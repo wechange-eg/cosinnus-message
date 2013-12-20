@@ -3,25 +3,19 @@ from __future__ import unicode_literals
 
 from django.conf.urls import patterns, url, include
 
-from cosinnus_message.views import MessageIndexView
+from cosinnus_message.views import (MessageIndexView, MessageListView,
+                                    MessageSendView, MessageDetailView)
 
-from ajax_select import urls as ajax_select_urls
-from dajaxice.core import dajaxice_autodiscover, dajaxice_config
-
-
-
-dajaxice_autodiscover()
 
 cosinnus_root_patterns = patterns('',
 )
 
 cosinnus_group_patterns = patterns('',
     url(r'^$', MessageIndexView.as_view(), name='index'),
+    url(r'^list/$', MessageListView.as_view(), name='list'),
+    url(r'^send/$', MessageSendView.as_view(), {'form_view': 'send'}, name='send'),
+    url(r'^(?P<slug>[^/]+)/$', MessageDetailView.as_view(), name='message'),
 )
 
-urlpatterns = patterns('',
-    url(r'^lookups/', include(ajax_select_urls)),
-    url(r'^messages/', include('postman.urls')),
-)
 
-urlpatterns += cosinnus_group_patterns + cosinnus_root_patterns
+urlpatterns = cosinnus_group_patterns + cosinnus_root_patterns

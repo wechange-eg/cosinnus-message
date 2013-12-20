@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 
-#from cosinnus_message.models import Message
+from cosinnus_message.models import Message
 
-pass
+class MessageModelAdmin(admin.ModelAdmin):
+    pass
 
-#admin.site.register(Note, NoteModelAdmin)
+admin.site.register(Message, MessageModelAdmin)
