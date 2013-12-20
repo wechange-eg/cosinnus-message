@@ -1,0 +1,11 @@
+=========================
+Messages - Current Status
+=========================
+
+.. note::
+
+   Messages is a cosinnus app that lets users of a group write a message text for a group and automatically send it by email to some (or all) members of that group.
+   
+   It is currently WIP. Templates, Views, Forms and Models are implemented and recipients can be selected. The actual sending of the mail is stubbed and needs to be implemented. 
+   
+   See tickets for details.
