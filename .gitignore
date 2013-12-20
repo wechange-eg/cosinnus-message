@@ -1,0 +1,7 @@
+cosinnus_note.egg-info/
+build/
+dist/cosinnus_note-0.1a0-py2.7.egg
+*.pyc
+.project
+.pydevproject
+.settings/org.eclipse.core.resources.prefs

@@ -1,0 +1,23 @@
+{% extends "postman/base.html" %}
+{% load i18n static bootstrap_toolkit %}
+
+{% block extrahead %}{{ block.super }}
+<script type="text/javascript"src="{% static 'admin/js/jquery.min.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div id="postman">
+  <h2>{% block pm_write_title %}{% endblock %}</h2>
+  <form action="{% if next_url %}?next={{ next_url|urlencode }}{% endif %}" method="post">{% csrf_token %}
+    {% block pm_write_recipient %}{% endblock %}
+    {{ form|as_bootstrap }}
+
+    <div class="control-group">
+      <div class="controls">
+        <button type="submit" class="btn btn-primary">{% trans "Send" %}</button>
+        <a href="{% url 'postman_inbox' %}" class="btn">{% trans "Cancel" %}</a>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
