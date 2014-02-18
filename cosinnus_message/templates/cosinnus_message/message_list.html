@@ -1,5 +1,5 @@
 {% extends "cosinnus_message/base.html" %}
-{% load i18n %}
+{% load i18n cosinnus_tags %}
 {% block page_title %}{% trans "Messages" %}: {{group.name}} {% endblock %}
 
 {% block breadcrumbs %}
@@ -16,9 +16,12 @@
 
 {% block content %}
 
-<ul class="nav nav-pills pull-right">
-  <li class="active"><a href="{% url 'cosinnus:message:send' group=group.slug %}" class="btn"><span class="glyphicon glyphicon-plus"></span> {% trans "Send Message" %}</a></li>
-</ul>
+
+{% if user.is_superuser or user|is_group_member:object %}
+    <ul class="nav nav-pills pull-right">
+      <li class="active"><a href="{% url 'cosinnus:message:send' group=group.slug %}" class="btn"><span class="glyphicon glyphicon-plus"></span> {% trans "Send Message" %}</a></li>
+    </ul>
+{% endif %}
 
 {% if object_list %}
 
