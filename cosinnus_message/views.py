@@ -29,7 +29,7 @@ class MessageFormMixin(object):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.group = self.group
-        self.object.author = self.request.user
+        self.object.creator = self.request.user
         self.object.save()
         form.save_m2m()
 

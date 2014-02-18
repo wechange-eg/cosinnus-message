@@ -16,12 +16,9 @@ from cosinnus.conf import settings
 
 class Message(BaseTaggableObjectModel):
     SORT_FIELDS_ALIASES = [
-        ('title', 'title'), ('author', 'author'), ('created_on', 'created_on'),
+        ('title', 'title'), ('creator', 'creator'), ('created', 'created'),
     ]
 
-    created_on = models.DateTimeField(_('Created'), auto_now_add=True, editable=False)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('Author'),
-                               on_delete=models.PROTECT, related_name='message')
     text = models.TextField(_('Text'))
 
     recipients = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, null=True, related_name='messages')
@@ -29,9 +26,13 @@ class Message(BaseTaggableObjectModel):
     objects = MessageManager()
 
     class Meta:
-        ordering = ['-created_on', 'title']
+        ordering = ['-created', 'title']
         verbose_name = _('Message')
         verbose_name_plural = _('Messages')
+
+    def __init__(self, *args, **kwargs):
+        super(Message, self).__init__(*args, **kwargs)
+        self._meta.get_field('creator').verbose_name = _('Author')
 
     def send(self):
         '''
