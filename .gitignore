@@ -1,6 +1,6 @@
-cosinnus_note.egg-info/
+*.egg-info/
 build/
-dist/cosinnus_note-0.1a0-py2.7.egg
+dist/
 *.pyc
 .project
 .pydevproject
