@@ -4,16 +4,16 @@ from __future__ import unicode_literals
 from django.core.urlresolvers import reverse
 from django.http import (HttpResponseRedirect)
 from django.utils.translation import ungettext, ugettext_lazy as _
+from django.contrib.auth import get_user_model
 from django.views.generic import (RedirectView, ListView, CreateView)
 from django.views.generic.detail import DetailView
 
 from cosinnus.views.mixins.group import (RequireReadMixin, RequireWriteMixin,
-    FilterGroupMixin)
+    FilterGroupMixin, GroupFormKwargsMixin)
 from cosinnus.views.mixins.tagged import TaggedListMixin
 
 from cosinnus_message.models import Message
 from cosinnus_message.forms import MessageForm
-
 
 class MessageFormMixin(object):
 
@@ -58,7 +58,7 @@ class MessageDetailView(RequireReadMixin, FilterGroupMixin, DetailView):
 
 
 class MessageSendView(RequireWriteMixin, FilterGroupMixin, MessageFormMixin,
-                      CreateView):
+                      CreateView, GroupFormKwargsMixin):
 
     form_class = MessageForm
     model = Message
@@ -70,6 +70,13 @@ class MessageSendView(RequireWriteMixin, FilterGroupMixin, MessageFormMixin,
     def get_initial(self):
         initial = super(MessageSendView, self).get_initial()
         return initial
+
+    def get_form(self, form_class):
+        """ Filter selectible recipients by this group's users """
+        form = CreateView.get_form(self, form_class)
+        uids = self.group.members
+        form.fields['recipients'].queryset = get_user_model()._default_manager.filter(id__in=uids)
+        return form
 
     def form_valid(self, form):
         return MessageFormMixin.form_valid(self, form)
