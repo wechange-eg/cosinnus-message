@@ -12,7 +12,7 @@ class MessageForm(ModelForm, GroupFormKwargsMixin):
 
     class Meta:
         model = Message
-        fields = ('title', 'isbroadcast', 'recipients', 'text')
+        fields = ('title', 'isbroadcast', 'isprivate', 'recipients', 'text')
 
     def __init__(self, *args, **kwargs):
         super(MessageForm, self).__init__(*args, **kwargs)

@@ -25,6 +25,7 @@ class Message(BaseTaggableObjectModel):
     text = models.TextField(_('Text'))
 
     isbroadcast = models.BooleanField(_('Broadcast'), blank=False, null=False, default=False)
+    isprivate = models.BooleanField(_('Private'), blank=False, null=False, default=False)
     recipients = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name=_('Recipients'), blank=True, null=True, related_name='messages')
 
     objects = MessageManager()

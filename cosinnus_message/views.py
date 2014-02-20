@@ -14,6 +14,14 @@ from cosinnus.views.mixins.tagged import TaggedListMixin
 
 from cosinnus_message.models import Message
 from cosinnus_message.forms import MessageForm
+from cosinnus.views.group import UserSelectMixin
+from django.core.exceptions import PermissionDenied
+
+
+def is_recipient_or_owner(user, msg):
+    """ is the given user creator or one of the recipients of the given message? """
+    return user.id in [rec.id for rec in msg.recipients.all()] or user.id == msg.creator.id
+
 
 class MessageFormMixin(object):
 
@@ -53,8 +61,38 @@ class MessageIndexView(RequireReadMixin, RedirectView):
 class MessageListView(RequireReadMixin, FilterGroupMixin, TaggedListMixin, ListView):
     model = Message
 
-class MessageDetailView(RequireReadMixin, FilterGroupMixin, DetailView):
+    def get_queryset(self, **kwargs):
+        """ Filter from view all private messages where the user is not recipient or creator """
+        user = self.request.user
+        group_qs = FilterGroupMixin.get_queryset(self, **kwargs)
+
+        privates = group_qs.filter(isprivate=True)
+        # filter all private messages (if logged in, filter only other user's private messages)
+        if user.username:
+            privates = [m for m in privates if not is_recipient_or_owner(user, m)]
+
+        private_ids = [m.id for m in privates]
+        filtered_qs = group_qs.exclude(id__in=private_ids)
+
+        return filtered_qs
+
+
+class MessageDetailView(RequireReadMixin, FilterGroupMixin, DetailView, UserSelectMixin):
+
     model = Message
+
+    def get_object(self, queryset=None):
+        """ disallow viewing private messages if not owner or recipient """
+        obj = DetailView.get_object(self, queryset=queryset)
+        user = self.request.user
+
+        if obj.isprivate:
+            isloggedin = user.username
+            if not isloggedin or not is_recipient_or_owner(user, obj):
+                # TODO: Sascha: how should throw an unauthorized error?
+                raise PermissionDenied()
+
+        return obj
 
 
 class MessageSendView(RequireWriteMixin, FilterGroupMixin, MessageFormMixin,
