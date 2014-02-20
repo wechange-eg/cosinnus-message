@@ -15,13 +15,17 @@ from cosinnus_message.managers import MessageManager
 from cosinnus.conf import settings
 
 class Message(BaseTaggableObjectModel):
+    """
+    A message sent to the whole group (broadcast) or to selected group members
+    """
     SORT_FIELDS_ALIASES = [
         ('title', 'title'), ('creator', 'creator'), ('created', 'created'),
     ]
 
     text = models.TextField(_('Text'))
 
-    recipients = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, null=True, related_name='messages')
+    isbroadcast = models.BooleanField(_('Broadcast'), blank=False, null=False, default=False)
+    recipients = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name=_('Recipients'), blank=True, null=True, related_name='messages')
 
     objects = MessageManager()
 

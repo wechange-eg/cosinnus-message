@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-20 18:31+0100\n"
+"POT-Creation-Date: 2014-02-20 15:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,57 +17,65 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\cosinnus_app.py:6 .\models.py:33
+#: .\cosinnus_app.py:6 .\models.py:34
 #: .\templates\cosinnus_message\message_detail.html.py:18
 #: .\templates\cosinnus_message\message_send.html.py:5
 msgid "Message"
-msgstr ""
-
-#: .\models.py:22 .\templates\cosinnus_message\message_list.html.py:37
-msgid "Created"
-msgstr "Erstellt"
-
-#: .\models.py:23 .\templates\cosinnus_message\message_list.html.py:36
-msgid "Author"
-msgstr "Autor"
+msgstr "Nachricht"
 
 #: .\models.py:25
 msgid "Text"
 msgstr "Text"
 
-#: .\models.py:34 .\templates\cosinnus_message\base.html.py:8
+#: .\models.py:27
+msgid "Broadcast"
+msgstr "Rundmail (Alle Gruppenmitglieder)"
+
+#: .\models.py:28
+msgid "Recipients"
+msgstr "Empfänger"
+
+#: .\models.py:35 .\templates\cosinnus_message\base.html.py:8
 #: .\templates\cosinnus_message\message_list.html.py:3
 #: .\templates\cosinnus_message\message_list.html.py:7
 msgid "Messages"
 msgstr "Nachrichten"
 
+#: .\models.py:39 .\templates\cosinnus_message\message_list.html.py:39
+msgid "Author"
+msgstr "Autor"
+
 #: .\templates\cosinnus_message\message_list.html.py:12
 #: .\templates\cosinnus_message\message_send.html.py:24
 msgid "Send message"
-msgstr "Nachrichten versenden"
+msgstr "Nachricht versenden"
 
-#: .\templates\cosinnus_message\message_list.html.py:20
+#: .\templates\cosinnus_message\message_list.html.py:22
 #: .\templates\cosinnus_message\message_send.html.py:13
 msgid "Send Message"
-msgstr "Nachrichten versenden"
+msgstr "Nachricht versenden"
 
-#: .\templates\cosinnus_message\message_list.html.py:30
+#: .\templates\cosinnus_message\message_list.html.py:33
 msgid "No tags available."
 msgstr "Es gibt keine Tags."
 
-#: .\templates\cosinnus_message\message_list.html.py:35
+#: .\templates\cosinnus_message\message_list.html.py:38
 msgid "Title"
 msgstr "Titel"
 
-#: .\templates\cosinnus_message\message_list.html.py:38
+#: .\templates\cosinnus_message\message_list.html.py:40
+msgid "Created"
+msgstr "Erstellt"
+
+#: .\templates\cosinnus_message\message_list.html.py:41
 msgid "Tags"
 msgstr "Tags"
 
-#: .\templates\cosinnus_message\message_list.html.py:39
+#: .\templates\cosinnus_message\message_list.html.py:42
 msgid "Actions"
 msgstr "Aktionen"
 
-#: .\templates\cosinnus_message\message_list.html.py:57
+#: .\templates\cosinnus_message\message_list.html.py:60
 msgid "There are no messages."
 msgstr "Keine Nachrichten vorhanden."
 
