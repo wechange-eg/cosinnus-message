@@ -42,13 +42,12 @@ class Message(BaseTaggableObjectModel):
 
     def send(self):
         '''
-            TODO: send actual mail.
-            Stub: Sends the Message to the email addresses of all recipients, as BCC.
+            Sends the Message to the email addresses of all recipients, as BCC.
         '''
         recipients = [recipient.email for recipient in self.recipients.all()]
         sender_address = self.creator.email if settings.SHOW_MESSAGE_SENDER_EMAIL else settings.DEFAULT_FROM_EMAIL
 
-        template_data = {'group': self.group.name, 'sender': recipient.first_name, 'title':self.title, 'text':self.text}
+        template_data = {'group': self.group.name, 'sender': self.creator.first_name, 'title':self.title, 'text':self.text}
         # print "fake sending mail to", recipients, "with data", template_data
 
         subject = _('%(sender)s via %(group)s: "%(title)s"') % template_data

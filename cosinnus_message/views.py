@@ -17,6 +17,8 @@ from cosinnus_message.forms import MessageForm
 from cosinnus.views.group import UserSelectMixin
 from django.core.exceptions import PermissionDenied
 
+from django.contrib import messages
+from django.db import transaction
 
 def is_recipient_or_owner(user, msg):
     """ is the given user creator or one of the recipients of the given message? """
@@ -35,16 +37,30 @@ class MessageFormMixin(object):
         return context
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.group = self.group
-        self.object.creator = self.request.user
-        self.object.save()
-        form.save_m2m()
 
-        # send the actual mail
-        self.object.send()
+        send_mail_error = False
+        with transaction.commit_manually():
+            try:
+                self.object = form.save(commit=False)
+                self.object.group = self.group
+                self.object.creator = self.request.user
+                self.object.save()
+                form.save_m2m()
 
-        return HttpResponseRedirect(self.get_success_url())
+                # send the actual mail
+                self.object.send()
+            except Exception as e:
+                transaction.rollback()
+                messages.error(self.request, _('Error sending mail! - %(reason)s' % {'reason':str(e)}))
+                send_mail_error = True
+            else:
+                transaction.commit()
+
+        if send_mail_error:
+            return self.form_invalid(form)
+        else:
+            return HttpResponseRedirect(self.get_success_url())
+
 
     def get_success_url(self):
         return reverse('cosinnus:message:list',
