@@ -16,9 +16,6 @@ class MessageForm(ModelForm, GroupFormKwargsMixin):
         model = Message
         fields = ('title', 'isbroadcast', 'isprivate', 'recipients', 'text')
 
-    def __init__(self, *args, **kwargs):
-        super(MessageForm, self).__init__(*args, **kwargs)
-
     def clean_recipients(self):
         """ override recipient selection if broadcast was selected and send to ALL group members """
         recipients = self.cleaned_data['recipients']

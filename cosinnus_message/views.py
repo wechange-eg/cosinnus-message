@@ -61,11 +61,9 @@ class MessageFormMixin(object):
         else:
             return HttpResponseRedirect(self.get_success_url())
 
-
     def get_success_url(self):
         return reverse('cosinnus:message:list',
                        kwargs={'group': self.group.slug})
-
 
 
 class MessageIndexView(RequireReadMixin, RedirectView):
@@ -130,6 +128,8 @@ class MessageSendView(RequireWriteMixin, FilterGroupMixin, MessageFormMixin,
         """ Filter selectible recipients by this group's users """
         form = CreateView.get_form(self, form_class)
         uids = self.group.members
+        if self.request.user:
+            uids.remove(self.request.user.id)
         form.fields['recipients'].queryset = get_user_model()._default_manager.filter(id__in=uids)
         return form
 
