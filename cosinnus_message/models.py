@@ -48,12 +48,12 @@ class Message(BaseTaggableObjectModel):
         recipients = [recipient.email for recipient in self.recipients.all()]
         sender_address = self.creator.email if settings.SHOW_MESSAGE_SENDER_EMAIL else settings.DEFAULT_FROM_EMAIL
 
-        template_data = {'group': self.group.name, 'sender': recipient.first_name, 'title':self.title, 'mail_body:':self.text}
+        template_data = {'group': self.group.name, 'sender': recipient.first_name, 'title':self.title, 'text':self.text}
         # print "fake sending mail to", recipients, "with data", template_data
 
         subject = _('%(sender)s via %(group)s: "%(title)s"') % template_data
 
-        mail.send_mail(settings.DEFAULT_FROM_EMAIL, subject, "cosinnus_message/email.txt", template_data, sender_address, bcc=recipients)
+        mail.send_mail('', subject, "cosinnus_message/email.txt", template_data, sender_address, bcc=recipients)
 
     def save(self, *args, **kwargs):
         if not self.slug:

@@ -3,5 +3,6 @@
 
 {{title}}
 
-{{mail_body}}
+{{text}}
+
 {% endblocktrans %}
