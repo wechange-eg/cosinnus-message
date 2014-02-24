@@ -1,0 +1,7 @@
+{% load i18n %}
+{% blocktrans %}{{sender}} wrote a new message in group {{group}}:
+
+{{title}}
+
+{{mail_body}}
+{% endblocktrans %}

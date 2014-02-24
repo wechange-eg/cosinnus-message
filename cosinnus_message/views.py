@@ -41,6 +41,7 @@ class MessageFormMixin(object):
         self.object.save()
         form.save_m2m()
 
+        # send the actual mail
         self.object.send()
 
         return HttpResponseRedirect(self.get_success_url())
