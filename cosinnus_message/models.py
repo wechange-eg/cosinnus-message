@@ -64,3 +64,8 @@ class Message(BaseTaggableObjectModel):
         kwargs = {'group': self.group.slug, 'slug': self.slug}
         return reverse('cosinnus:message:message', kwargs=kwargs)
 
+
+import django
+if django.VERSION[:2] < (1, 7):
+    from cosinnus_message import cosinnus_app
+    cosinnus_app.register()
