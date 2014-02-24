@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-20 19:27+0100\n"
+"POT-Creation-Date: 2014-02-24 18:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,37 +17,68 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\cosinnus_app.py:6 .\models.py:35
+#: .\cosinnus_app.py:6 .\models.py:36
 #: .\templates\cosinnus_message\message_detail.html.py:18
 #: .\templates\cosinnus_message\message_send.html.py:5
 msgid "Message"
 msgstr "Nachricht"
 
-#: .\models.py:25
-msgid "Text"
-msgstr "Text"
+#: .\forms.py:24
+msgid "Please select a recipient for the message!"
+msgstr "Bitte wählen sie mindestens einen Empfänger aus!"
 
-#: .\models.py:27
+#: .\models.py:26
+msgid "Text"
+msgstr "Nachrichtentext"
+
+#: .\models.py:28
 msgid "Broadcast"
 msgstr "Rundmail (Alle Gruppenmitglieder)"
 
-#: .\models.py:28
+#: .\models.py:29
 msgid "Private"
 msgstr "Private Nachricht"
 
-#: .\models.py:29
+#: .\models.py:30
 msgid "Recipients"
 msgstr "Empfänger"
 
-#: .\models.py:36 .\templates\cosinnus_message\base.html.py:8
+#: .\models.py:37 .\templates\cosinnus_message\base.html.py:8
 #: .\templates\cosinnus_message\message_list.html.py:3
 #: .\templates\cosinnus_message\message_list.html.py:7
 msgid "Messages"
 msgstr "Nachrichten"
 
-#: .\models.py:40 .\templates\cosinnus_message\message_list.html.py:39
+#: .\models.py:41 .\templates\cosinnus_message\message_list.html.py:39
 msgid "Author"
 msgstr "Autor"
+
+#: .\models.py:53
+#, python-format
+msgid "%(sender)s via %(group)s: \"%(title)s\""
+msgstr "%(sender)s via %(group)s: \"%(title)s\""
+
+#: .\views.py:54
+#, python-format
+msgid "Error sending mail! - %(reason)s"
+msgstr "Fehler beim Versenden der e-Mail-Nachricht! - %(reason)s"
+
+#: .\templates\cosinnus_message\email.txt.py:2
+#, python-format
+msgid ""
+"%(sender)s wrote a new message in group %(group)s:\n"
+"\n"
+"%(title)s\n"
+"\n"
+"%(text)s\n"
+"\n"
+msgstr ""
+"%(sender)s hat eine neue Nachricht in der Gruppe %(group)s geschrieben:\n"
+"\n"
+"%(title)s\n"
+"\n"
+"%(text)s\n"
+"\n"
 
 #: .\templates\cosinnus_message\message_list.html.py:12
 #: .\templates\cosinnus_message\message_send.html.py:24
