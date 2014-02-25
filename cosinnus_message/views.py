@@ -85,7 +85,7 @@ class MessageListView(RequireReadMixin, FilterGroupMixin, TaggedListMixin,
         recipient or creator
         """
         user = self.request.user
-        group_qs = FilterGroupMixin.get_queryset(self, **kwargs)
+        group_qs = super(MessageListView, self).get_queryset(self, **kwargs)
 
         privates = group_qs.filter(isprivate=True)
         # filter all private messages (if logged in, filter only other
@@ -106,7 +106,7 @@ class MessageDetailView(RequireReadMixin, FilterGroupMixin, DetailView,
 
     def get_object(self, queryset=None):
         """Disallow viewing private messages if not owner or recipient"""
-        obj = DetailView.get_object(self, queryset=queryset)
+        obj = super(MessageDetailView, self).get_object(self, queryset=queryset)
         user = self.request.user
 
         if obj.isprivate:
@@ -125,31 +125,11 @@ class MessageSendView(RequireWriteMixin, FilterGroupMixin, MessageFormMixin,
     model = Message
     template_name = 'cosinnus_message/message_send.html'
 
-    def get_object(self, queryset=None):
-        return CreateView.get_object(self, queryset=queryset)
-
-    def get_initial(self):
-        initial = super(MessageSendView, self).get_initial()
-        return initial
-
     def get_form(self, form_class):
         """ Filter selectible recipients by this group's users """
-        form = CreateView.get_form(self, form_class)
+        form = super(MessageSendView, self).get_form(form_class)
         uids = self.group.members
         if self.request.user:
             uids.remove(self.request.user.id)
         form.fields['recipients'].queryset = get_user_model()._default_manager.filter(id__in=uids)
         return form
-
-    def form_valid(self, form):
-        return MessageFormMixin.form_valid(self, form)
-
-    def get_context_data(self, **kwargs):
-        context = super(MessageSendView, self).get_context_data(**kwargs)
-        tags = Message.objects.tags()
-        context.update({
-            'tags': tags
-        })
-
-        return context
-
