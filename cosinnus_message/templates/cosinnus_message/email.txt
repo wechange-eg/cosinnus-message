@@ -3,5 +3,8 @@
 
 {{title}}
 
-{{mail_body}}
+{{text}}
+
+Click here to see the message: {{message_url}}
+
 {% endblocktrans %}

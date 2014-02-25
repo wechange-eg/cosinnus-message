@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-20 19:27+0100\n"
+"POT-Creation-Date: 2014-02-24 19:19+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,9 +23,13 @@ msgstr ""
 msgid "Message"
 msgstr "Nachricht"
 
+#: .\forms.py:24
+msgid "Please select a recipient for the message!"
+msgstr "Bitte wählen sie mindestens einen Empfänger aus!"
+
 #: .\models.py:25
 msgid "Text"
-msgstr "Text"
+msgstr "Nachrichtentext"
 
 #: .\models.py:27
 msgid "Broadcast"
@@ -48,6 +52,36 @@ msgstr "Nachrichten"
 #: .\models.py:40 .\templates\cosinnus_message\message_list.html.py:39
 msgid "Author"
 msgstr "Autor"
+
+#: .\models.py:57
+#, python-format
+msgid "%(sender)s via %(group)s: \"%(title)s\""
+msgstr "%(sender)s via %(group)s: \"%(title)s\""
+
+#: .\views.py:54
+#, python-format
+msgid "Error sending mail! - %(reason)s"
+msgstr "Fehler beim Versenden der e-Mail-Nachricht! - %(reason)s"
+
+#: .\templates\cosinnus_message\email.txt.py:2
+#, python-format
+msgid ""
+"%(sender)s wrote a new message in group %(group)s:\n"
+"\n"
+"%(title)s\n"
+"\n"
+"%(text)s\n"
+"\n"
+"Click here to see the message: %(message_url)s\n"
+"\n"
+msgstr ""
+"%(sender)s hat eine neue Nachricht in der Gruppe %(group)s geschrieben:\n"
+"\n"
+"%(title)s\n"
+"\n"
+"%(text)s\n"
+"\n"
+"Klicken sie hier um die Nachricht auf der Webseite anzusehen: %(message_url)s\n"
 
 #: .\templates\cosinnus_message\message_list.html.py:12
 #: .\templates\cosinnus_message\message_send.html.py:24

@@ -5,8 +5,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
-
-from django.contrib.auth import get_user_model
+from django.contrib.sites.models import get_current_site
 
 from cosinnus.utils.functions import unique_aware_slugify
 from cosinnus.models.tagged import BaseTaggableObjectModel
@@ -42,18 +41,22 @@ class Message(BaseTaggableObjectModel):
 
     def send(self):
         '''
-            TODO: send actual mail.
-            Stub: Sends the Message to the email addresses of all recipients, as BCC.
+            Sends the Message to the email addresses of all recipients, as BCC.
         '''
         recipients = [recipient.email for recipient in self.recipients.all()]
         sender_address = self.creator.email if settings.SHOW_MESSAGE_SENDER_EMAIL else settings.DEFAULT_FROM_EMAIL
 
-        template_data = {'group': self.group.name, 'sender': recipient.first_name, 'title':self.title, 'mail_body:':self.text}
-        # print "fake sending mail to", recipients, "with data", template_data
+        template_data = {
+            'group': self.group.name,
+            'sender': self.creator.first_name,
+            'title':self.title,
+            'text':self.text,
+            'message_url': 'http://' + get_current_site(None).domain + reverse('cosinnus:message:message', kwargs={'group':self.group.slug, 'slug':self.slug}),
+        }
 
         subject = _('%(sender)s via %(group)s: "%(title)s"') % template_data
 
-        mail.send_mail(settings.DEFAULT_FROM_EMAIL, subject, "cosinnus_message/email.txt", template_data, sender_address, bcc=recipients)
+        mail.send_mail('', subject, "cosinnus_message/email.txt", template_data, sender_address, bcc=recipients)
 
     def save(self, *args, **kwargs):
         if not self.slug:
