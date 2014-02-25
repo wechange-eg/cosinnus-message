@@ -10,7 +10,6 @@ from cosinnus.models.tagged import BaseTaggableObjectModel
 from cosinnus.utils.functions import unique_aware_slugify
 
 from cosinnus_message.conf import settings
-from cosinnus_message.managers import MessageManager
 
 
 class Message(BaseTaggableObjectModel):
@@ -30,8 +29,6 @@ class Message(BaseTaggableObjectModel):
     recipients = models.ManyToManyField(settings.AUTH_USER_MODEL,
         verbose_name=_('Recipients'), blank=True, null=True,
         related_name='messages')
-
-    objects = MessageManager()
 
     class Meta:
         ordering = ['-created', 'title']
