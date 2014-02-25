@@ -85,7 +85,7 @@ class MessageListView(RequireReadMixin, FilterGroupMixin, TaggedListMixin,
         recipient or creator
         """
         user = self.request.user
-        group_qs = super(MessageListView, self).get_queryset(self, **kwargs)
+        group_qs = super(MessageListView, self).get_queryset(**kwargs)
 
         privates = group_qs.filter(isprivate=True)
         # filter all private messages (if logged in, filter only other
