@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.core.urlresolvers import reverse
 from django.http import (HttpResponseRedirect)
-from django.utils.translation import ungettext, ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import get_user_model
 from django.views.generic import (RedirectView, ListView, CreateView)
 from django.views.generic.detail import DetailView
@@ -21,7 +21,9 @@ from django.contrib import messages
 from django.db import transaction
 
 def is_recipient_or_owner(user, msg):
-    """ is the given user creator or one of the recipients of the given message? """
+    """
+    Is the given user creator or one of the recipients of the given message?
+    """
     return user.id in [rec.id for rec in msg.recipients.all()] or user.id == msg.creator.id
 
 
@@ -37,7 +39,6 @@ class MessageFormMixin(object):
         return context
 
     def form_valid(self, form):
-
         send_mail_error = False
         with transaction.commit_manually():
             try:
@@ -48,10 +49,11 @@ class MessageFormMixin(object):
                 form.save_m2m()
 
                 # send the actual mail
-                self.object.send()
+                self.object.send(self.request)
             except Exception as e:
                 transaction.rollback()
-                messages.error(self.request, _('Error sending mail! - %(reason)s' % {'reason':str(e)}))
+                messages.error(self.request,
+                    _('Error sending mail! - %(reason)s' % {'reason': str(e)}))
                 send_mail_error = True
             else:
                 transaction.commit()
@@ -73,16 +75,21 @@ class MessageIndexView(RequireReadMixin, RedirectView):
                         kwargs={'group': self.group.slug})
 
 
-class MessageListView(RequireReadMixin, FilterGroupMixin, TaggedListMixin, ListView):
+class MessageListView(RequireReadMixin, FilterGroupMixin, TaggedListMixin,
+                      ListView):
     model = Message
 
     def get_queryset(self, **kwargs):
-        """ Filter from view all private messages where the user is not recipient or creator """
+        """
+        Filter from view all private messages where the user is not
+        recipient or creator
+        """
         user = self.request.user
         group_qs = FilterGroupMixin.get_queryset(self, **kwargs)
 
         privates = group_qs.filter(isprivate=True)
-        # filter all private messages (if logged in, filter only other user's private messages)
+        # filter all private messages (if logged in, filter only other
+        # user's private messages)
         if user.username:
             privates = [m for m in privates if not is_recipient_or_owner(user, m)]
 
@@ -92,12 +99,13 @@ class MessageListView(RequireReadMixin, FilterGroupMixin, TaggedListMixin, ListV
         return filtered_qs
 
 
-class MessageDetailView(RequireReadMixin, FilterGroupMixin, DetailView, UserSelectMixin):
+class MessageDetailView(RequireReadMixin, FilterGroupMixin, DetailView,
+                        UserSelectMixin):
 
     model = Message
 
     def get_object(self, queryset=None):
-        """ disallow viewing private messages if not owner or recipient """
+        """Disallow viewing private messages if not owner or recipient"""
         obj = DetailView.get_object(self, queryset=queryset)
         user = self.request.user
 

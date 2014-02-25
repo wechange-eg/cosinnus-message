@@ -3,16 +3,15 @@ from __future__ import unicode_literals
 
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.sites.models import get_current_site
 
-from cosinnus.utils.functions import unique_aware_slugify
+from cosinnus.core import mail
 from cosinnus.models.tagged import BaseTaggableObjectModel
+from cosinnus.utils.functions import unique_aware_slugify
+
+from cosinnus_message.conf import settings
 from cosinnus_message.managers import MessageManager
 
-from cosinnus.conf import settings
-from cosinnus.core import mail
 
 class Message(BaseTaggableObjectModel):
     """
@@ -24,9 +23,13 @@ class Message(BaseTaggableObjectModel):
 
     text = models.TextField(_('Text'))
 
-    isbroadcast = models.BooleanField(_('Broadcast'), blank=False, null=False, default=False)
-    isprivate = models.BooleanField(_('Private'), blank=False, null=False, default=False)
-    recipients = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name=_('Recipients'), blank=True, null=True, related_name='messages')
+    isbroadcast = models.BooleanField(_('Broadcast'), blank=False, null=False,
+        default=False)
+    isprivate = models.BooleanField(_('Private'), blank=False, null=False,
+        default=False)
+    recipients = models.ManyToManyField(settings.AUTH_USER_MODEL,
+        verbose_name=_('Recipients'), blank=True, null=True,
+        related_name='messages')
 
     objects = MessageManager()
 
@@ -39,28 +42,37 @@ class Message(BaseTaggableObjectModel):
         super(Message, self).__init__(*args, **kwargs)
         self._meta.get_field('creator').verbose_name = _('Author')
 
-    def send(self):
-        '''
-            Sends the Message to the email addresses of all recipients, as BCC.
-        '''
+    def send(self, request):
+        """
+        Sends the Message to the email addresses of all recipients, as BCC.
+        """
         recipients = [recipient.email for recipient in self.recipients.all()]
-        sender_address = self.creator.email if settings.SHOW_MESSAGE_SENDER_EMAIL else settings.DEFAULT_FROM_EMAIL
+        sender_address = settings.DEFAULT_FROM_EMAIL
+        if settings.COSINNUS_MESSAGE_SHOW_MESSAGE_SENDER_EMAIL:
+            sender_address = self.creator.email
 
         template_data = {
             'group': self.group.name,
             'sender': self.creator.first_name,
-            'title':self.title,
-            'text':self.text,
-            'message_url': 'http://' + get_current_site(None).domain + reverse('cosinnus:message:message', kwargs={'group':self.group.slug, 'slug':self.slug}),
+            'title': self.title,
+            'text': self.text,
+            'protocol': 'https' if request.is_secure() else 'http',
+            'domain': request.get_host(),
+            'url_path': reverse('cosinnus:message:message', kwargs={
+                'group':self.group.slug,
+                'slug':self.slug
+            }),
         }
 
         subject = _('%(sender)s via %(group)s: "%(title)s"') % template_data
 
-        mail.send_mail('', subject, "cosinnus_message/email.txt", template_data, sender_address, bcc=recipients)
+        mail.send_mail('', subject, "cosinnus_message/email.txt",
+            template_data, sender_address, bcc=recipients)
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            unique_aware_slugify(self, slug_source='title', slug_field='slug', group=self.group)
+            unique_aware_slugify(self, slug_source='title', slug_field='slug',
+                group=self.group)
         super(Message, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
