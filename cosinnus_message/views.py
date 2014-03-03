@@ -1,30 +1,21 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.core.urlresolvers import reverse
-from django.http import (HttpResponseRedirect)
-from django.utils.translation import ugettext_lazy as _
+from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.views.generic import (RedirectView, ListView, CreateView)
+from django.core.urlresolvers import reverse
+from django.db import transaction
+from django.http import HttpResponseRedirect
+from django.utils.translation import ugettext_lazy as _
+from django.views.generic import RedirectView, ListView, CreateView
 from django.views.generic.detail import DetailView
 
 from cosinnus.views.mixins.group import (RequireReadMixin, RequireWriteMixin,
     FilterGroupMixin, GroupFormKwargsMixin)
 from cosinnus.views.mixins.tagged import TaggedListMixin
 
-from cosinnus_message.models import Message
 from cosinnus_message.forms import MessageForm
-from cosinnus.views.group import UserSelectMixin
-from django.core.exceptions import PermissionDenied
-
-from django.contrib import messages
-from django.db import transaction
-
-def is_recipient_or_owner(user, msg):
-    """
-    Is the given user creator or one of the recipients of the given message?
-    """
-    return user.id in [rec.id for rec in msg.recipients.all()] or user.id == msg.creator.id
+from cosinnus_message.models import Message
 
 
 class MessageFormMixin(object):
@@ -84,42 +75,29 @@ class MessageListView(RequireReadMixin, FilterGroupMixin, TaggedListMixin,
         Filter from view all private messages where the user is not
         recipient or creator
         """
+        # TODO Django>=1.7: change to chained select_relatad calls
+        qs = super(MessageListView, self).get_queryset(
+            select_related=('creator', 'recipients',))
         user = self.request.user
-        group_qs = super(MessageListView, self).get_queryset(**kwargs)
-
-        privates = group_qs.filter(isprivate=True)
-        # filter all private messages (if logged in, filter only other
-        # user's private messages)
-        if user.username:
-            privates = [m for m in privates if not is_recipient_or_owner(user, m)]
-
-        private_ids = [m.id for m in privates]
-        filtered_qs = group_qs.exclude(id__in=private_ids)
-
-        return filtered_qs
+        return qs.filter_for_user(user if user.is_authenticated() else None)
 
 
-class MessageDetailView(RequireReadMixin, FilterGroupMixin, DetailView,
-                        UserSelectMixin):
+class MessageDetailView(RequireReadMixin, FilterGroupMixin, DetailView):
 
     model = Message
 
-    def get_object(self, queryset=None):
-        """Disallow viewing private messages if not owner or recipient"""
-        obj = super(MessageDetailView, self).get_object(self, queryset=queryset)
+    def get_queryset(self, **kwargs):
+        """
+        Disallow viewing private messages if not owner or recipient
+        """
+        # TODO Django>=1.7: change to chained select_relatad calls
+        qs = super(MessageDetailView, self).get_queryset()
         user = self.request.user
-
-        if obj.isprivate:
-            isloggedin = user.username
-            if not isloggedin or not is_recipient_or_owner(user, obj):
-                # TODO: Sascha: how should throw an unauthorized error?
-                raise PermissionDenied()
-
-        return obj
+        return qs.filter_for_user(user if user.is_authenticated() else None)
 
 
 class MessageSendView(RequireWriteMixin, FilterGroupMixin, MessageFormMixin,
-                      CreateView, GroupFormKwargsMixin):
+                      GroupFormKwargsMixin, CreateView):
 
     form_class = MessageForm
     model = Message
@@ -129,7 +107,7 @@ class MessageSendView(RequireWriteMixin, FilterGroupMixin, MessageFormMixin,
         """ Filter selectible recipients by this group's users """
         form = super(MessageSendView, self).get_form(form_class)
         uids = self.group.members
-        if self.request.user:
-            uids.remove(self.request.user.id)
-        form.fields['recipients'].queryset = get_user_model()._default_manager.filter(id__in=uids)
+        uids.remove(self.request.user.id)
+        form.fields['recipients'].queryset = get_user_model() \
+                ._default_manager.filter(id__in=uids)
         return form
