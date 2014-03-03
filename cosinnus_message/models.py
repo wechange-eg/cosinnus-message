@@ -3,13 +3,38 @@ from __future__ import unicode_literals
 
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
 from cosinnus.core import mail
 from cosinnus.models.tagged import BaseTaggableObjectModel
-from cosinnus.utils.functions import unique_aware_slugify
 
 from cosinnus_message.conf import settings
+
+
+class MessageQuerySet(models.query.QuerySet):
+
+    def filter_for_user(self, user):
+        q = Q(isprivate=False)
+        if user:
+            recipient_of = list(self._clone().filter(recipients__id=user.pk)
+                                             .values_list('id', flat=True)
+                                             .order_by())
+            q |= Q(creator_id=user.pk) | Q(id__in=recipient_of)
+        return self.filter(q)
+
+
+class MessageManager(models.Manager):
+
+    use_for_related_fields = True
+
+    def get_queryset(self):
+        return MessageQuerySet(self.model, using=self._db)
+
+    get_query_set = get_queryset
+
+    def filter_for_user(self, user):
+        return self.get_queryset().filter_for_user(user)
 
 
 class Message(BaseTaggableObjectModel):
@@ -29,6 +54,8 @@ class Message(BaseTaggableObjectModel):
     recipients = models.ManyToManyField(settings.AUTH_USER_MODEL,
         verbose_name=_('Recipients'), blank=True, null=True,
         related_name='messages')
+
+    objects = MessageManager()
 
     class Meta:
         ordering = ['-created', 'title']
@@ -65,12 +92,6 @@ class Message(BaseTaggableObjectModel):
 
         mail.send_mail('', subject, "cosinnus_message/email.txt",
             template_data, sender_address, bcc=recipients)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            unique_aware_slugify(self, slug_source='title', slug_field='slug',
-                group=self.group)
-        super(Message, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         kwargs = {'group': self.group.slug, 'slug': self.slug}
