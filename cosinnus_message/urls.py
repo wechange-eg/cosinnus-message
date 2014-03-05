@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.conf.urls import patterns, url, include
+from django.conf.urls import patterns, url
 
 from cosinnus_message.views import (MessageIndexView, MessageListView,
                                     MessageSendView, MessageDetailView)

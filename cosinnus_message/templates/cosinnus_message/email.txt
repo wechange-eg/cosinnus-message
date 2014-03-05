@@ -1,10 +1,10 @@
 {% load i18n %}
-{% blocktrans %}{{sender}} wrote a new message in group {{group}}:
+{% blocktrans %}{{ sender }} wrote a new message in group {{ group }}:
 
-{{title}}
+{{ title }}
 
-{{text}}
+{{ text }}
 
-Click here to see the message: {{message_url}}
+Click here to see the message: {{ protocol }}://{{ domain }}{{ url_path }}
 
 {% endblocktrans %}
