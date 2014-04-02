@@ -57,7 +57,7 @@ class Message(BaseTaggableObjectModel):
 
     objects = MessageManager()
 
-    class Meta:
+    class Meta(BaseTaggableObjectModel.Meta):
         ordering = ['-created', 'title']
         verbose_name = _('Message')
         verbose_name_plural = _('Messages')
