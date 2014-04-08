@@ -3,19 +3,26 @@ from __future__ import unicode_literals
 
 from django.conf.urls import patterns, url
 
-from cosinnus_message.views import (MessageIndexView, MessageListView,
-                                    MessageSendView, MessageDetailView)
 
+cosinnus_root_patterns = patterns('', )
 
-cosinnus_root_patterns = patterns('',
+cosinnus_group_patterns = patterns('cosinnus_message.views',
+    url(r'^$',
+        'message_index_view',
+        name='index'),
+
+    url(r'^list/$',
+        'message_list_view',
+        name='list'),
+
+    url(r'^send/$',
+        'message_send_view',
+        {'form_view': 'send'},
+        name='send'),
+
+    url(r'^(?P<slug>[^/]+)/$',
+        'message_detail_view',
+        name='message'),
 )
-
-cosinnus_group_patterns = patterns('',
-    url(r'^$', MessageIndexView.as_view(), name='index'),
-    url(r'^list/$', MessageListView.as_view(), name='list'),
-    url(r'^send/$', MessageSendView.as_view(), {'form_view': 'send'}, name='send'),
-    url(r'^(?P<slug>[^/]+)/$', MessageDetailView.as_view(), name='message'),
-)
-
 
 urlpatterns = cosinnus_group_patterns + cosinnus_root_patterns

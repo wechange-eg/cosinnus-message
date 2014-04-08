@@ -2,15 +2,19 @@
 
 from __future__ import unicode_literals
 
-from django.forms.models import ModelForm
+from django import forms
+from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
-from cosinnus_message.models import Message
+from cosinnus.forms.group import GroupKwargModelFormMixin
+from cosinnus.forms.tagged import TagObjectFormMixin
 from cosinnus.views.mixins.group import GroupFormKwargsMixin
-from django.core.exceptions import ValidationError
+
+from cosinnus_message.models import Message
 
 
-class MessageForm(ModelForm, GroupFormKwargsMixin):
+class MessageForm(GroupKwargModelFormMixin, TagObjectFormMixin,
+                  forms.ModelForm):
 
     class Meta:
         model = Message

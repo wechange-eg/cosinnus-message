@@ -33,26 +33,20 @@ class MessageFormMixin(object):
         send_mail_error = False
         with transaction.commit_manually():
             try:
-                self.object = form.save(commit=False)
-                self.object.group = self.group
-                self.object.creator = self.request.user
-                self.object.save()
-                form.save_m2m()
-
+                form.instance.creator = self.request.user
+                form.instance.save()  # necessary for instance.recipients
                 # send the actual mail
-                self.object.send(self.request)
+                form.instance.send(self.request)
+                ret = super(MessageFormMixin, self).form_valid(form)
             except Exception as e:
                 transaction.rollback()
                 messages.error(self.request,
                     _('Error sending mail! - %(reason)s' % {'reason': str(e)}))
                 send_mail_error = True
+                return self.form_invalid(form)
             else:
                 transaction.commit()
-
-        if send_mail_error:
-            return self.form_invalid(form)
-        else:
-            return HttpResponseRedirect(self.get_success_url())
+                return ret
 
     def get_success_url(self):
         return reverse('cosinnus:message:list',
@@ -64,6 +58,8 @@ class MessageIndexView(RequireReadMixin, RedirectView):
     def get_redirect_url(self, **kwargs):
         return reverse('cosinnus:message:list',
                         kwargs={'group': self.group.slug})
+
+message_index_view = MessageIndexView.as_view()
 
 
 class MessageListView(RequireReadMixin, FilterGroupMixin, TaggedListMixin,
@@ -81,6 +77,8 @@ class MessageListView(RequireReadMixin, FilterGroupMixin, TaggedListMixin,
         user = self.request.user
         return qs.filter_for_user(user if user.is_authenticated() else None)
 
+message_list_view = MessageListView.as_view()
+
 
 class MessageDetailView(RequireReadMixin, FilterGroupMixin, DetailView):
 
@@ -94,6 +92,8 @@ class MessageDetailView(RequireReadMixin, FilterGroupMixin, DetailView):
         qs = super(MessageDetailView, self).get_queryset()
         user = self.request.user
         return qs.filter_for_user(user if user.is_authenticated() else None)
+
+message_detail_view = MessageDetailView.as_view()
 
 
 class MessageSendView(RequireWriteMixin, FilterGroupMixin, MessageFormMixin,
@@ -111,3 +111,5 @@ class MessageSendView(RequireWriteMixin, FilterGroupMixin, MessageFormMixin,
         form.fields['recipients'].queryset = get_user_model() \
                 ._default_manager.filter(id__in=uids)
         return form
+
+message_send_view = MessageSendView.as_view()
