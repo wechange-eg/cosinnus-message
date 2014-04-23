@@ -5,12 +5,14 @@ from __future__ import unicode_literals
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
+from postman.forms import BaseWriteForm
 
 from cosinnus.forms.group import GroupKwargModelFormMixin
 from cosinnus.forms.tagged import TagObjectFormMixin
 from cosinnus.views.mixins.group import GroupFormKwargsMixin
 
 from cosinnus_message.models import Message
+from cosinnus_message.fields import CommaSeparatedUserFullnameField
 
 
 class MessageForm(GroupKwargModelFormMixin, TagObjectFormMixin,
@@ -36,3 +38,33 @@ class MessageForm(GroupKwargModelFormMixin, TagObjectFormMixin,
             recipients = self.fields['recipients'].queryset.all()
 
         return recipients
+    
+class CustomWriteForm(BaseWriteForm):
+    def __init__(self, *args, **kwargs):
+        print ">>>>>>>>>>> aaah"
+        super(CustomWriteForm, self).__init__(*args, **kwargs)
+        
+    recipients = CommaSeparatedUserFullnameField(
+        label=(_("Recipients"), _("Recipient")))
+
+    class Meta(BaseWriteForm.Meta):
+        fields = ('recipients', 'subject', 'body')
+
+
+class CustomReplyForm(CustomWriteForm):
+    def __init__(self, *args, **kwargs):
+        recipient = kwargs.pop('recipient', None)
+        super(CustomReplyForm, self).__init__(*args, **kwargs)
+        self.recipient = recipient
+        self.fields['recipients'].label = _('Additional Recipients')
+        self.fields['recipients'].required = False
+
+    def clean(self):
+        if not self.recipient:
+            raise forms.ValidationError(
+                _("Undefined recipient."))
+        return super(CustomReplyForm, self).clean()
+
+    def save(self, *args, **kwargs):
+        return super(CustomReplyForm, self).save(
+            self.recipient, *args, **kwargs)
