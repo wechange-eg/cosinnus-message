@@ -5,7 +5,6 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import RedirectView, ListView, CreateView
 from django.views.generic.detail import DetailView
@@ -29,8 +28,15 @@ class MessageFormMixin(object):
         context.update({'form_view': self.form_view})
         return context
 
+    def get_form_kwargs(self):
+        kwargs = super(MessageFormMixin, self).get_form_kwargs()
+        kwargs.update({
+            'group': self.group,
+            'user': self.request.user,
+        })
+        return kwargs
+
     def form_valid(self, form):
-        send_mail_error = False
         with transaction.commit_manually():
             try:
                 form.instance.creator = self.request.user
@@ -42,7 +48,6 @@ class MessageFormMixin(object):
                 transaction.rollback()
                 messages.error(self.request,
                     _('Error sending mail! - %(reason)s' % {'reason': str(e)}))
-                send_mail_error = True
                 return self.form_invalid(form)
             else:
                 transaction.commit()
@@ -57,7 +62,7 @@ class MessageIndexView(RequireReadMixin, RedirectView):
 
     def get_redirect_url(self, **kwargs):
         return reverse('cosinnus:message:list',
-                        kwargs={'group': self.group.slug})
+                       kwargs={'group': self.group.slug})
 
 message_index_view = MessageIndexView.as_view()
 
@@ -89,7 +94,8 @@ class MessageDetailView(RequireReadMixin, FilterGroupMixin, DetailView):
         Disallow viewing private messages if not owner or recipient
         """
         # TODO Django>=1.7: change to chained select_relatad calls
-        qs = super(MessageDetailView, self).get_queryset()
+        qs = super(MessageDetailView, self).get_queryset(
+            select_related=('creator', 'recipients',))
         user = self.request.user
         return qs.filter_for_user(user if user.is_authenticated() else None)
 
@@ -102,14 +108,5 @@ class MessageSendView(RequireWriteMixin, FilterGroupMixin, MessageFormMixin,
     form_class = MessageForm
     model = Message
     template_name = 'cosinnus_message/message_send.html'
-
-    def get_form(self, form_class):
-        """ Filter selectible recipients by this group's users """
-        form = super(MessageSendView, self).get_form(form_class)
-        uids = self.group.members
-        uids.remove(self.request.user.id)
-        form.fields['recipients'].queryset = get_user_model() \
-                ._default_manager.filter(id__in=uids)
-        return form
 
 message_send_view = MessageSendView.as_view()
