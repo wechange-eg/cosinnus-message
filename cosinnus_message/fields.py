@@ -1,6 +1,9 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
+from MySQLdb import escape_string
+
+
 from postman.fields import BasicCommaSeparatedUserField
 from ajax_select.fields import AutoCompleteField
 

@@ -8,6 +8,7 @@ from ajax_select import LookupChannel
 
 class MessageRecipientLookup(LookupChannel):
     model = User
+    search_field = 'username'
 
     def get_query(self, q, request):
         #user = request.user
@@ -30,4 +31,3 @@ class MessageRecipientLookup(LookupChannel):
     def check_auth(self, request):
         if not request.user.is_authenticated:
             raise PermissionDenied
-
