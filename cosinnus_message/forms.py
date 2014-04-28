@@ -12,7 +12,7 @@ from cosinnus.forms.tagged import TagObjectFormMixin
 from cosinnus.views.mixins.group import GroupFormKwargsMixin
 
 from cosinnus_message.models import Message
-from cosinnus_message.fields import CommaSeparatedUserFullnameField
+from cosinnus_message.fields import UserSelect2MultipleChoiceField
 
 
 class MessageForm(GroupKwargModelFormMixin, TagObjectFormMixin,
@@ -38,15 +38,13 @@ class MessageForm(GroupKwargModelFormMixin, TagObjectFormMixin,
             recipients = self.fields['recipients'].queryset.all()
 
         return recipients
-    
-class CustomWriteForm(BaseWriteForm):
-    def __init__(self, *args, **kwargs):
-        print ">>>>>>>>>>> aaah"
-        super(CustomWriteForm, self).__init__(*args, **kwargs)
-        
-    recipients = CommaSeparatedUserFullnameField(
-        label=(_("Recipients"), _("Recipient")))
 
+
+class CustomWriteForm(BaseWriteForm):
+    """The form for an authenticated user, to compose a message."""
+    # specify help_text only to avoid the possible default 'Enter text to search.' of ajax_select v1.2.5
+    recipients = UserSelect2MultipleChoiceField(label=_("Recipients"), help_text='')
+    
     class Meta(BaseWriteForm.Meta):
         fields = ('recipients', 'subject', 'body')
 
