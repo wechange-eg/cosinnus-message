@@ -11,6 +11,7 @@ from django.views.generic.detail import DetailView
 from cosinnus.views.mixins.group import (RequireReadMixin, RequireWriteMixin,
     FilterGroupMixin, GroupFormKwargsMixin)
 from cosinnus.views.mixins.tagged import TaggedListMixin
+from cosinnus.views.mixins.user import UserFormKwargsMixin
 
 from cosinnus_message.forms import MessageForm
 from cosinnus_message.models import Message
@@ -102,7 +103,7 @@ message_detail_view = MessageDetailView.as_view()
 
 
 class MessageSendView(RequireWriteMixin, FilterGroupMixin, MessageFormMixin,
-                      GroupFormKwargsMixin, CreateView):
+                      GroupFormKwargsMixin, UserFormKwargsMixin, CreateView):
 
     form_class = MessageForm
     model = Message

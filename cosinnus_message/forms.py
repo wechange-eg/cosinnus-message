@@ -7,26 +7,26 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
-from multiform import InvalidArgument
-
 from cosinnus.forms.group import GroupKwargModelFormMixin
 from cosinnus.forms.tagged import get_form
+from cosinnus.forms.user import UserKwargModelFormMixin
 
 from cosinnus_message.models import Message
 
 
-class _MessageForm(GroupKwargModelFormMixin, forms.ModelForm):
+class _MessageForm(GroupKwargModelFormMixin, UserKwargModelFormMixin,
+                   forms.ModelForm):
 
     class Meta:
         model = Message
         fields = ('title', 'isbroadcast', 'isprivate', 'recipients', 'text')
 
-    def __init__(self, user, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(_MessageForm, self).__init__(*args, **kwargs)
 
         # Filter selectible recipients by this group's users
         uids = self.group.members
-        uids.remove(user.id)
+        uids.remove(self.user.id)
         self.fields['recipients'].queryset = get_user_model()._default_manager \
                                                              .filter(id__in=uids)
 
@@ -48,9 +48,4 @@ class _MessageForm(GroupKwargModelFormMixin, forms.ModelForm):
         return recipients
 
 
-class MessageForm(get_form(_MessageForm, attachable=False)):
-
-    def dispatch_init_user(self, name, user):
-        if name == 'obj':
-            return user
-        return InvalidArgument
+MessageForm = get_form(_MessageForm, attachable=False)
