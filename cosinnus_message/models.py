@@ -83,8 +83,8 @@ class Message(BaseTaggableObjectModel):
             'protocol': 'https' if request.is_secure() else 'http',
             'domain': request.get_host(),
             'url_path': reverse('cosinnus:message:message', kwargs={
-                'group':self.group.slug,
-                'slug':self.slug
+                'group': self.group.slug,
+                'slug': self.slug
             }),
         }
 
