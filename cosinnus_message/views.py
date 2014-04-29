@@ -8,16 +8,17 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import RedirectView, ListView, CreateView
 from django.views.generic.detail import DetailView
 from django.db.models import Q
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth.models import User
+
 from django_select2 import Select2View, NO_ERR_RESP
 
 from cosinnus.views.mixins.group import (RequireReadMixin, RequireWriteMixin,
     FilterGroupMixin, GroupFormKwargsMixin)
 from cosinnus.views.mixins.tagged import TaggedListMixin
 from cosinnus.views.mixins.user import UserFormKwargsMixin
-
 from cosinnus_message.models import Message
-from django.core.exceptions import PermissionDenied
-from django.contrib.auth.models import User
+from cosinnus.models.group import CosinnusGroup
 
 
 class MessageFormMixin(object):
@@ -105,7 +106,6 @@ class MessageDetailView(RequireReadMixin, FilterGroupMixin, DetailView):
 message_detail_view = MessageDetailView.as_view()
 
 
-
 class UserSelect2View(Select2View):
     def check_all_permissions(self, request, *args, **kwargs):
         user = request.user 
@@ -113,6 +113,17 @@ class UserSelect2View(Select2View):
             raise PermissionDenied
         
     def get_results(self, request, term, page, context):
-        emps = User.objects.filter( Q(first_name__icontains=term) | Q(last_name__icontains=term) | Q(username__icontains=term))
-        res = [ (emp.id, "%s %s" % (emp.first_name, emp.last_name),) for emp in emps ]
-        return (NO_ERR_RESP, False, res) # Any error response, Has more results, options list
+        term = term.lower()
+        
+        # username is not used as filter for the term for now, might confuse users why a search result is found
+        users = User.objects.filter( Q(first_name__icontains=term) | Q(last_name__icontains=term))# | Q(username__icontains=term))
+        # filter all groups the user is a member of, and all public groups for the term
+        # use CosinnusGroup.objects.get_cached() to search in all groups instead
+        groups = set(CosinnusGroup.objects.get_for_user(request.user)).union(CosinnusGroup.objects.public())
+        groups = [ group for group in groups if term in group.name.lower() ]
+        
+        # these result sets are what select2 uses to build the choice list
+        results = [ ("user:"+str(user.id), "%s %s" % (user.first_name, user.last_name),) for user in users ]
+        results.extend([ ("group:"+str(group.id), "[[ %s ]]" % (group.name),) for group in groups ])
+        
+        return (NO_ERR_RESP, False, results) # Any error response, Has more results, options list
