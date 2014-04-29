@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 
-from django_select2 import (AutoModelSelect2MultipleField, 
-        HeavyModelSelect2MultipleChoiceField,Select2View)
+from django_select2 import (HeavyModelSelect2MultipleChoiceField)
 from cosinnus_message.views import UserSelect2View
 from django.core.exceptions import ValidationError
 from cosinnus.conf import settings

@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.conf.urls import patterns, url
-from django.views.generic.base import RedirectView
+#from django.views.generic.base import RedirectView
 
 
 cosinnus_root_patterns = patterns('', )
