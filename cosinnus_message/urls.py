@@ -15,10 +15,6 @@ cosinnus_group_patterns = patterns('cosinnus_message.views',
         'message_list_view',
         name='list'),
 
-    url(r'^send/$',
-        'message_send_view',
-        {'form_view': 'send'},
-        name='send'),
 
     url(r'^(?P<slug>[^/]+)/$',
         'message_detail_view',

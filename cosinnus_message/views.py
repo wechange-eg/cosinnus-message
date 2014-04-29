@@ -9,13 +9,16 @@ from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import RedirectView, ListView, CreateView
 from django.views.generic.detail import DetailView
+from django.db.models import Q
+from django_select2 import Select2View, NO_ERR_RESP
 
 from cosinnus.views.mixins.group import (RequireReadMixin, RequireWriteMixin,
     FilterGroupMixin, GroupFormKwargsMixin)
 from cosinnus.views.mixins.tagged import TaggedListMixin
 
-from cosinnus_message.forms import MessageForm
 from cosinnus_message.models import Message
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth.models import User
 
 
 class MessageFormMixin(object):
@@ -96,20 +99,14 @@ class MessageDetailView(RequireReadMixin, FilterGroupMixin, DetailView):
 message_detail_view = MessageDetailView.as_view()
 
 
-class MessageSendView(RequireWriteMixin, FilterGroupMixin, MessageFormMixin,
-                      GroupFormKwargsMixin, CreateView):
 
-    form_class = MessageForm
-    model = Message
-    template_name = 'cosinnus_message/message_send.html'
-
-    def get_form(self, form_class):
-        """ Filter selectible recipients by this group's users """
-        form = super(MessageSendView, self).get_form(form_class)
-        uids = self.group.members
-        uids.remove(self.request.user.id)
-        form.fields['recipients'].queryset = get_user_model() \
-                ._default_manager.filter(id__in=uids)
-        return form
-
-message_send_view = MessageSendView.as_view()
+class UserSelect2View(Select2View):
+    def check_all_permissions(self, request, *args, **kwargs):
+        user = request.user 
+        if not user.is_authenticated():
+            raise PermissionDenied
+        
+    def get_results(self, request, term, page, context):
+        emps = User.objects.filter( Q(first_name__icontains=term) | Q(last_name__icontains=term) | Q(username__icontains=term))
+        res = [ (emp.id, "%s %s" % (emp.first_name, emp.last_name),) for emp in emps ]
+        return (NO_ERR_RESP, False, res) # Any error response, Has more results, options list

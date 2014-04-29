@@ -88,6 +88,7 @@ Refer to documentation.
 """
 from __future__ import unicode_literals
 from cosinnus_message.forms import CustomReplyForm, CustomWriteForm
+from cosinnus_message.views import UserSelect2View
 
 try:
     from django.conf.urls import patterns, url  # django 1.4
@@ -102,6 +103,8 @@ from postman.views import (InboxView, SentView, ArchivesView, TrashView,
 
 
 urlpatterns = patterns('',
+    url(r'^ajax/userselect/$', UserSelect2View.as_view(), name='user_select2_view'),
+                       
     url(r'^posteingang/(?:(?P<option>'+OPTIONS+')/)?$', InboxView.as_view(), name='postman_inbox'),
     url(r'^gesendet/(?:(?P<option>'+OPTIONS+')/)?$', SentView.as_view(), name='postman_sent'),
     url(r'^archiv/(?:(?P<option>'+OPTIONS+')/)?$', ArchivesView.as_view(), name='postman_archives'),

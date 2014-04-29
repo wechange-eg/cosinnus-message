@@ -13,6 +13,7 @@ from cosinnus.views.mixins.group import GroupFormKwargsMixin
 
 from cosinnus_message.models import Message
 from cosinnus_message.fields import UserSelect2MultipleChoiceField
+from cosinnus_message.views import UserSelect2View
 
 
 class MessageForm(GroupKwargModelFormMixin, TagObjectFormMixin,
@@ -43,7 +44,8 @@ class MessageForm(GroupKwargModelFormMixin, TagObjectFormMixin,
 class CustomWriteForm(BaseWriteForm):
     """The form for an authenticated user, to compose a message."""
     # specify help_text only to avoid the possible default 'Enter text to search.' of ajax_select v1.2.5
-    recipients = UserSelect2MultipleChoiceField(label=_("Recipients"), help_text='')
+    recipients = UserSelect2MultipleChoiceField(label=_("Recipients"), help_text='', 
+                                                data_view='user_select2_view')
     
     class Meta(BaseWriteForm.Meta):
         fields = ('recipients', 'subject', 'body')
