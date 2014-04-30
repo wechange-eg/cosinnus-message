@@ -43,4 +43,5 @@ class UserSelect2MultipleChoiceField(HeavyModelSelect2MultipleChoiceField):
         # combine the groups users with the directly selected users
         recipients.update( User.objects.filter(id__in=user_ids) )
 
-        return recipients
+        return list(recipients)
+    
