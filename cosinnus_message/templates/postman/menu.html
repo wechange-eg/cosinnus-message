@@ -24,7 +24,7 @@
 
 {% captureas href %}{% url 'postman_write' %}{% endcaptureas %}
 {% captureas label %}{% trans "Verfassen" %}{% endcaptureas %}
-{% include "cosinnus/leftnav_button.html" with icon="fa-pencil" label=label href=href  %}
+{% include "cosinnus/leftnav_button.html" with extra_classes="" icon="fa-pencil" label=label href=href  %}
 
 
 {% endblock %}
