@@ -1,5 +1,5 @@
 {% extends "postman/base.html" %}
-{% load i18n bootstrap3 %}
+{% load i18n bootstrap3 widget_tweaks %}
 {% block extrahead %}{{ block.super }}
 {% if autocompleter_app.is_active %}
 {# dj v1.4 #}{% load static %}
@@ -38,7 +38,7 @@
 	                    <i class="fa fa-user"></i>
 	                </a>
 	                <div class="media-body">
-	                    {% bootstrap_field form.recipients %}
+	                    {% render_field form.recipients class+="user-selector w100" placeholder=form.recipients.label %}
 	                </div>
 	            </li>
 	        </ul>
@@ -51,16 +51,13 @@
 	                    <i class="fa fa-pencil"></i>
 	                </a>
 	                <div class="media-body">
-	                    <!-- <input class="form-control"
-	                        placeholder="Betreff"
-	                        value="" />-->
-	                    {% bootstrap_field form.subject %}
+	                    {% render_field form.subject class+="form-control" placeholder=form.subject.label %}
 	                </div>
 	            </li>
 	        </ul>
 	    </div>
         
-        {% bootstrap_field form.body %}
+        {% render_field form.body class+="app-message-text" placeholder=form.body.label %}
         <!-- 
         TODO: Use django-widget-tweaks? 
         https://pypi.python.org/pypi/django-widget-tweaks
