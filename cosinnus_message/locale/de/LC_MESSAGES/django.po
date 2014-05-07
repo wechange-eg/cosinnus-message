@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-24 19:19+0100\n"
+"POT-Creation-Date: 2014-05-07 12:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,110 +17,245 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\cosinnus_app.py:6 .\models.py:35
-#: .\templates\cosinnus_message\message_detail.html.py:18
-#: .\templates\cosinnus_message\message_send.html.py:5
+#: .\cosinnus_app.py:14 .\templates\postman\view.html.py:4
+#: .\templates\postman\view.html.py:27
 msgid "Message"
 msgstr "Nachricht"
 
-#: .\forms.py:24
-msgid "Please select a recipient for the message!"
-msgstr "Bitte wählen sie mindestens einen Empfänger aus!"
-
-#: .\models.py:25
-msgid "Text"
-msgstr "Nachrichtentext"
-
-#: .\models.py:27
-msgid "Broadcast"
-msgstr "Rundmail (Alle Gruppenmitglieder)"
-
-#: .\models.py:28
-msgid "Private"
-msgstr "Private Nachricht"
-
-#: .\models.py:29
+#: .\forms.py:15
 msgid "Recipients"
 msgstr "Empfänger"
 
-#: .\models.py:36 .\templates\cosinnus_message\base.html.py:8
-#: .\templates\cosinnus_message\message_list.html.py:3
-#: .\templates\cosinnus_message\message_list.html.py:7
+#: .\forms.py:27
+msgid "Additional Recipients"
+msgstr "Zusätzliche Empfänger"
+
+#: .\forms.py:33
+msgid "Undefined recipient."
+msgstr ""
+
+#: .\templates\cosinnus_message\base.html.py:6
 msgid "Messages"
 msgstr "Nachrichten"
 
-#: .\models.py:40 .\templates\cosinnus_message\message_list.html.py:39
-msgid "Author"
-msgstr "Autor"
+#: .\templates\postman\archives.html.py:4
+#: .\templates\postman\archives.html.py:8
+msgid "Archived Messages"
+msgstr "Archivierte Nachricht"
 
-#: .\models.py:57
-#, python-format
-msgid "%(sender)s via %(group)s: \"%(title)s\""
-msgstr "%(sender)s via %(group)s: \"%(title)s\""
+#: .\templates\postman\base_folder.html.py:45
+msgid "No messages."
+msgstr "Keine Nachrichten."
 
-#: .\views.py:54
-#, python-format
-msgid "Error sending mail! - %(reason)s"
-msgstr "Fehler beim Versenden der e-Mail-Nachricht! - %(reason)s"
-
-#: .\templates\cosinnus_message\email.txt.py:2
-#, python-format
-msgid ""
-"%(sender)s wrote a new message in group %(group)s:\n"
-"\n"
-"%(title)s\n"
-"\n"
-"%(text)s\n"
-"\n"
-"Click here to see the message: %(message_url)s\n"
-"\n"
+#: .\templates\postman\base_folder.html.py:60
+#: .\templates\postman\view.html.py:107
+msgid "Delete"
 msgstr ""
-"%(sender)s hat eine neue Nachricht in der Gruppe %(group)s geschrieben:\n"
-"\n"
-"%(title)s\n"
-"\n"
-"%(text)s\n"
-"\n"
-"Klicken sie hier um die Nachricht auf der Webseite anzusehen: %(message_url)s\n"
 
-#: .\templates\cosinnus_message\message_list.html.py:12
-#: .\templates\cosinnus_message\message_send.html.py:24
-msgid "Send message"
-msgstr "Nachricht versenden"
+#: .\templates\postman\base_folder.html.py:74
+#: .\templates\postman\view.html.py:14 .\templates\postman\view.html.py:22
+#: .\templates\postman\view.html.py:121
+msgid "Archive"
+msgstr ""
 
-#: .\templates\cosinnus_message\message_list.html.py:22
-#: .\templates\cosinnus_message\message_send.html.py:13
-msgid "Send Message"
-msgstr "Nachricht versenden"
+#: .\templates\postman\base_folder.html.py:88
+msgid "Undelete"
+msgstr ""
 
-#: .\templates\cosinnus_message\message_list.html.py:33
-msgid "No tags available."
-msgstr "Es gibt keine Tags."
+#: .\templates\postman\base_write.html.py:36
+msgid "Please enter message..."
+msgstr "Bitte Nachricht eingeben..."
 
-#: .\templates\cosinnus_message\message_list.html.py:38
-msgid "Title"
-msgstr "Titel"
-
-#: .\templates\cosinnus_message\message_list.html.py:40
-msgid "Created"
-msgstr "Erstellt"
-
-#: .\templates\cosinnus_message\message_list.html.py:41
-msgid "Tags"
-msgstr "Tags"
-
-#: .\templates\cosinnus_message\message_list.html.py:42
-msgid "Actions"
-msgstr "Aktionen"
-
-#: .\templates\cosinnus_message\message_list.html.py:60
-msgid "There are no messages."
-msgstr "Keine Nachrichten vorhanden."
-
-#: .\templates\cosinnus_message\message_send.html.py:34
+#: .\templates\postman\base_write.html.py:46
 msgid "Send"
 msgstr "Absenden"
 
-#: .\templates\cosinnus_message\message_send.html.py:35
-msgid "Cancel"
-msgstr "Abbrechen"
+#: .\templates\postman\email_user.txt.py:1
+msgid "Dear user,"
+msgstr ""
+
+#: .\templates\postman\email_user.txt.py:3
+#: .\templates\postman\email_visitor.txt.py:3
+#, python-format
+msgid "On %(date)s, you asked to send a message to the user '%(recipient)s'."
+msgstr ""
+
+#: .\templates\postman\email_user.txt.py:5
+#: .\templates\postman\email_visitor.txt.py:5
+msgid "Your message has been rejected by the moderator"
+msgstr ""
+
+#: .\templates\postman\email_user.txt.py:5
+#: .\templates\postman\email_visitor.txt.py:5
+msgid ", for the following reason:"
+msgstr ""
+
+#: .\templates\postman\email_user.txt.py:9
+#: .\templates\postman\email_visitor.txt.py:10
+#, python-format
+msgid "On %(date)s, you sent a message to the user '%(sender)s'."
+msgstr ""
+
+#: .\templates\postman\email_user.txt.py:10
+msgid "Your correspondent has given you an answer."
+msgstr ""
+
+#: .\templates\postman\email_user.txt.py:11
+#, python-format
+msgid "You have received a copy of a response from the user '%(sender)s'."
+msgstr ""
+
+#: .\templates\postman\email_user.txt.py:13
+#, python-format
+msgid "You have received a message from the user '%(sender)s'."
+msgstr ""
+
+#: .\templates\postman\email_user.txt.py:16
+#: .\templates\postman\email_visitor.txt.py:14
+msgid "Thank you again for your interest in our services."
+msgstr ""
+
+#: .\templates\postman\email_user.txt.py:17
+#: .\templates\postman\email_visitor.txt.py:16
+msgid "The site administrator"
+msgstr ""
+
+#: .\templates\postman\email_user.txt.py:19
+#: .\templates\postman\email_visitor.txt.py:18
+msgid ""
+"Note: This message is issued by an automated system.\n"
+"Do not reply, this would not be taken into account."
+msgstr ""
+
+#: .\templates\postman\email_user_subject.txt.py:1
+#: .\templates\postman\email_visitor_subject.txt.py:1
+#, python-format
+msgid "Message \"%(subject)s\" on the site %(sitename)s"
+msgstr ""
+
+#: .\templates\postman\email_visitor.txt.py:1
+msgid "Dear visitor,"
+msgstr ""
+
+#: .\templates\postman\email_visitor.txt.py:8
+msgid "As a reminder, please find below the content of your message."
+msgstr ""
+
+#: .\templates\postman\email_visitor.txt.py:11
+msgid "Please find below the answer from your correspondent."
+msgstr ""
+
+#: .\templates\postman\email_visitor.txt.py:15
+msgid "For more comfort, we encourage you to open an account on the site."
+msgstr ""
+
+#: .\templates\postman\inbox.html.py:4 .\templates\postman\inbox.html.py:8
+#: .\templates\postman\view.html.py:24
+msgid "Inbox"
+msgstr ""
+
+#: .\templates\postman\menu.html.py:10
+msgid "Posteingang"
+msgstr ""
+
+#: .\templates\postman\menu.html.py:14
+msgid "Gesendet"
+msgstr ""
+
+#: .\templates\postman\menu.html.py:18
+msgid "Archiv"
+msgstr ""
+
+#: .\templates\postman\menu.html.py:22
+msgid "Papierkorb"
+msgstr ""
+
+#: .\templates\postman\menu.html.py:26
+msgid "Verfassen"
+msgstr ""
+
+#: .\templates\postman\reply.html.py:4 .\templates\postman\reply.html.py:8
+#: .\templates\postman\view.html.py:85
+msgid "Reply"
+msgstr ""
+
+#: .\templates\postman\reply.html.py:11
+msgid "Recipient"
+msgstr "Empfänger"
+
+#: .\templates\postman\sent.html.py:4 .\templates\postman\sent.html.py:8
+#: .\templates\postman\view.html.py:16
+msgid "Sent"
+msgstr "Gesendet"
+
+#: .\templates\postman\trash.html.py:4 .\templates\postman\trash.html.py:8
+#: .\templates\postman\view.html.py:12 .\templates\postman\view.html.py:20
+msgid "Trash"
+msgstr "Papierkorb"
+
+#: .\templates\postman\view.html.py:27
+msgid "Conversation"
+msgstr ""
+
+#: .\templates\postman\view.html.py:69
+msgid "Answer"
+msgstr ""
+
+#: .\templates\postman\write.html.py:4 .\templates\postman\write.html.py:8
+msgid "Write"
+msgstr "Verfassen"
+
+#~ msgid "Please select a recipient for the message!"
+#~ msgstr "Bitte wählen sie mindestens einen Empfänger aus!"
+
+#~ msgid "Text"
+#~ msgstr "Nachrichtentext"
+
+#~ msgid "Broadcast"
+#~ msgstr "Rundmail (Alle Gruppenmitglieder)"
+
+#~ msgid "Author"
+#~ msgstr "Autor"
+
+#~ msgid "%(sender)s via %(group)s: \"%(title)s\""
+#~ msgstr "%(sender)s via %(group)s: \"%(title)s\""
+
+#~ msgid "Error sending mail! - %(reason)s"
+#~ msgstr "Fehler beim Versenden der e-Mail-Nachricht! - %(reason)s"
+
+#~ msgid ""
+#~ "%(sender)s wrote a new message in group %(group)s:\n"
+#~ "\n"
+#~ "%(title)s\n"
+#~ "\n"
+#~ "%(text)s\n"
+#~ "\n"
+#~ "Click here to see the message: %(message_url)s\n"
+#~ "\n"
+#~ msgstr ""
+#~ "%(sender)s hat eine neue Nachricht in der Gruppe %(group)s geschrieben:\n"
+#~ "\n"
+#~ "%(title)s\n"
+#~ "\n"
+#~ "%(text)s\n"
+#~ "\n"
+#~ "Klicken sie hier um die Nachricht auf der Webseite anzusehen: %"
+#~ "(message_url)s\n"
+
+#~ msgid "Send message"
+#~ msgstr "Nachricht versenden"
+
+#~ msgid "No tags available."
+#~ msgstr "Es gibt keine Tags."
+
+#~ msgid "Title"
+#~ msgstr "Titel"
+
+#~ msgid "Created"
+#~ msgstr "Erstellt"
+
+#~ msgid "Actions"
+#~ msgstr "Aktionen"
+
+#~ msgid "Cancel"
+#~ msgstr "Abbrechen"
