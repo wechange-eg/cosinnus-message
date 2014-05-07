@@ -5,7 +5,27 @@
 
 {% block breadcrumb %}
     {{ block.super }}
-    <li class="active">{% trans "TODO breadcrumb" %}</li>
+    
+    {% with pm_messages.all|first as message %}
+	    {% if message.sender == user %}
+	       {% if message.sender_deleted_at %}
+               <li class="active"><a href="{% url 'postman_trash' %}">{% trans "Trash" %}</a></li>	       
+	       {% elif message.sender_archived %}
+               <li class="active"><a href="{% url 'postman_archives' %}">{% trans "Archive" %}</a></li>         
+           {% else %}
+	           <li class="active"><a href="{% url 'postman_sent' %}">{% trans "Sent" %}</a></li>
+	       {% endif %}
+	    {% else %}
+	       {% if message.recipient_deleted_at %}
+               <li class="active"><a href="{% url 'postman_trash' %}">{% trans "Trash" %}</a></li>         
+           {% elif message.recipient_archived %}
+               <li class="active"><a href="{% url 'postman_archives' %}">{% trans "Archive" %}</a></li>         
+           {% else %}
+               <li class="active"><a href="{% url 'postman_inbox' %}">{% trans "Inbox" %}</a></li>
+           {% endif %}
+	    {% endif %}
+        <li class="active">{% if pm_messages|length > 1 %}{% trans "Conversation" %}{% else %}{% trans "Message" %}{% endif %}: {{ message.subject }}</li>
+    {% endwith %}
 {% endblock %}
 
 {% block postman_content %}
