@@ -18,7 +18,8 @@ class CosinnusMessageView(MessageView):
     def get_context_data(self, **kwargs):
         """ clear the body text, do not quote the message when replying """
         context = super(CosinnusMessageView, self).get_context_data(**kwargs)
-        context['form'].initial['body'] = None
+        if context['form']:
+            context['form'].initial['body'] = None
         return context
 
 class CosinnusConversationView(ConversationView):
@@ -27,7 +28,8 @@ class CosinnusConversationView(ConversationView):
     def get_context_data(self, **kwargs):
         """ clear the body text, do not quote the message when replying """
         context = super(CosinnusConversationView, self).get_context_data(**kwargs)
-        context['form'].initial['body'] = None
+        if context['form']:
+            context['form'].initial['body'] = None
         return context
 
 
