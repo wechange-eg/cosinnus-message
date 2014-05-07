@@ -35,11 +35,6 @@
     
     {% endfor %}
 
-
-<!-- BIG TODO: this will only work if we are in a conversation started by the other person!!! -->
-<span>BIG TODO: this will only work if we are in a conversation started by the other person!!!</span>
-{% with pm_messages.all|first as message %}
-
     {% if reply_to_pk %}
     <form action="{% url 'postman_reply' reply_to_pk %}?next={{ next_url|urlencode }}" method="post">{% csrf_token %}
 	    
@@ -77,39 +72,40 @@
 
 </div><!-- content-box -->
 
+{% with pm_messages.all|first as message %}
 
-<form action="" method="post">{% csrf_token %}
-	<input type="hidden" {% if pm_messages|length > 1 and message.thread_id %}name="tpks" value="{{ message.thread_id }}"{% else %}name="pks" value="{{ message.pk }}"{% endif %} />
-	
-	<button type="submit"  onclick="this.form.action='{% url 'postman_delete' %}?next={{ next_url|urlencode }}'" class="btn btn-emphasized">
-	    <ul class="media-list">
-	        <li class="media">
-	            <a class="pull-left" href="#">
-	                <i class="fa fa-eraser"></i>
-	            </a>
-	            <div class="media-body">
-	                {% trans "Delete" %}
-	            </div>
-	        </li>
-	    </ul>
-	</button>
-	
-	{% if not archived %}
-	<button type="submit" onclick="this.form.action='{% url 'postman_archive' %}?next={{ next_url|urlencode }}'" class="btn btn-emphasized">
-	    <ul class="media-list">
-	        <li class="media">
-	            <a class="pull-left" href="#">
-	                <i class="fa fa-folder"></i>
-	            </a>
-	            <div class="media-body">
-	                {% trans "Archive" %}
-	            </div>
-	        </li>
-	    </ul>
-	</button>
-	{% endif %}
-	
-</form>
+	<form action="" method="post">{% csrf_token %}
+		<input type="hidden" {% if pm_messages|length > 1 and message.thread_id %}name="tpks" value="{{ message.thread_id }}"{% else %}name="pks" value="{{ message.pk }}"{% endif %} />
+		
+		<button type="submit"  onclick="this.form.action='{% url 'postman_delete' %}?next={{ next_url|urlencode }}'" class="btn btn-emphasized">
+		    <ul class="media-list">
+		        <li class="media">
+		            <a class="pull-left" href="#">
+		                <i class="fa fa-eraser"></i>
+		            </a>
+		            <div class="media-body">
+		                {% trans "Delete" %}
+		            </div>
+		        </li>
+		    </ul>
+		</button>
+		
+		{% if not archived %}
+		<button type="submit" onclick="this.form.action='{% url 'postman_archive' %}?next={{ next_url|urlencode }}'" class="btn btn-emphasized">
+		    <ul class="media-list">
+		        <li class="media">
+		            <a class="pull-left" href="#">
+		                <i class="fa fa-folder"></i>
+		            </a>
+		            <div class="media-body">
+		                {% trans "Archive" %}
+		            </div>
+		        </li>
+		    </ul>
+		</button>
+		{% endif %}
+		
+	</form>
 
 {% endwith %}
 
