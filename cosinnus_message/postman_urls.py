@@ -88,7 +88,8 @@ Refer to documentation.
 """
 from __future__ import unicode_literals
 from cosinnus_message.forms import CustomReplyForm, CustomWriteForm
-from cosinnus_message.views import UserSelect2View
+from cosinnus_message.views import UserSelect2View, CosinnusMessageView,\
+    CosinnusConversationView
 
 try:
     from django.conf.urls import patterns, url  # django 1.4
@@ -117,8 +118,8 @@ urlpatterns = patterns('',
     url(r'^neu/(?:(?P<recipients>[\d]+)/)?$',
         WriteView.as_view(form_classes=(CustomWriteForm, CustomWriteForm)),
         name='postman_write'),
-    url(r'^nachricht/(?P<message_id>[\d]+)/$', MessageView.as_view(), name='postman_view'),
-    url(r'^nachricht/t/(?P<thread_id>[\d]+)/$', ConversationView.as_view(), name='postman_view_conversation'),
+    url(r'^nachricht/(?P<message_id>[\d]+)/$', CosinnusMessageView.as_view(), name='postman_view'),
+    url(r'^nachricht/t/(?P<thread_id>[\d]+)/$', CosinnusConversationView.as_view(), name='postman_view_conversation'),
     url(r'^archiv/$', ArchiveView.as_view(), name='postman_archive'),
     url(r'^loeschen/$', DeleteView.as_view(), name='postman_delete'),
     url(r'^wiederherstellen/$', UndeleteView.as_view(), name='postman_undelete'),
