@@ -1,5 +1,5 @@
 {% extends "postman/base.html" %}
-{% load i18n bootstrap3 widget_tweaks %}
+{% load i18n bootstrap3 widget_tweaks cosinnus_tags %}
 
 {% block postman_content %}
 <!-- a box with semi transparent background -->
@@ -33,14 +33,8 @@
 	        </ul>
 	    </div>
         
-        {% render_field form.body class+="app-message-text" placeholder=form.body.label %}
-        <!-- 
-        TODO: Use django-widget-tweaks? 
-        https://pypi.python.org/pypi/django-widget-tweaks
-        
-        http://stackoverflow.com/questions/16822600/how-to-customize-the-input-element-generated-by-django-forms
-         -->          
-	
+        {% captureas label %}{% trans "Please enter message..." %}{% endcaptureas %}
+        {% render_field form.body class+="app-message-text" placeholder=label %}
 	
 	    <button type="submit" class="btn btn-emphasized app-message-send-button">
 	        <ul class="media-list">
