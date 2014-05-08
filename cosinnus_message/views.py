@@ -12,6 +12,28 @@ from django.http import HttpResponseRedirect
 from django_select2 import Select2View, NO_ERR_RESP
 
 from cosinnus.models.group import CosinnusGroup
+from postman.views import ConversationView, MessageView
+
+
+class CosinnusMessageView(MessageView):
+    """Display one specific message."""
+    
+    def get_context_data(self, **kwargs):
+        """ clear the body text, do not quote the message when replying """
+        context = super(CosinnusMessageView, self).get_context_data(**kwargs)
+        if context['form']:
+            context['form'].initial['body'] = None
+        return context
+
+class CosinnusConversationView(ConversationView):
+    """Display a conversation."""
+    
+    def get_context_data(self, **kwargs):
+        """ clear the body text, do not quote the message when replying """
+        context = super(CosinnusConversationView, self).get_context_data(**kwargs)
+        if context['form']:
+            context['form'].initial['body'] = None
+        return context
 
 
 def index(request, *args, **kwargs):
