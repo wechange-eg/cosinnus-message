@@ -8,6 +8,7 @@ from django.conf.urls import patterns, url
 cosinnus_root_patterns = patterns('', )
 
 cosinnus_group_patterns = patterns('cosinnus_message.views',
+    url(r'^$', 'index', name='index'),
     # this doesn't work as a redirect to root
     #url(r'^$', RedirectView.as_view(url='/posteingang/')),
 )
