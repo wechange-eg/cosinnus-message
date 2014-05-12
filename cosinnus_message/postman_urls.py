@@ -105,7 +105,7 @@ from postman.views import (InboxView, SentView, ArchivesView, TrashView,
 
 urlpatterns = patterns('',
     url(r'^ajax/userselect/$', UserSelect2View.as_view(), name='user_select2_view'),
-                       
+
     url(r'^posteingang/(?:(?P<option>'+OPTIONS+')/)?$', InboxView.as_view(), name='postman_inbox'),
     url(r'^gesendet/(?:(?P<option>'+OPTIONS+')/)?$', SentView.as_view(), name='postman_sent'),
     url(r'^archiv/(?:(?P<option>'+OPTIONS+')/)?$', ArchivesView.as_view(), name='postman_archives'),
@@ -123,5 +123,5 @@ urlpatterns = patterns('',
     url(r'^archiv/$', ArchiveView.as_view(), name='postman_archive'),
     url(r'^loeschen/$', DeleteView.as_view(), name='postman_delete'),
     url(r'^wiederherstellen/$', UndeleteView.as_view(), name='postman_undelete'),
-    (r'^$', RedirectView.as_view(url='posteingang/')),
+    url(r'^$', RedirectView.as_view(url='posteingang/'), name='postman-index'),
 )
