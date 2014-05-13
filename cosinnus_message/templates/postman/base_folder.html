@@ -21,6 +21,7 @@
 		            <li class="media">
 		                <a class="pull-left" href="#">
 		                    <i class="fa fa-square-o"></i>
+		                    <input type="hidden" {% if by_conversation and message.thread_id %}name="delete_tpk__{{message.thread_id}}"{% else %}name="delete_pk__{{ message.pk }}"{% endif %}>
 		                </a>
 		
 		                <div class="media-body">

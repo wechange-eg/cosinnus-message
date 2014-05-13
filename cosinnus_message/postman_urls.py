@@ -89,7 +89,7 @@ Refer to documentation.
 from __future__ import unicode_literals
 from cosinnus_message.forms import CustomReplyForm, CustomWriteForm
 from cosinnus_message.views import UserSelect2View, CosinnusMessageView,\
-    CosinnusConversationView
+    CosinnusConversationView, ArchiveView, DeleteView, UndeleteView
 
 try:
     from django.conf.urls import patterns, url  # django 1.4
@@ -99,8 +99,7 @@ from django.views.generic.base import RedirectView
 
 from postman import OPTIONS
 from postman.views import (InboxView, SentView, ArchivesView, TrashView,
-        WriteView, ReplyView, MessageView, ConversationView,
-        ArchiveView, DeleteView, UndeleteView)
+        WriteView, ReplyView)
 
 
 urlpatterns = patterns('',

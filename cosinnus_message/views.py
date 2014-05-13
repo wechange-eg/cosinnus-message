@@ -12,7 +12,19 @@ from django.http import HttpResponseRedirect
 from django_select2 import Select2View, NO_ERR_RESP
 
 from cosinnus.models.group import CosinnusGroup
-from postman.views import ConversationView, MessageView
+from postman.views import ConversationView, MessageView, csrf_protect_m,\
+    login_required_m, _get_referer
+from django.views.generic.base import View
+from postman.models import Message
+from django.http.response import Http404
+from django.contrib import messages
+from django.shortcuts import redirect
+try:
+    from django.utils.timezone import now  # Django 1.4 aware datetimes
+except ImportError:
+    from datetime import datetime
+    now = datetime.now
+from django.utils.translation import ugettext_lazy as _
 
 
 class CosinnusMessageView(MessageView):
@@ -34,6 +46,77 @@ class CosinnusConversationView(ConversationView):
         if context['form']:
             context['form'].initial['body'] = None
         return context
+
+
+
+class UpdateMessageMixin(object):
+    """
+    Code common to the archive/delete/undelete actions.
+
+    Attributes:
+        ``field_bit``: a part of the name of the field to update
+        ``success_msg``: the displayed text in case of success
+    Optional attributes:
+        ``field_value``: the value to set in the field
+        ``success_url``: where to redirect to after a successful POST
+
+    """
+    http_method_names = ['post']
+    field_value = None
+    success_url = None
+
+    @csrf_protect_m
+    @login_required_m
+    def dispatch(self, *args, **kwargs):
+        return super(UpdateMessageMixin, self).dispatch(*args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        next_url = _get_referer(request) or 'postman_inbox'
+        
+        """ This is all we wanted to do that we needed to override the postman views for """
+        #pks = request.POST.getlist('pks')
+        #tpks = request.POST.getlist('tpks')
+        pks = [k.split('__')[1] for k,v in request.POST.items() if 'delete_pk' in k and v=='true']
+        tpks = [k.split('__')[1] for k,v in request.POST.items() if 'delete_tpk' in k and v=='true']
+        
+        if pks or tpks:
+            user = request.user
+            filter = Q(pk__in=pks) | Q(thread__in=tpks)
+            recipient_rows = Message.objects.as_recipient(user, filter).update(**{'recipient_{0}'.format(self.field_bit): self.field_value})
+            sender_rows = Message.objects.as_sender(user, filter).update(**{'sender_{0}'.format(self.field_bit): self.field_value})
+            if not (recipient_rows or sender_rows):
+                raise Http404  # abnormal enough, like forged ids
+            messages.success(request, self.success_msg, fail_silently=True)
+            return redirect(request.GET.get('next') or self.success_url or next_url)
+        else:
+            messages.warning(request, _("Select at least one object."), fail_silently=True)
+            return redirect(next_url)
+
+
+class ArchiveView(UpdateMessageMixin, View):
+    """Mark messages/conversations as archived."""
+    field_bit = 'archived'
+    success_msg = _("Messages or conversations successfully archived.")
+    field_value = True
+
+
+class DeleteView(UpdateMessageMixin, View):
+    """Mark messages/conversations as deleted."""
+    field_bit = 'deleted_at'
+    success_msg = _("Messages or conversations successfully deleted.")
+    field_value = now()
+
+
+class UndeleteView(UpdateMessageMixin, View):
+    """Revert messages/conversations from marked as deleted."""
+    field_bit = 'deleted_at'
+    success_msg = _("Messages or conversations successfully recovered.")
+
+
+
+
+
+
 
 
 def index(request, *args, **kwargs):
