@@ -20,6 +20,8 @@ from django.http.response import Http404
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.utils.html import escape
+from django.template.loader import render_to_string
+
 try:
     from django.utils.timezone import now  # Django 1.4 aware datetimes
 except ImportError:
@@ -153,9 +155,9 @@ class UserSelect2View(Select2View):
 
         # these result sets are what select2 uses to build the choice list
         
-        results = [("user:" + six.text_type(user.id), "<strong>User:</strong> %s %s" % (escape(user.first_name), escape(user.last_name)),)
+        results = [("user:" + six.text_type(user.id), render_to_string('cosinnus_message/user_select_pill.html', {'type':'user','text':escape(user.first_name) + " " + escape(user.last_name)}),)
                    for user in users]
-        results.extend([("group:" + six.text_type(group.id), "<strong>Group:</strong> %s" % (escape(group.name)),)
+        results.extend([("group:" + six.text_type(group.id), render_to_string('cosinnus_message/user_select_pill.html', {'type':'group','text':escape(group.name)}),)
                        for group in groups])
 
         # Any error response, Has more results, options list

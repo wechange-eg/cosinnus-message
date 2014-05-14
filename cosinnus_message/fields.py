@@ -18,6 +18,9 @@ class UserSelect2MultipleChoiceField(HeavyModelSelect2MultipleChoiceField):
             Note: You are responsible for cleaning the content, i.e. with  django.utils.html.escape()! """
         super(UserSelect2MultipleChoiceField, self).__init__(*args, **kwargs)
         self.widget.options['escapeMarkup'] = JSFunction('function(m) { return m; }')
+        # this doesn't seem to help in removing the <div> tags
+        #self.widget.options['formatResult'] = JSFunction('function(data) { return data.text; }')
+        #self.widget.options['formatSelection'] = JSFunction('function(data) { return data.text; }')
     
     def clean(self, value):
         """ We organize the ids gotten back from the recipient select2 field.
