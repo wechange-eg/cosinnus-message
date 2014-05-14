@@ -1,5 +1,5 @@
 {% extends "postman/base.html" %}
-{% load i18n postman_tags widget_tweaks %}
+{% load i18n postman_tags widget_tweaks thumbnail %}
 
 {% block page_title %}{% trans "Message" %}{{ block.super }}{% endblock %}
 
@@ -33,19 +33,22 @@
 <!-- a box with semi transparent background -->
 <div class="content-box">
     
-    {% for message in pm_messages %}
+    {% for message in pm_messages reversed %}
     
 	    <div class="btn btn-emphasized w100">
 	        <ul class="media-list">
 	            <li class="media">
 	                <a class="pull-left" href="#">
-	                    <i class="fa fa-user"></i>
+	                    {% if message.sender.cosinnus_profile.avatar %}
+	                       <img src="{% thumbnail message.sender.cosinnus_profile.avatar 35x35 crop=smart %}" />
+	                    {% else %}
+	                       <i class="fa fa-user"></i>
+	                    {% endif %}
 	                </a>
 	                <div class="media-body">
 	                    <a href="documents-edit.html">
 	                        <span class="annotation" data-date="{{ message.sent_at }}"></span>
 	                        <strong>{{ message.obfuscated_sender|or_me:user }}</strong>
-	                        {{ message.subject }}
 	                    </a>
 	                </div>
 	            </li>
