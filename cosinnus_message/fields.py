@@ -6,11 +6,18 @@ from django.core.exceptions import ValidationError
 from cosinnus.conf import settings
 from django.http.response import Http404
 from cosinnus.models.group import CosinnusGroup
+from django_select2.util import JSFunction
 
 class UserSelect2MultipleChoiceField(HeavyModelSelect2MultipleChoiceField):
     queryset = User.objects
     search_fields = ['username__icontains', ]
     data_view = UserSelect2View
+    
+    def __init__(self, *args, **kwargs):
+        """ Enable returning HTML formatted results in django-select2 return views!
+            Note: You are responsible for cleaning the content, i.e. with  django.utils.html.escape()! """
+        super(UserSelect2MultipleChoiceField, self).__init__(*args, **kwargs)
+        self.widget.options['escapeMarkup'] = JSFunction('function(m) { return m; }')
     
     def clean(self, value):
         """ We organize the ids gotten back from the recipient select2 field.

@@ -19,6 +19,7 @@ from postman.models import Message
 from django.http.response import Http404
 from django.contrib import messages
 from django.shortcuts import redirect
+from django.utils.html import escape
 try:
     from django.utils.timezone import now  # Django 1.4 aware datetimes
 except ImportError:
@@ -151,9 +152,10 @@ class UserSelect2View(Select2View):
         groups = [group for group in groups if term in group.name.lower()]
 
         # these result sets are what select2 uses to build the choice list
-        results = [("user:" + six.text_type(user.id), "%s %s" % (user.first_name, user.last_name),)
+        
+        results = [("user:" + six.text_type(user.id), "<strong>User:</strong> %s %s" % (escape(user.first_name), escape(user.last_name)),)
                    for user in users]
-        results.extend([("group:" + six.text_type(group.id), "[[ %s ]]" % (group.name),)
+        results.extend([("group:" + six.text_type(group.id), "<strong>Group:</strong> %s" % (escape(group.name)),)
                        for group in groups])
 
         # Any error response, Has more results, options list
