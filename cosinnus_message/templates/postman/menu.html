@@ -6,25 +6,30 @@
 
 {% postman_unread as unread_count %}
 
-{% captureas href %}{% url 'postman_inbox' %}{% endcaptureas %}
+{% url 'postman_inbox' as inbox_url %}
+{% url 'postman_sent' as sent_url %}
+{% url 'postman_archives' as archives_url %}
+{% url 'postman_trash' as trash_url %}
+{% url 'postman_write' as write_url %}
+
+{% captureas active %}{% if request.get_full_path == inbox_url %}True{% endif %}{% endcaptureas %}
 {% captureas label %}{% trans "Posteingang" %}{% if unread_count %} <strong>({{ unread_count }})</strong>{% endif %}{% endcaptureas %}
-{% include "cosinnus/leftnav_button.html" with extra_classes="fine-space" active=True icon="fa-envelope" label=label href=href  %}
+{% include "cosinnus/leftnav_button.html" with extra_classes="fine-space" active=active icon="fa-envelope" label=label href=inbox_url  %}
 
-{% captureas href %}{% url 'postman_sent' %}{% endcaptureas %}
+{% captureas active %}{% if request.get_full_path == sent_url %}True{% endif %}{% endcaptureas %}
 {% captureas label %}{% trans "Gesendet" %}{% endcaptureas %}
-{% include "cosinnus/leftnav_button.html" with extra_classes="fine-space" icon="fa-share" label=label href=href  %}
+{% include "cosinnus/leftnav_button.html" with extra_classes="fine-space" active=active icon="fa-share" label=label href=sent_url  %}
 
-{% captureas href %}{% url 'postman_archives' %}{% endcaptureas %}
+{% captureas active %}{% if request.get_full_path == archives_url %}True{% endif %}{% endcaptureas %}
 {% captureas label %}{% trans "Archiv" %}{% endcaptureas %}
-{% include "cosinnus/leftnav_button.html" with extra_classes="fine-space" icon="fa-folder" label=label href=href  %}
+{% include "cosinnus/leftnav_button.html" with extra_classes="fine-space" active=active icon="fa-folder" label=label href=archives_url  %}
 
-{% captureas href %}{% url 'postman_trash' %}{% endcaptureas %}
+{% captureas active %}{% if request.get_full_path == trash_url %}True{% endif %}{% endcaptureas %}
 {% captureas label %}{% trans "Papierkorb" %}{% endcaptureas %}
-{% include "cosinnus/leftnav_button.html" with extra_classes="regular-space" icon="fa-trash-o" label=label href=href  %}
+{% include "cosinnus/leftnav_button.html" with extra_classes="regular-space" active=active icon="fa-trash-o" label=label href=trash_url  %}
 
-{% captureas href %}{% url 'postman_write' %}{% endcaptureas %}
+{% captureas active %}{% if request.get_full_path == write_url %}True{% endif %}{% endcaptureas %}
 {% captureas label %}{% trans "Verfassen" %}{% endcaptureas %}
-{% include "cosinnus/leftnav_button.html" with extra_classes="" icon="fa-pencil" label=label href=href  %}
-
+{% include "cosinnus/leftnav_button.html" with extra_classes="" active=active icon="fa-pencil" label=label href=write_url  %}
 
 {% endblock %}
