@@ -35,7 +35,7 @@
     
     {% for message in pm_messages reversed %}
     
-	    <div class="btn btn-emphasized w100">
+	    <div class="btn btn-{% if message.sender == user %}extra-{% endif %}emphasized w100">
 	        <ul class="media-list">
 	            <li class="media">
 	                <a class="pull-left" href="#">
