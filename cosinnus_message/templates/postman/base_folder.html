@@ -38,7 +38,7 @@
                                 {% block pm_recipient_cell %}{{ message.obfuscated_recipient|or_me:user }}{% if message.count %} ({{ message.count }}){% endif %}{% endblock %}
                                 </strong>
 		                        {% block pm_subject %}
-                                    {% include "postman/inc_subject_ex.html" %}
+                                    {{ message.subject }}
 		                        {% endblock %}
 		                    </a>
 		                </div>
