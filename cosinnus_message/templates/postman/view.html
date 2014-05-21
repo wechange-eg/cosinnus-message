@@ -47,7 +47,7 @@
 	                </a>
 	                <div class="media-body">
 	                    <a href="documents-edit.html">
-	                        <span class="annotation" data-date="{{ message.sent_at }}"></span>
+	                        <span class="annotation" data-date="{{ message.sent_at|date:"c" }}"></span>
 	                        <strong>{{ message.obfuscated_sender|or_me:user }}</strong>
 	                    </a>
 	                </div>
