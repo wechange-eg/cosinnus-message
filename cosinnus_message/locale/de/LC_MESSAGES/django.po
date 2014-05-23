@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-07 12:17+0200\n"
+"POT-Creation-Date: 2014-05-23 12:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,6 +34,22 @@ msgstr "Zusätzliche Empfänger"
 msgid "Undefined recipient."
 msgstr ""
 
+#: .\views.py:100
+msgid "Select at least one object."
+msgstr ""
+
+#: .\views.py:107
+msgid "Messages or conversations successfully archived."
+msgstr ""
+
+#: .\views.py:114
+msgid "Messages or conversations successfully deleted."
+msgstr ""
+
+#: .\views.py:121
+msgid "Messages or conversations successfully recovered."
+msgstr ""
+
 #: .\templates\cosinnus_message\base.html.py:6
 msgid "Messages"
 msgstr "Nachrichten"
@@ -43,22 +59,22 @@ msgstr "Nachrichten"
 msgid "Archived Messages"
 msgstr "Archivierte Nachricht"
 
-#: .\templates\postman\base_folder.html.py:45
+#: .\templates\postman\base_folder.html.py:51
 msgid "No messages."
 msgstr "Keine Nachrichten."
 
-#: .\templates\postman\base_folder.html.py:60
-#: .\templates\postman\view.html.py:107
+#: .\templates\postman\base_folder.html.py:66
+#: .\templates\postman\view.html.py:110
 msgid "Delete"
 msgstr ""
 
-#: .\templates\postman\base_folder.html.py:74
+#: .\templates\postman\base_folder.html.py:80
 #: .\templates\postman\view.html.py:14 .\templates\postman\view.html.py:22
-#: .\templates\postman\view.html.py:121
+#: .\templates\postman\view.html.py:124
 msgid "Archive"
 msgstr ""
 
-#: .\templates\postman\base_folder.html.py:88
+#: .\templates\postman\base_folder.html.py:94
 msgid "Undelete"
 msgstr ""
 
@@ -102,25 +118,22 @@ msgstr ""
 
 #: .\templates\postman\email_user.txt.py:11
 #, python-format
-msgid "You have received a copy of a response from the user '%(sender)s'."
+msgid ""
+"You have received a copy of a response from the user '%(sender_first)s %"
+"(sender_last)s'."
 msgstr ""
 
 #: .\templates\postman\email_user.txt.py:13
 #, python-format
-msgid "You have received a message from the user '%(sender)s'."
-msgstr ""
-
-#: .\templates\postman\email_user.txt.py:16
-#: .\templates\postman\email_visitor.txt.py:14
-msgid "Thank you again for your interest in our services."
-msgstr ""
-
-#: .\templates\postman\email_user.txt.py:17
-#: .\templates\postman\email_visitor.txt.py:16
-msgid "The site administrator"
-msgstr ""
+msgid ""
+"You have received a message from the user '%(sender_first)s %(sender_last)s'."
+msgstr "Sie haben eine Nachricht von Benutzer '%(sender_first)s %(sender_last)s' erhalten."
 
 #: .\templates\postman\email_user.txt.py:19
+msgid "Follow this link to view the message on the site"
+msgstr "Folgen sie diesem Link um die Nachricht auf der Seite anzusehen"
+
+#: .\templates\postman\email_user.txt.py:23
 #: .\templates\postman\email_visitor.txt.py:18
 msgid ""
 "Note: This message is issued by an automated system.\n"
@@ -145,8 +158,16 @@ msgstr ""
 msgid "Please find below the answer from your correspondent."
 msgstr ""
 
+#: .\templates\postman\email_visitor.txt.py:14
+msgid "Thank you again for your interest in our services."
+msgstr ""
+
 #: .\templates\postman\email_visitor.txt.py:15
 msgid "For more comfort, we encourage you to open an account on the site."
+msgstr ""
+
+#: .\templates\postman\email_visitor.txt.py:16
+msgid "The site administrator"
 msgstr ""
 
 #: .\templates\postman\inbox.html.py:4 .\templates\postman\inbox.html.py:8
@@ -154,28 +175,28 @@ msgstr ""
 msgid "Inbox"
 msgstr ""
 
-#: .\templates\postman\menu.html.py:10
+#: .\templates\postman\menu.html.py:16
 msgid "Posteingang"
 msgstr ""
 
-#: .\templates\postman\menu.html.py:14
+#: .\templates\postman\menu.html.py:20
 msgid "Gesendet"
 msgstr ""
 
-#: .\templates\postman\menu.html.py:18
+#: .\templates\postman\menu.html.py:24
 msgid "Archiv"
 msgstr ""
 
-#: .\templates\postman\menu.html.py:22
+#: .\templates\postman\menu.html.py:28
 msgid "Papierkorb"
 msgstr ""
 
-#: .\templates\postman\menu.html.py:26
+#: .\templates\postman\menu.html.py:32
 msgid "Verfassen"
 msgstr ""
 
 #: .\templates\postman\reply.html.py:4 .\templates\postman\reply.html.py:8
-#: .\templates\postman\view.html.py:85
+#: .\templates\postman\view.html.py:88
 msgid "Reply"
 msgstr ""
 
@@ -197,7 +218,7 @@ msgstr "Papierkorb"
 msgid "Conversation"
 msgstr ""
 
-#: .\templates\postman\view.html.py:69
+#: .\templates\postman\view.html.py:72
 msgid "Answer"
 msgstr ""
 
