@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-23 12:23+0200\n"
+"POT-Creation-Date: 2014-06-02 17:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -127,7 +126,9 @@ msgstr ""
 #, python-format
 msgid ""
 "You have received a message from the user '%(sender_first)s %(sender_last)s'."
-msgstr "Sie haben eine Nachricht von Benutzer '%(sender_first)s %(sender_last)s' erhalten."
+msgstr ""
+"Sie haben eine Nachricht von Benutzer '%(sender_first)s %(sender_last)s' "
+"erhalten."
 
 #: .\templates\postman\email_user.txt.py:19
 msgid "Follow this link to view the message on the site"
