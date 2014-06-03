@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-02 17:18+0200\n"
+"POT-Creation-Date: 2014-06-03 12:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr "Zusätzliche Empfänger"
 
 #: .\forms.py:33
 msgid "Undefined recipient."
-msgstr ""
+msgstr "Kein Empfänger angegeben"
 
 #: .\views.py:100
 msgid "Select at least one object."
@@ -63,25 +63,25 @@ msgid "No messages."
 msgstr "Keine Nachrichten."
 
 #: .\templates\postman\base_folder.html.py:66
-#: .\templates\postman\view.html.py:110
+#: .\templates\postman\view.html.py:118
 msgid "Delete"
-msgstr ""
+msgstr "Löschen"
 
 #: .\templates\postman\base_folder.html.py:80
 #: .\templates\postman\view.html.py:14 .\templates\postman\view.html.py:22
-#: .\templates\postman\view.html.py:124
+#: .\templates\postman\view.html.py:132
 msgid "Archive"
-msgstr ""
+msgstr "Archivieren"
 
 #: .\templates\postman\base_folder.html.py:94
 msgid "Undelete"
-msgstr ""
+msgstr "Löschen rückgängig machen"
 
-#: .\templates\postman\base_write.html.py:36
+#: .\templates\postman\base_write.html.py:40
 msgid "Please enter message..."
 msgstr "Bitte Nachricht eingeben..."
 
-#: .\templates\postman\base_write.html.py:46
+#: .\templates\postman\base_write.html.py:54
 msgid "Send"
 msgstr "Absenden"
 
@@ -174,7 +174,7 @@ msgstr ""
 #: .\templates\postman\inbox.html.py:4 .\templates\postman\inbox.html.py:8
 #: .\templates\postman\view.html.py:24
 msgid "Inbox"
-msgstr ""
+msgstr "Posteingang"
 
 #: .\templates\postman\menu.html.py:16
 msgid "Posteingang"
@@ -197,9 +197,9 @@ msgid "Verfassen"
 msgstr ""
 
 #: .\templates\postman\reply.html.py:4 .\templates\postman\reply.html.py:8
-#: .\templates\postman\view.html.py:88
+#: .\templates\postman\view.html.py:96
 msgid "Reply"
-msgstr ""
+msgstr "Antworten"
 
 #: .\templates\postman\reply.html.py:11
 msgid "Recipient"
@@ -217,11 +217,15 @@ msgstr "Papierkorb"
 
 #: .\templates\postman\view.html.py:27
 msgid "Conversation"
-msgstr ""
+msgstr "Unterhaltung"
 
 #: .\templates\postman\view.html.py:72
 msgid "Answer"
-msgstr ""
+msgstr "Antworten"
+
+#: .\templates\postman\view.html.py:83
+msgid "Reply..."
+msgstr "Antworten..."
 
 #: .\templates\postman\write.html.py:4 .\templates\postman\write.html.py:8
 msgid "Write"
