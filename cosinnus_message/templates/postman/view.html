@@ -1,5 +1,5 @@
 {% extends "postman/base.html" %}
-{% load i18n postman_tags widget_tweaks thumbnail %}
+{% load i18n postman_tags widget_tweaks cosinnus_tags thumbnail %}
 
 {% block page_title %}{% trans "Message" %}{{ block.super }}{% endblock %}
 
@@ -75,21 +75,29 @@
 	            </li>
 	        </ul>
 	    </div>
-	
-	    {{ form.body|add_class:"app-message-text" }}
 	    
-	    <button type="submit" class="btn btn-emphasized app-message-send-button">
-	        <ul class="media-list">
-	            <li class="media">
-	                <a class="pull-left" href="#">
-	                    <i class="fa fa-pencil"></i>
-	                </a>
-	                <div class="media-body">
-	                    {% trans 'Reply' %}
-	                </div>
-	            </li>
-	        </ul>
-	    </button>
+	    <div class="btn btn-default w100">
+            <ul class="media-list">
+                <li class="media">
+                    <div class="media-body">
+                        {% captureas label %}{% trans "Reply..." %}{% endcaptureas %}
+                        {% render_field form.body class+="app-message-text next-button-is-for-sending" placeholder=label %}
+                    </div>
+                </li>
+            </ul>
+        </div>
+	    <button type="submit" class="btn btn-emphasized" style="display: none;">
+            <ul class="media-list">
+                <li class="media">
+                    <a class="pull-left" href="#">
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                    <div class="media-body">
+                        {% trans "Reply" %}
+                    </div>
+                </li>
+            </ul>
+        </button>
 	</form>
     {% endif %}
 
