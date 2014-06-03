@@ -24,11 +24,7 @@
 		                    <input type="hidden" {% if by_conversation and message.thread_id %}name="delete_tpk__{{message.thread_id}}"{% else %}name="delete_pk__{{ message.pk }}"{% endif %}>
 		                </a>
 	                    <a class="pull-left" href="#">
-	                        {% if message.sender.cosinnus_profile.avatar %}
-	                           <img src="{% thumbnail message.sender.cosinnus_profile.avatar 35x35 crop=smart %}" />
-	                        {% else %}
-	                           <i class="fa fa-user"></i>
-	                        {% endif %}
+	                        {% include "cosinnus/user/user_avatar_image.html" with user=message.sender %}
 	                    </a>
 		                <div class="media-body">
 		                    <a href="{% block pm_link %}{% if by_conversation and message.thread_id %}{% url 'postman_view_conversation' message.thread_id %}{% else %}{{message.get_absolute_url }}{% endif %}?next={{ current_url|urlencode }}{% endblock %}">

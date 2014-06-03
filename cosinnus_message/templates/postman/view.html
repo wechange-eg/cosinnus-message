@@ -39,11 +39,7 @@
 	        <ul class="media-list">
 	            <li class="media">
 	                <a class="pull-left" href="#">
-	                    {% if message.sender.cosinnus_profile.avatar %}
-	                       <img src="{% thumbnail message.sender.cosinnus_profile.avatar 35x35 crop=smart %}" />
-	                    {% else %}
-	                       <i class="fa fa-user"></i>
-	                    {% endif %}
+	                    {% include "cosinnus/user/user_avatar_image.html" with user=message.sender %}
 	                </a>
 	                <div class="media-body">
 	                    <a href="documents-edit.html">
