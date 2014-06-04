@@ -8,7 +8,7 @@ from django.db import models
 class Migration(SchemaMigration):
 
     depends_on = (
-        ("cosinnus", "0003_auto__add_tagobject"),
+        ("cosinnus", "0016_auto__add_field_cosinnusgroup_avatar"),
     )
 
     def forwards(self, orm):
