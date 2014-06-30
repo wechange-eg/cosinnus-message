@@ -50,7 +50,7 @@
 	            </li>
 	        </ul>
 	    </div>
-	    <p class="regular-space">{{ message.body|linebreaksbr }}</p>
+	    <p class="regular-space">{{ message.body|urlize|linebreaksbr }}</p>
     
     {% endfor %}
 
