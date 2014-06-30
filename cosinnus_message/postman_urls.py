@@ -121,7 +121,7 @@ urlpatterns = patterns('',
     url(r'^antworten/(?P<message_id>[\d:]+)/$',
         ReplyView.as_view(form_class=CustomReplyForm),
         name='postman_reply'),
-    url(r'^neu/(?:(?P<recipients>[\d]+)/)?$',
+    url(r'^neu/(?:(?P<recipients>[^/]+)/)?$',
         WriteView.as_view(form_classes=(CustomWriteForm, CustomWriteForm)),
         name='postman_write'),
 )
