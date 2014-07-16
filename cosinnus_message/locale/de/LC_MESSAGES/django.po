@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-03 12:48+0200\n"
+"POT-Creation-Date: 2014-07-16 17:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,31 +21,37 @@ msgstr ""
 msgid "Message"
 msgstr "Nachricht"
 
-#: .\forms.py:15
+# The Cosinnus App Name
+msgctxt "the_app"
+msgid "message"
+msgstr "Nachrichten"
+
+
+#: .\forms.py:21
 msgid "Recipients"
 msgstr "Empfänger"
 
-#: .\forms.py:27
+#: .\forms.py:54
 msgid "Additional Recipients"
 msgstr "Zusätzliche Empfänger"
 
-#: .\forms.py:33
+#: .\forms.py:60
 msgid "Undefined recipient."
 msgstr "Kein Empfänger angegeben"
 
-#: .\views.py:100
+#: .\views.py:98
 msgid "Select at least one object."
 msgstr ""
 
-#: .\views.py:107
+#: .\views.py:105
 msgid "Messages or conversations successfully archived."
 msgstr ""
 
-#: .\views.py:114
+#: .\views.py:112
 msgid "Messages or conversations successfully deleted."
 msgstr ""
 
-#: .\views.py:121
+#: .\views.py:119
 msgid "Messages or conversations successfully recovered."
 msgstr ""
 
@@ -58,22 +64,22 @@ msgstr "Nachrichten"
 msgid "Archived Messages"
 msgstr "Archivierte Nachricht"
 
-#: .\templates\postman\base_folder.html.py:51
+#: .\templates\postman\base_folder.html.py:47
 msgid "No messages."
 msgstr "Keine Nachrichten."
 
-#: .\templates\postman\base_folder.html.py:66
-#: .\templates\postman\view.html.py:118
+#: .\templates\postman\base_folder.html.py:62
+#: .\templates\postman\view.html.py:114
 msgid "Delete"
 msgstr "Löschen"
 
-#: .\templates\postman\base_folder.html.py:80
+#: .\templates\postman\base_folder.html.py:76
 #: .\templates\postman\view.html.py:14 .\templates\postman\view.html.py:22
-#: .\templates\postman\view.html.py:132
+#: .\templates\postman\view.html.py:128
 msgid "Archive"
 msgstr "Archivieren"
 
-#: .\templates\postman\base_folder.html.py:94
+#: .\templates\postman\base_folder.html.py:90
 msgid "Undelete"
 msgstr "Löschen rückgängig machen"
 
@@ -197,7 +203,7 @@ msgid "Verfassen"
 msgstr ""
 
 #: .\templates\postman\reply.html.py:4 .\templates\postman\reply.html.py:8
-#: .\templates\postman\view.html.py:96
+#: .\templates\postman\view.html.py:92
 msgid "Reply"
 msgstr "Antworten"
 
@@ -219,11 +225,11 @@ msgstr "Papierkorb"
 msgid "Conversation"
 msgstr "Unterhaltung"
 
-#: .\templates\postman\view.html.py:72
+#: .\templates\postman\view.html.py:68
 msgid "Answer"
 msgstr "Antworten"
 
-#: .\templates\postman\view.html.py:83
+#: .\templates\postman\view.html.py:79
 msgid "Reply..."
 msgstr "Antworten..."
 
