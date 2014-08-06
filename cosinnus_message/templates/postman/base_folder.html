@@ -44,7 +44,7 @@
         {% endfor %}
         
     {% else %}
-	    <p>{% trans "No messages." %}</p>
+	    {% include 'cosinnus/common/empty_button.html' with message="No messages." %}
 	{% endif %}
 
 </div><!-- content-box -->
