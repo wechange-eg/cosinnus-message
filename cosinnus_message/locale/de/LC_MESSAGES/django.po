@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-16 17:26+0200\n"
+"POT-Creation-Date: 2014-09-01 18:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,16 +16,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\cosinnus_app.py:14 .\templates\postman\view.html.py:4
+#: .\cosinnus_app.py:15 .\templates\postman\view.html.py:4
 #: .\templates\postman\view.html.py:27
 msgid "Message"
 msgstr "Nachricht"
 
 # The Cosinnus App Name
+#: .\cosinnus_app.py:20
 msgctxt "the_app"
 msgid "message"
 msgstr "Nachrichten"
-
 
 #: .\forms.py:21
 msgid "Recipients"
@@ -63,10 +63,6 @@ msgstr "Nachrichten"
 #: .\templates\postman\archives.html.py:8
 msgid "Archived Messages"
 msgstr "Archivierte Nachricht"
-
-#: .\templates\postman\base_folder.html.py:47
-msgid "No messages."
-msgstr "Keine Nachrichten."
 
 #: .\templates\postman\base_folder.html.py:62
 #: .\templates\postman\view.html.py:114
@@ -236,6 +232,9 @@ msgstr "Antworten..."
 #: .\templates\postman\write.html.py:4 .\templates\postman\write.html.py:8
 msgid "Write"
 msgstr "Verfassen"
+
+#~ msgid "No messages."
+#~ msgstr "Keine Nachrichten."
 
 #~ msgid "Please select a recipient for the message!"
 #~ msgstr "Bitte wählen sie mindestens einen Empfänger aus!"
