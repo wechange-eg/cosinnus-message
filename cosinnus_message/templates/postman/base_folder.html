@@ -23,7 +23,7 @@
 		                    <i class="fa fa-square-o"></i>
 		                    <input type="hidden" {% if by_conversation and message.thread_id %}name="delete_tpk__{{message.thread_id}}"{% else %}name="delete_pk__{{ message.pk }}"{% endif %}>
 		                </a>
-	                    <a class="pull-left" href="{{ message.sender.cosinnus_profile.get_absolute_url }}">
+	                    <a class="pull-left" href="{{ message.sender|profile_url }}">
 	                        {% include "cosinnus/user/user_avatar_image.html" with user=message.sender %}
 	                    </a>
 		                <div class="media-body">
