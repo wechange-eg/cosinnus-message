@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-01 18:17+0200\n"
+"POT-Creation-Date: 2014-09-17 11:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,8 +70,8 @@ msgid "Delete"
 msgstr "Löschen"
 
 #: .\templates\postman\base_folder.html.py:76
-#: .\templates\postman\view.html.py:14 .\templates\postman\view.html.py:22
-#: .\templates\postman\view.html.py:128
+#: .\templates\postman\menu.html.py:24 .\templates\postman\view.html.py:14
+#: .\templates\postman\view.html.py:22 .\templates\postman\view.html.py:128
 msgid "Archive"
 msgstr "Archivieren"
 
@@ -174,29 +174,25 @@ msgid "The site administrator"
 msgstr ""
 
 #: .\templates\postman\inbox.html.py:4 .\templates\postman\inbox.html.py:8
-#: .\templates\postman\view.html.py:24
+#: .\templates\postman\menu.html.py:16 .\templates\postman\view.html.py:24
 msgid "Inbox"
 msgstr "Posteingang"
 
-#: .\templates\postman\menu.html.py:16
-msgid "Posteingang"
-msgstr ""
+#: .\templates\postman\menu.html.py:20 .\templates\postman\sent.html.py:4
+#: .\templates\postman\sent.html.py:8 .\templates\postman\view.html.py:16
+msgid "Sent"
+msgstr "Gesendet"
 
-#: .\templates\postman\menu.html.py:20
-msgid "Gesendet"
-msgstr ""
+#: .\templates\postman\menu.html.py:28 .\templates\postman\trash.html.py:4
+#: .\templates\postman\trash.html.py:8 .\templates\postman\view.html.py:12
+#: .\templates\postman\view.html.py:20
+msgid "Trash"
+msgstr "Papierkorb"
 
-#: .\templates\postman\menu.html.py:24
-msgid "Archiv"
-msgstr ""
-
-#: .\templates\postman\menu.html.py:28
-msgid "Papierkorb"
-msgstr ""
-
-#: .\templates\postman\menu.html.py:32
-msgid "Verfassen"
-msgstr ""
+#: .\templates\postman\menu.html.py:32 .\templates\postman\write.html.py:4
+#: .\templates\postman\write.html.py:8
+msgid "Write"
+msgstr "Verfassen"
 
 #: .\templates\postman\reply.html.py:4 .\templates\postman\reply.html.py:8
 #: .\templates\postman\view.html.py:92
@@ -206,16 +202,6 @@ msgstr "Antworten"
 #: .\templates\postman\reply.html.py:11
 msgid "Recipient"
 msgstr "Empfänger"
-
-#: .\templates\postman\sent.html.py:4 .\templates\postman\sent.html.py:8
-#: .\templates\postman\view.html.py:16
-msgid "Sent"
-msgstr "Gesendet"
-
-#: .\templates\postman\trash.html.py:4 .\templates\postman\trash.html.py:8
-#: .\templates\postman\view.html.py:12 .\templates\postman\view.html.py:20
-msgid "Trash"
-msgstr "Papierkorb"
 
 #: .\templates\postman\view.html.py:27
 msgid "Conversation"
@@ -228,10 +214,6 @@ msgstr "Antworten"
 #: .\templates\postman\view.html.py:79
 msgid "Reply..."
 msgstr "Antworten..."
-
-#: .\templates\postman\write.html.py:4 .\templates\postman\write.html.py:8
-msgid "Write"
-msgstr "Verfassen"
 
 #~ msgid "No messages."
 #~ msgstr "Keine Nachrichten."
