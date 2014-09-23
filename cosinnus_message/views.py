@@ -140,14 +140,17 @@ class UserSelect2View(Select2View):
             raise PermissionDenied
 
     def get_results(self, request, term, page, context):
-        term = term.lower()
+        terms = term.strip().lower().split(' ')
+        first_term, other_terms = terms[0], terms[1:]
 
         # username is not used as filter for the term for now, might confuse
         # users why a search result is found
-        users = User.objects.filter(
-            Q(first_name__icontains=term) |
-            Q(last_name__icontains=term)
-        )  # | Q(username__icontains=term))
+        q = Q(first_name__icontains=first_term) | Q(last_name__icontains=first_term)
+        for other_term in other_terms:
+            q &= Q(first_name__icontains=other_term) | Q(last_name__icontains=other_term)
+        
+        users = User.objects.filter(q).exclude(id__exact=request.user.id)  
+        # | Q(username__icontains=term))
         # Filter all groups the user is a member of, and all public groups for
         # the term.
         # Use CosinnusGroup.objects.get_cached() to search in all groups
