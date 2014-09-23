@@ -1,4 +1,4 @@
-{% load i18n %}{% autoescape off %}{% trans "Dear user," %}
+{% load i18n cosinnus_tags %}{% autoescape off %}{% trans "Dear user," %}
 {% if action == 'rejection' %}
 {% blocktrans with object.sent_at|date:"DATETIME_FORMAT" as date and object.obfuscated_recipient as recipient %}On {{ date }}, you asked to send a message to the user '{{ recipient }}'.{% endblocktrans %}
 
@@ -6,14 +6,11 @@
     {{ object.moderation_reason }}{% else %}.{% endif %}
 
 {% else %}{# 'acceptance' #}
-{% if object.parent_id %}{% if object.parent.sender_id == object.recipient_id %}{% blocktrans with object.parent.sent_at|date:"DATETIME_FORMAT" as date and object.obfuscated_sender as sender %}On {{ date }}, you sent a message to the user '{{ sender }}'.{% endblocktrans %}
-{% trans "Your correspondent has given you an answer." %}
+{% if object.parent_id %}{% if object.parent.sender_id == object.recipient_id %}{% blocktrans with object.parent.sent_at|date:"DATETIME_FORMAT" as date and object.sender.first_name as sender_first and object.sender.last_name as sender_last %}'{{ sender_first }} {{ sender_last }}' has replied to your message from {{ date }}:{% endblocktrans %}
 {% else %}{% blocktrans with object.sender.first_name as sender_first and object.sender.last_name as sender_last %}You have received a copy of a response from the user '{{ sender_first }} {{ sender_last }}'.{% endblocktrans %}
 {% endif %}
 {% else %}{% blocktrans with object.sender.first_name as sender_first and object.sender.last_name as sender_last %}You have received a message from the user '{{ sender_first }} {{ sender_last }}'.{% endblocktrans %}
 {% endif %}
-
-{{ object.sender.first_name }}:
 {{ object.body }}
 
 {% trans "Follow this link to view the message on the site" %}: {{ site.domain }}{% if object.thread_id %}{% url 'postman_view_conversation' object.thread_id %}{% else %}{{object.get_absolute_url }}{% endif %}

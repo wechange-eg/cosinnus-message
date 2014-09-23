@@ -42,10 +42,16 @@
 	                    {% include "cosinnus/user/user_avatar_image.html" with user=message.sender %}
 	                </a>
 	                <div class="media-body">
-	                    <a href="documents-edit.html">
+	                    <a href="{{ message.sender|profile_url }}">
 	                        <span class="annotation moment-data-date" data-date="{{ message.sent_at|date:"c" }}"></span>
-	                        <strong>{{ message.obfuscated_sender|or_me:user }}</strong>
+	                        <strong>{% if message.sender == user %}<i>{% trans "Me" %}</i>{% else %}{{ message.sender|full_name }}{% endif %}</strong>
 	                    </a>
+	                    {% if not message.recipient == user %}
+		                    &gt;
+		                    <a href="{{ message.recipient|profile_url }}">
+	                            <strong>{% if message.recipient == user %}<i>{% trans "Me" %}</i>{% else %}{{ message.recipient|full_name }}{% endif %}</strong>
+	                        </a>
+                        {% endif %}
 	                </div>
 	            </li>
 	        </ul>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-17 11:42+0200\n"
+"POT-Creation-Date: 2014-09-23 13:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,6 +61,11 @@ msgstr ""
 #: .\templates\postman\archives.html.py:4
 #: .\templates\postman\archives.html.py:8
 msgid "Archived Messages"
+msgstr ""
+
+#: .\templates\postman\base_folder.html.py:33
+#: .\templates\postman\base_folder.html.py:34
+msgid "Me"
 msgstr ""
 
 #: .\templates\postman\base_folder.html.py:62

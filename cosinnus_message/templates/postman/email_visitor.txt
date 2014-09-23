@@ -7,7 +7,7 @@
 
 {% trans "As a reminder, please find below the content of your message." %}
 {% else %}{# 'acceptance' #}
-{% blocktrans with object.parent.sent_at|date:"DATETIME_FORMAT" as date and object.sender as sender %}On {{ date }}, you sent a message to the user '{{ sender }}'.{% endblocktrans %}
+{% blocktrans with object.parent.sent_at|date:"DATETIME_FORMAT" as date and object.sender as sender %}On {{ date }}, you sent a message to the user '{{ sender_first }} {{ sender_last }}'.{% endblocktrans %}
 {% trans "Please find below the answer from your correspondent." %}
 {% endif %}
 

@@ -26,19 +26,23 @@
 	                    <a class="pull-left" href="{{ message.sender|profile_url }}">
 	                        {% include "cosinnus/user/user_avatar_image.html" with user=message.sender %}
 	                    </a>
-		                <div class="media-body">
-		                    <a href="{% block pm_link %}{% if by_conversation and message.thread_id %}{% url 'postman_view_conversation' message.thread_id %}{% else %}{{message.get_absolute_url }}{% endif %}?next={{ current_url|urlencode }}{% endblock %}">
-		                        <span class="annotation moment-data-date" data-date="{{ message.sent_at|date:"c" }}"></span>
-		                        <strong>
-		                        {% block pm_sender_cell %}{{ message.obfuscated_sender|or_me:user }}{% if message.count %} ({{ message.count }}){% endif %}{% endblock %}
-                                {% block pm_recipient_cell %}{{ message.obfuscated_recipient|or_me:user }}{% if message.count %} ({{ message.count }}){% endif %}{% endblock %}
-                                </strong>
-		                        {% block pm_subject %}
-                                    {{ message.subject }}
-		                        {% endblock %}
-		                    </a>
-		                </div>
-		            </li>
+                        <div class="media-body">
+                            <a href="{% block pm_link %}{% if by_conversation and message.thread_id %}{% url 'postman_view_conversation' message.thread_id %}{% else %}{{message.get_absolute_url }}{% endif %}?next={{ current_url|urlencode }}{% endblock %}">
+                                <span class="annotation moment-data-date" data-date="{{ message.sent_at|date:"c" }}"></span>
+                            <strong>
+	                            {% block pm_sender_cell %}{% if message.sender == user %}<i>{% trans "Me" %}</i>{% else %}{{ message.sender|full_name }}{% endif %}{% if message.count %} ({{ message.count }}){% endif %}{% endblock %}
+	                            {% block pm_recipient_cell %}{% if message.sender == user %}<i>{% trans "Me" %}</i>{% else %}{{ message.sender|full_name }}{% endif %}{% if message.count %} ({{ message.count }}){% endif %}{% endblock %}
+	                            {% if not message.recipient == user %}
+	                                &gt;
+		                            {% if message.recipient == user %}<i>{% trans "Me" %}</i>{% else %}{{ message.recipient|full_name }}{% endif %}
+	                            {% endif %}
+                            </strong>
+                            {% block pm_subject %}
+                                {{ message.subject }}
+                            {% endblock %}
+                            </a>
+                        </div>
+                    </li>
 		        </ul>
 		    </div>
         {% endfor %}
