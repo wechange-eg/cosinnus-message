@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-23 13:44+0200\n"
+"POT-Creation-Date: 2014-09-23 14:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,21 +65,23 @@ msgstr ""
 
 #: .\templates\postman\base_folder.html.py:33
 #: .\templates\postman\base_folder.html.py:34
+#: .\templates\postman\base_folder.html.py:37
+#: .\templates\postman\view.html.py:47 .\templates\postman\view.html.py:52
 msgid "Me"
 msgstr ""
 
-#: .\templates\postman\base_folder.html.py:62
-#: .\templates\postman\view.html.py:114
+#: .\templates\postman\base_folder.html.py:66
+#: .\templates\postman\view.html.py:120
 msgid "Delete"
 msgstr ""
 
-#: .\templates\postman\base_folder.html.py:76
+#: .\templates\postman\base_folder.html.py:80
 #: .\templates\postman\menu.html.py:24 .\templates\postman\view.html.py:14
-#: .\templates\postman\view.html.py:22 .\templates\postman\view.html.py:128
+#: .\templates\postman\view.html.py:22 .\templates\postman\view.html.py:134
 msgid "Archive"
 msgstr ""
 
-#: .\templates\postman\base_folder.html.py:90
+#: .\templates\postman\base_folder.html.py:94
 msgid "Undelete"
 msgstr ""
 
@@ -112,33 +114,29 @@ msgid ", for the following reason:"
 msgstr ""
 
 #: .\templates\postman\email_user.txt.py:9
-#: .\templates\postman\email_visitor.txt.py:10
 #, python-format
-msgid "On %(date)s, you sent a message to the user '%(sender)s'."
+msgid ""
+"'%(sender_first)s %(sender_last)s' has replied to your message from %(date)s:"
 msgstr ""
 
 #: .\templates\postman\email_user.txt.py:10
-msgid "Your correspondent has given you an answer."
-msgstr ""
-
-#: .\templates\postman\email_user.txt.py:11
 #, python-format
 msgid ""
 "You have received a copy of a response from the user '%(sender_first)s %"
 "(sender_last)s'."
 msgstr ""
 
-#: .\templates\postman\email_user.txt.py:13
+#: .\templates\postman\email_user.txt.py:11
 #, python-format
 msgid ""
 "You have received a message from the user '%(sender_first)s %(sender_last)s'."
 msgstr ""
 
-#: .\templates\postman\email_user.txt.py:19
+#: .\templates\postman\email_user.txt.py:16
 msgid "Follow this link to view the message on the site"
 msgstr ""
 
-#: .\templates\postman\email_user.txt.py:23
+#: .\templates\postman\email_user.txt.py:20
 #: .\templates\postman\email_visitor.txt.py:18
 msgid ""
 "Note: This message is issued by an automated system.\n"
@@ -157,6 +155,13 @@ msgstr ""
 
 #: .\templates\postman\email_visitor.txt.py:8
 msgid "As a reminder, please find below the content of your message."
+msgstr ""
+
+#: .\templates\postman\email_visitor.txt.py:10
+#, python-format
+msgid ""
+"On %(date)s, you sent a message to the user '%(sender_first)s %(sender_last)"
+"s'."
 msgstr ""
 
 #: .\templates\postman\email_visitor.txt.py:11
@@ -197,7 +202,7 @@ msgid "Write"
 msgstr ""
 
 #: .\templates\postman\reply.html.py:4 .\templates\postman\reply.html.py:8
-#: .\templates\postman\view.html.py:92
+#: .\templates\postman\view.html.py:98
 msgid "Reply"
 msgstr ""
 
@@ -209,10 +214,10 @@ msgstr ""
 msgid "Conversation"
 msgstr ""
 
-#: .\templates\postman\view.html.py:68
+#: .\templates\postman\view.html.py:74
 msgid "Answer"
 msgstr ""
 
-#: .\templates\postman\view.html.py:79
+#: .\templates\postman\view.html.py:85
 msgid "Reply..."
 msgstr ""
