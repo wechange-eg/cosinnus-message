@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-23 14:20+0200\n"
+"POT-Creation-Date: 2014-10-13 13:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -118,7 +118,9 @@ msgstr ""
 #, python-format
 msgid ""
 "'%(sender_first)s %(sender_last)s' has replied to your message from %(date)s:"
-msgstr "'%(sender_first)s %(sender_last)s' hat dir auf deine Nachricht vom %(date)s geantwortet:"
+msgstr ""
+"'%(sender_first)s %(sender_last)s' hat dir auf deine Nachricht vom %(date)s "
+"geantwortet:"
 
 #: .\templates\postman\email_user.txt.py:10
 #, python-format
@@ -166,8 +168,8 @@ msgid ""
 "On %(date)s, you sent a message to the user '%(sender_first)s %(sender_last)"
 "s'."
 msgstr ""
-"Am %(date)s, hast du eine Nachricht an Benutzer_in '%(sender_first)s %(sender_last)s' "
-"geschrieben."
+"Am %(date)s, hast du eine Nachricht an Benutzer_in '%(sender_first)s %"
+"(sender_last)s' geschrieben."
 
 #: .\templates\postman\email_visitor.txt.py:11
 msgid "Please find below the answer from your correspondent."
