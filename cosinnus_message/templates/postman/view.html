@@ -56,7 +56,7 @@
 	            </li>
 	        </ul>
 	    </div>
-	    <p class="regular-space">{{ message.body|urlize|linebreaksbr }}</p>
+	    <p class="regular-space">{{ message.body|urlize|url_target_blank|linebreaksbr }}</p>
     
     {% endfor %}
 
