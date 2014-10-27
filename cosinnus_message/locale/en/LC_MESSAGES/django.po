@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-13 13:29+0200\n"
+"POT-Creation-Date: 2014-10-27 15:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,18 +70,22 @@ msgstr ""
 msgid "Me"
 msgstr ""
 
-#: .\templates\postman\base_folder.html.py:66
+#: .\templates\postman\base_folder.html.py:51
+msgid "No messages"
+msgstr ""
+
+#: .\templates\postman\base_folder.html.py:67
 #: .\templates\postman\view.html.py:120
 msgid "Delete"
 msgstr ""
 
-#: .\templates\postman\base_folder.html.py:80
+#: .\templates\postman\base_folder.html.py:81
 #: .\templates\postman\menu.html.py:24 .\templates\postman\view.html.py:14
 #: .\templates\postman\view.html.py:22 .\templates\postman\view.html.py:134
 msgid "Archive"
 msgstr ""
 
-#: .\templates\postman\base_folder.html.py:94
+#: .\templates\postman\base_folder.html.py:95
 msgid "Undelete"
 msgstr ""
 

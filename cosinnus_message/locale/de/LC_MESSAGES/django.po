@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-13 13:29+0200\n"
+"POT-Creation-Date: 2014-10-27 15:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,19 +41,19 @@ msgstr "Kein Empfänger angegeben"
 
 #: .\views.py:98
 msgid "Select at least one object."
-msgstr ""
+msgstr "Wählen sie mindestens einen Empfänger aus!"
 
 #: .\views.py:105
 msgid "Messages or conversations successfully archived."
-msgstr ""
+msgstr "Nachrichten wurden erfolgreich archiviert."
 
 #: .\views.py:112
 msgid "Messages or conversations successfully deleted."
-msgstr ""
+msgstr "Nachrichten wurden erfolgreich gelöscht."
 
 #: .\views.py:119
 msgid "Messages or conversations successfully recovered."
-msgstr ""
+msgstr "Nachrichten wurden erfolgreich wiederhergestellt."
 
 #: .\templates\cosinnus_message\base.html.py:6
 msgid "Messages"
@@ -71,18 +71,22 @@ msgstr "Archivierte Nachricht"
 msgid "Me"
 msgstr "Ich"
 
-#: .\templates\postman\base_folder.html.py:66
+#: .\templates\postman\base_folder.html.py:51
+msgid "No messages"
+msgstr "Keine Nachrichten."
+
+#: .\templates\postman\base_folder.html.py:67
 #: .\templates\postman\view.html.py:120
 msgid "Delete"
 msgstr "Löschen"
 
-#: .\templates\postman\base_folder.html.py:80
+#: .\templates\postman\base_folder.html.py:81
 #: .\templates\postman\menu.html.py:24 .\templates\postman\view.html.py:14
 #: .\templates\postman\view.html.py:22 .\templates\postman\view.html.py:134
 msgid "Archive"
 msgstr "Archivieren"
 
-#: .\templates\postman\base_folder.html.py:94
+#: .\templates\postman\base_folder.html.py:95
 msgid "Undelete"
 msgstr "Löschen rückgängig machen"
 
@@ -147,12 +151,14 @@ msgid ""
 "Note: This message is issued by an automated system.\n"
 "Do not reply, this would not be taken into account."
 msgstr ""
+"Diese Nachricht wurde von einem automatisierten System erstellt - "
+"bitte antworten sie nicht darauf. "
 
 #: .\templates\postman\email_user_subject.txt.py:1
 #: .\templates\postman\email_visitor_subject.txt.py:1
 #, python-format
 msgid "Message \"%(subject)s\" on the site %(sitename)s"
-msgstr ""
+msgstr "Nachricht \"%(subject)s\" auf %(sitename)s"
 
 #: .\templates\postman\email_visitor.txt.py:1
 msgid "Dear visitor,"
@@ -228,9 +234,6 @@ msgstr "Antworten"
 #: .\templates\postman\view.html.py:85
 msgid "Reply..."
 msgstr "Antworten..."
-
-#~ msgid "No messages."
-#~ msgstr "Keine Nachrichten."
 
 #~ msgid "Please select a recipient for the message!"
 #~ msgstr "Bitte wählen sie mindestens einen Empfänger aus!"
