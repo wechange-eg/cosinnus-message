@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-27 15:14+0100\n"
+"POT-Creation-Date: 2014-11-18 16:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -76,13 +76,13 @@ msgid "No messages"
 msgstr "Keine Nachrichten."
 
 #: .\templates\postman\base_folder.html.py:67
-#: .\templates\postman\view.html.py:120
+#: .\templates\postman\view.html.py:118
 msgid "Delete"
 msgstr "Löschen"
 
 #: .\templates\postman\base_folder.html.py:81
 #: .\templates\postman\menu.html.py:24 .\templates\postman\view.html.py:14
-#: .\templates\postman\view.html.py:22 .\templates\postman\view.html.py:134
+#: .\templates\postman\view.html.py:22 .\templates\postman\view.html.py:132
 msgid "Archive"
 msgstr "Archivieren"
 
@@ -151,8 +151,8 @@ msgid ""
 "Note: This message is issued by an automated system.\n"
 "Do not reply, this would not be taken into account."
 msgstr ""
-"Diese Nachricht wurde von einem automatisierten System erstellt - "
-"bitte antworten sie nicht darauf. "
+"Diese Nachricht wurde von einem automatisierten System erstellt - bitte "
+"antworten sie nicht darauf. "
 
 #: .\templates\postman\email_user_subject.txt.py:1
 #: .\templates\postman\email_visitor_subject.txt.py:1
@@ -215,7 +215,7 @@ msgid "Write"
 msgstr "Verfassen"
 
 #: .\templates\postman\reply.html.py:4 .\templates\postman\reply.html.py:8
-#: .\templates\postman\view.html.py:98
+#: .\templates\postman\view.html.py:96
 msgid "Reply"
 msgstr "Antworten"
 
@@ -227,11 +227,11 @@ msgstr "Empfänger"
 msgid "Conversation"
 msgstr "Unterhaltung"
 
-#: .\templates\postman\view.html.py:74
+#: .\templates\postman\view.html.py:73
 msgid "Answer"
 msgstr "Antworten"
 
-#: .\templates\postman\view.html.py:85
+#: .\templates\postman\view.html.py:83
 msgid "Reply..."
 msgstr "Antworten..."
 

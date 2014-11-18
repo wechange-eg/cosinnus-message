@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-27 15:14+0100\n"
+"POT-Creation-Date: 2014-11-18 16:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,13 +75,13 @@ msgid "No messages"
 msgstr ""
 
 #: .\templates\postman\base_folder.html.py:67
-#: .\templates\postman\view.html.py:120
+#: .\templates\postman\view.html.py:118
 msgid "Delete"
 msgstr ""
 
 #: .\templates\postman\base_folder.html.py:81
 #: .\templates\postman\menu.html.py:24 .\templates\postman\view.html.py:14
-#: .\templates\postman\view.html.py:22 .\templates\postman\view.html.py:134
+#: .\templates\postman\view.html.py:22 .\templates\postman\view.html.py:132
 msgid "Archive"
 msgstr ""
 
@@ -206,7 +206,7 @@ msgid "Write"
 msgstr ""
 
 #: .\templates\postman\reply.html.py:4 .\templates\postman\reply.html.py:8
-#: .\templates\postman\view.html.py:98
+#: .\templates\postman\view.html.py:96
 msgid "Reply"
 msgstr ""
 
@@ -218,10 +218,10 @@ msgstr ""
 msgid "Conversation"
 msgstr ""
 
-#: .\templates\postman\view.html.py:74
+#: .\templates\postman\view.html.py:73
 msgid "Answer"
 msgstr ""
 
-#: .\templates\postman\view.html.py:85
+#: .\templates\postman\view.html.py:83
 msgid "Reply..."
 msgstr ""
