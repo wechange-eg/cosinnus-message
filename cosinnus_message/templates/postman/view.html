@@ -33,7 +33,7 @@
 <!-- a box with semi transparent background -->
 <div class="content-box">
     
-    {% for message in pm_messages reversed %}
+    {% for message in pm_messages %}
     
 	    <div class="btn btn-{% if message.sender == user %}extra-{% endif %}emphasized w100">
 	        <ul class="media-list">
