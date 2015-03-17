@@ -145,9 +145,9 @@ class UserSelect2View(Select2View):
 
         # username is not used as filter for the term for now, might confuse
         # users why a search result is found
-        q = Q(first_name__icontains=first_term) | Q(last_name__icontains=first_term)
+        q = Q(first_name__icontains=first_term) | Q(last_name__icontains=first_term) | Q(email__icontains=first_term) 
         for other_term in other_terms:
-            q &= Q(first_name__icontains=other_term) | Q(last_name__icontains=other_term)
+            q &= Q(first_name__icontains=other_term) | Q(last_name__icontains=other_term) | Q(email__icontains=other_term) 
         
         users = User.objects.filter(q).exclude(id__exact=request.user.id)  
         # | Q(username__icontains=term))
