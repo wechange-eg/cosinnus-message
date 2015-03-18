@@ -157,7 +157,7 @@ class UserSelect2View(Select2View):
         # instead
         groups = set(CosinnusGroup.objects.get_for_user(request.user)).union(
             CosinnusGroup.objects.public())
-        groups = [group for group in groups if term in group.name.lower()]
+        groups = [group for group in groups if all([term.lower() in group.name.lower() for term in terms])]
 
         # these result sets are what select2 uses to build the choice list
         
