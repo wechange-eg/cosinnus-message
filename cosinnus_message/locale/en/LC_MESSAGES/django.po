@@ -24,7 +24,7 @@ msgstr ""
 #: .\cosinnus_app.py:20
 msgctxt "the_app"
 msgid "message"
-msgstr ""
+msgstr "Messages"
 
 #: .\forms.py:21
 msgid "Recipients"
