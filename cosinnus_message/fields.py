@@ -49,9 +49,10 @@ class UserSelect2MultipleChoiceField(HeavyModelSelect2MultipleChoiceField):
         groups = CosinnusGroup.objects.get_cached(pks=group_ids)
         recipients = set()
         for group in groups:
-            recipients.update(group.users.all())
+            recipients.update(group.users.all().exclude(is_active=False))
+            
         # combine the groups users with the directly selected users
-        recipients.update( User.objects.filter(id__in=user_ids) )
+        recipients.update( User.objects.filter(id__in=user_ids).exclude(is_active=False) )
 
         return list(recipients)
     

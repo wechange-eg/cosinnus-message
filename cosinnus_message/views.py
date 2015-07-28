@@ -149,7 +149,7 @@ class UserSelect2View(Select2View):
         for other_term in other_terms:
             q &= Q(first_name__icontains=other_term) | Q(last_name__icontains=other_term) | Q(email__icontains=other_term) 
         
-        users = User.objects.filter(q).exclude(id__exact=request.user.id)  
+        users = User.objects.filter(q).exclude(id__exact=request.user.id).exclude(is_active=False)
         # | Q(username__icontains=term))
         # Filter all groups the user is a member of, and all public groups for
         # the term.
