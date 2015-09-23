@@ -242,7 +242,7 @@ msgstr "Antworten..."
 #~ msgstr "Nachrichtentext"
 
 #~ msgid "Broadcast"
-#~ msgstr "Rundmail (Alle Projektmitarbeiter_innen)"
+#~ msgstr "Rundmail (Alle ProjektMitglieder)"
 
 #~ msgid "Author"
 #~ msgstr "Autor"
