@@ -3,142 +3,152 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-10-22 13:42+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2015-11-11 10:42+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: uk\n"
+"X-Generator: Poedit 1.8.6\n"
 
 #: .\cosinnus_app.py:15 .\templates\postman\view.html.py:4
 #: .\templates\postman\view.html.py:27
 msgid "Message"
-msgstr ""
+msgstr "Повідомлення"
 
 #: .\cosinnus_app.py:20
 msgctxt "the_app"
 msgid "message"
-msgstr ""
+msgstr "Повідомлення"
 
 #: .\forms.py:21
 msgid "Recipients"
-msgstr ""
+msgstr "Отримувачі"
 
 #: .\forms.py:54
 msgid "Additional Recipients"
-msgstr ""
+msgstr "Додаткові отримувачі"
 
 #: .\forms.py:60
 msgid "Undefined recipient."
-msgstr ""
+msgstr "Не вказано отримувача."
 
 #: .\views.py:98
 msgid "Select at least one object."
-msgstr ""
+msgstr "Виберіть щонайменше одного отримувача."
 
 #: .\views.py:105
 msgid "Messages or conversations successfully archived."
-msgstr ""
+msgstr "Повідомлення успішно заархівовані."
 
 #: .\views.py:112
 msgid "Messages or conversations successfully deleted."
-msgstr ""
+msgstr "Повідомлення успішно видалені."
 
 #: .\views.py:119
 msgid "Messages or conversations successfully recovered."
-msgstr ""
+msgstr "Повідомлення успішно відновлені."
 
 #: .\templates\cosinnus_message\base.html.py:6
 msgid "Messages"
-msgstr ""
+msgstr "Повідомлення"
 
 #: .\templates\postman\archives.html.py:4
 #: .\templates\postman\archives.html.py:8
 msgid "Archived Messages"
-msgstr ""
+msgstr "Заархівовані повідомлення"
 
 #: .\templates\postman\base_folder.html.py:33
 #: .\templates\postman\base_folder.html.py:34
 #: .\templates\postman\base_folder.html.py:37
 #: .\templates\postman\view.html.py:47 .\templates\postman\view.html.py:52
 msgid "Me"
-msgstr ""
+msgstr "Я"
 
 #: .\templates\postman\base_folder.html.py:51
 msgid "No messages"
-msgstr ""
+msgstr "Жодних повідомлень"
 
 #: .\templates\postman\base_folder.html.py:67
 #: .\templates\postman\view.html.py:118
 msgid "Delete"
-msgstr ""
+msgstr "Видалити"
 
 #: .\templates\postman\base_folder.html.py:81
 #: .\templates\postman\menu.html.py:24 .\templates\postman\view.html.py:14
 #: .\templates\postman\view.html.py:22 .\templates\postman\view.html.py:132
 msgid "Archive"
-msgstr ""
+msgstr "Архівувати"
 
 #: .\templates\postman\base_folder.html.py:95
 msgid "Undelete"
-msgstr ""
+msgstr "Скасувати видалення"
 
 #: .\templates\postman\base_write.html.py:40
 msgid "Please enter message..."
-msgstr ""
+msgstr "Уведіть, будь ласка, повідомлення..."
 
 #: .\templates\postman\base_write.html.py:54
 msgid "Send"
-msgstr ""
+msgstr "Надіслати"
 
 #: .\templates\postman\email_user.txt.py:1
 msgid "Dear user,"
-msgstr ""
+msgstr "Шановний/-на користувачу/-ко,"
 
 #: .\templates\postman\email_user.txt.py:3
 #: .\templates\postman\email_visitor.txt.py:3
 #, python-format
 msgid "On %(date)s, you asked to send a message to the user '%(recipient)s'."
 msgstr ""
+"%(date)s ви хотіли надіслати повідомлення до користувача/-ки '%(recipient)s'."
 
 #: .\templates\postman\email_user.txt.py:5
 #: .\templates\postman\email_visitor.txt.py:5
 msgid "Your message has been rejected by the moderator"
-msgstr ""
+msgstr "Ваше повідомлення заблокував модератор"
 
 #: .\templates\postman\email_user.txt.py:5
 #: .\templates\postman\email_visitor.txt.py:5
 msgid ", for the following reason:"
-msgstr ""
+msgstr ", з наступної причини:"
 
 #: .\templates\postman\email_user.txt.py:9
 #, python-format
 msgid ""
 "'%(sender_first)s %(sender_last)s' has replied to your message from %(date)s:"
 msgstr ""
+"'%(sender_first)s %(sender_last)s' відповів/-ла на ваше повідомлення від "
+"%(date)s:"
 
 #: .\templates\postman\email_user.txt.py:10
 #, python-format
 msgid ""
-"You have received a copy of a response from the user '%(sender_first)s %"
-"(sender_last)s'."
+"You have received a copy of a response from the user '%(sender_first)s "
+"%(sender_last)s'."
 msgstr ""
+"Ви отримали копію відповіді від користувача/-ки '%(sender_first)s "
+"%(sender_last)s'."
 
 #: .\templates\postman\email_user.txt.py:11
 #, python-format
 msgid ""
 "You have received a message from the user '%(sender_first)s %(sender_last)s'."
 msgstr ""
+"Ви отримали повідомлення від користувача/-ки '%(sender_first)s "
+"%(sender_last)s'."
 
 #: .\templates\postman\email_user.txt.py:16
 msgid "Follow this link to view the message on the site"
-msgstr ""
+msgstr "Перейдіть за цим посиланням, щоб переглянути повідомлення на веб-сайті"
 
 #: .\templates\postman\email_user.txt.py:20
 #: .\templates\postman\email_visitor.txt.py:18
@@ -146,82 +156,86 @@ msgid ""
 "Note: This message is issued by an automated system.\n"
 "Do not reply, this would not be taken into account."
 msgstr ""
+"Зауважте: це повідомлення надсилається системою автоматично.\n"
+"Будь ласка, не відповідайте на нього."
 
 #: .\templates\postman\email_user_subject.txt.py:1
 #: .\templates\postman\email_visitor_subject.txt.py:1
 #, python-format
 msgid "Message \"%(subject)s\" on the site %(sitename)s"
-msgstr ""
+msgstr "Повідомлення «%(subject)s» на веб-сайті %(sitename)s"
 
 #: .\templates\postman\email_visitor.txt.py:1
 msgid "Dear visitor,"
-msgstr ""
+msgstr "Шановний/-на відвідувачу/-ко,"
 
 #: .\templates\postman\email_visitor.txt.py:8
 msgid "As a reminder, please find below the content of your message."
-msgstr ""
+msgstr "У якості нагадування, нижче наведено зміст вашого повідомлення."
 
 #: .\templates\postman\email_visitor.txt.py:10
 #, python-format
 msgid ""
-"On %(date)s, you sent a message to the user '%(sender_first)s %(sender_last)"
-"s'."
+"On %(date)s, you sent a message to the user '%(sender_first)s "
+"%(sender_last)s'."
 msgstr ""
+"%(date)s ви надіслали повідомлення користувачу/-ці '%(sender_first)s "
+"%(sender_last)s'."
 
 #: .\templates\postman\email_visitor.txt.py:11
 msgid "Please find below the answer from your correspondent."
-msgstr ""
+msgstr "Нижче знаходиться відповідь від вашого/-ї кореспондента/-ки."
 
 #: .\templates\postman\email_visitor.txt.py:14
 msgid "Thank you again for your interest in our services."
-msgstr ""
+msgstr "Ще раз дякуємо, що користуєтеся нашими сервісами."
 
 #: .\templates\postman\email_visitor.txt.py:15
 msgid "For more comfort, we encourage you to open an account on the site."
-msgstr ""
+msgstr "Для більшої зручності ми радимо зареєструватися на веб-сайті."
 
 #: .\templates\postman\email_visitor.txt.py:16
 msgid "The site administrator"
-msgstr ""
+msgstr "Адміністратор/-ка веб-сайту"
 
 #: .\templates\postman\inbox.html.py:4 .\templates\postman\inbox.html.py:8
 #: .\templates\postman\menu.html.py:16 .\templates\postman\view.html.py:24
 msgid "Inbox"
-msgstr ""
+msgstr "Вхідні"
 
 #: .\templates\postman\menu.html.py:20 .\templates\postman\sent.html.py:4
 #: .\templates\postman\sent.html.py:8 .\templates\postman\view.html.py:16
 msgid "Sent"
-msgstr ""
+msgstr "Надіслані"
 
 #: .\templates\postman\menu.html.py:28 .\templates\postman\trash.html.py:4
 #: .\templates\postman\trash.html.py:8 .\templates\postman\view.html.py:12
 #: .\templates\postman\view.html.py:20
 msgid "Trash"
-msgstr ""
+msgstr "Кошик"
 
 #: .\templates\postman\menu.html.py:32 .\templates\postman\write.html.py:4
 #: .\templates\postman\write.html.py:8
 msgid "Write"
-msgstr ""
+msgstr "Написати"
 
 #: .\templates\postman\reply.html.py:4 .\templates\postman\reply.html.py:8
 #: .\templates\postman\view.html.py:96
 msgid "Reply"
-msgstr ""
+msgstr "Відповісти"
 
 #: .\templates\postman\reply.html.py:11
 msgid "Recipient"
-msgstr ""
+msgstr "Отримувач"
 
 #: .\templates\postman\view.html.py:27
 msgid "Conversation"
-msgstr ""
+msgstr "Розмова"
 
 #: .\templates\postman\view.html.py:73
 msgid "Answer"
-msgstr ""
+msgstr "Відповісти"
 
 #: .\templates\postman\view.html.py:83
 msgid "Reply..."
-msgstr ""
+msgstr "Відповісти..."
