@@ -21,6 +21,7 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.utils.html import escape
 from django.template.loader import render_to_string
+from cosinnus.utils.urls import safe_redirect
 
 try:
     from django.utils.timezone import now  # Django 1.4 aware datetimes
@@ -93,7 +94,9 @@ class UpdateMessageMixin(object):
             if not (recipient_rows or sender_rows):
                 raise Http404  # abnormal enough, like forged ids
             messages.success(request, self.success_msg, fail_silently=True)
-            return redirect(request.GET.get('next') or self.success_url or next_url)
+            next_url = request.GET.get('next', None)
+            next_url = safe_redirect(next_url, request) if next_url else None
+            return redirect(next_url or self.success_url or next_url)
         else:
             messages.warning(request, _("Select at least one object."), fail_silently=True)
             return redirect(next_url)
