@@ -6,11 +6,11 @@
 
 {% postman_unread as unread_count %}
 
-{% url 'postman_inbox' as inbox_url %}
-{% url 'postman_sent' as sent_url %}
-{% url 'postman_archives' as archives_url %}
-{% url 'postman_trash' as trash_url %}
-{% url 'postman_write' as write_url %}
+{% url 'postman:inbox' as inbox_url %}
+{% url 'postman:sent' as sent_url %}
+{% url 'postman:archives' as archives_url %}
+{% url 'postman:trash' as trash_url %}
+{% url 'postman:write' as write_url %}
 
 {% captureas active %}{% if request.get_full_path == inbox_url %}True{% endif %}{% endcaptureas %}
 {% captureas label %}{% trans "Inbox" %}{% if unread_count %} <strong>({{ unread_count }})</strong>{% endif %}{% endcaptureas %}

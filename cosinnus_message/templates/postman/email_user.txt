@@ -13,7 +13,7 @@
 {{ object.body }}
 
 
-{% trans "Follow this link to view the message on the site" %}: {{ site.domain }}{% if object.thread_id %}{% url 'postman_view_conversation' object.thread_id %}{% else %}{{object.get_absolute_url }}{% endif %}
+{% trans "Follow this link to view the message on the site" %}: {{ site.domain }}{% if object.thread_id %}{% url 'postman:view_conversation' object.thread_id %}{% else %}{{object.get_absolute_url }}{% endif %}
 
 {% endif %}{# 'acceptance' #}
 

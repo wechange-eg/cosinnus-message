@@ -19,7 +19,7 @@ class CustomWriteForm(BaseWriteForm):
     """The form for an authenticated user, to compose a message."""
     # specify help_text only to avoid the possible default 'Enter text to search.' of ajax_select v1.2.5
     recipients = UserSelect2MultipleChoiceField(label=_("Recipients"), help_text='', 
-                                                data_view='user_select2_view')
+                                                data_view='postman:user_select2_view')
     
     class Meta(BaseWriteForm.Meta):
         fields = ('recipients', 'subject', 'body')

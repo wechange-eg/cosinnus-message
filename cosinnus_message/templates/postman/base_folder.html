@@ -27,7 +27,7 @@
 	                        {% include "cosinnus/user/user_avatar_image.html" with user=message.sender %}
 	                    </a>
                         <div class="media-body">
-                            <a href="{% block pm_link %}{% if by_conversation and message.thread_id %}{% url 'postman_view_conversation' message.thread_id %}{% else %}{{message.get_absolute_url }}{% endif %}?next={{ current_url|urlencode }}{% endblock %}">
+                            <a href="{% block pm_link %}{% if by_conversation and message.thread_id %}{% url 'postman:view_conversation' message.thread_id %}{% else %}{{message.get_absolute_url }}{% endif %}?next={{ current_url|urlencode }}{% endblock %}">
                                 <span class="annotation moment-data-date" data-date="{{ message.sent_at|date:"c" }}"></span>
                             <strong>
 	                            {% block pm_sender_cell %}{% if message.sender == user %}<i>{% trans "Me" %}</i>{% else %}{{ message.sender|full_name }}{% endif %}{% if message.count %} ({{ message.count }}){% endif %}{% endblock %}
@@ -57,7 +57,7 @@
 <!-- TODO: add values from checkboxes -->
 
 {% block pm_delete_button %}
-<button type="submit" class="btn btn-emphasized messages-delete-button" onclick="this.form.action='{% url 'postman_delete' %}'">
+<button type="submit" class="btn btn-emphasized messages-delete-button" onclick="this.form.action='{% url 'postman:delete' %}'">
     <ul class="media-list">
         <li class="media">
             <a class="pull-left" href="#">
@@ -71,7 +71,7 @@
 </button>
 {% endblock %}
 {% block pm_archive_button %}
-<button type="submit" class="btn btn-emphasized messages-delete-button" onclick="this.form.action='{% url 'postman_archive' %}'">
+<button type="submit" class="btn btn-emphasized messages-delete-button" onclick="this.form.action='{% url 'postman:archive' %}'">
     <ul class="media-list">
         <li class="media">
             <a class="pull-left" href="#">
@@ -85,7 +85,7 @@
 </button>
 {% endblock %}
 {% block pm_undelete_button %}
-<button type="submit" class="btn btn-emphasized messages-delete-button" onclick="this.form.action='{% url 'postman_undelete' %}'">
+<button type="submit" class="btn btn-emphasized messages-delete-button" onclick="this.form.action='{% url 'postman:undelete' %}'">
     <ul class="media-list">
         <li class="media">
             <a class="pull-left" href="#">

@@ -9,19 +9,19 @@
     {% with pm_messages.all|first as message %}
 	    {% if message.sender == user %}
 	       {% if message.sender_deleted_at %}
-               <li class="active"><a href="{% url 'postman_trash' %}">{% trans "Trash" %}</a></li>	       
+               <li class="active"><a href="{% url 'postman:trash' %}">{% trans "Trash" %}</a></li>	       
 	       {% elif message.sender_archived %}
-               <li class="active"><a href="{% url 'postman_archives' %}">{% trans "Archive" %}</a></li>         
+               <li class="active"><a href="{% url 'postman:archives' %}">{% trans "Archive" %}</a></li>         
            {% else %}
-	           <li class="active"><a href="{% url 'postman_sent' %}">{% trans "Sent" %}</a></li>
+	           <li class="active"><a href="{% url 'postman:sent' %}">{% trans "Sent" %}</a></li>
 	       {% endif %}
 	    {% else %}
 	       {% if message.recipient_deleted_at %}
-               <li class="active"><a href="{% url 'postman_trash' %}">{% trans "Trash" %}</a></li>         
+               <li class="active"><a href="{% url 'postman:trash' %}">{% trans "Trash" %}</a></li>         
            {% elif message.recipient_archived %}
-               <li class="active"><a href="{% url 'postman_archives' %}">{% trans "Archive" %}</a></li>         
+               <li class="active"><a href="{% url 'postman:archives' %}">{% trans "Archive" %}</a></li>         
            {% else %}
-               <li class="active"><a href="{% url 'postman_inbox' %}">{% trans "Inbox" %}</a></li>
+               <li class="active"><a href="{% url 'postman:inbox' %}">{% trans "Inbox" %}</a></li>
            {% endif %}
 	    {% endif %}
         <li class="active">{% if pm_messages|length > 1 %}{% trans "Conversation" %}{% else %}{% trans "Message" %}{% endif %}: {{ message.subject }}</li>
@@ -61,7 +61,7 @@
     {% endfor %}
 
     {% if reply_to_pk %}
-    <form action="{% url 'postman_reply' reply_to_pk %}?next={{ next_url|urlencode }}" method="post">{% csrf_token %}
+    <form action="{% url 'postman:reply' reply_to_pk %}?next={{ next_url|urlencode }}" method="post">{% csrf_token %}
 	    
 	    <div class="btn btn-emphasized w100">
 	        <ul class="media-list">
@@ -108,7 +108,7 @@
 	<form action="" method="post">{% csrf_token %}
 		<input type="hidden" {% if pm_messages|length > 1 and message.thread_id %}name="delete_tpk__{{message.thread_id}}" value="true"{% else %}name="delete_pk__{{ message.pk }}" value="true"{% endif %} />
 		
-		<button type="submit"  onclick="this.form.action='{% url 'postman_delete' %}?next={{ next_url|urlencode }}'" class="btn btn-emphasized">
+		<button type="submit"  onclick="this.form.action='{% url 'postman:delete' %}?next={{ next_url|urlencode }}'" class="btn btn-emphasized">
 		    <ul class="media-list">
 		        <li class="media">
 		            <a class="pull-left" href="#">
@@ -122,7 +122,7 @@
 		</button>
 		
 		{% if not archived %}
-		<button type="submit" onclick="this.form.action='{% url 'postman_archive' %}?next={{ next_url|urlencode }}'" class="btn btn-emphasized">
+		<button type="submit" onclick="this.form.action='{% url 'postman:archive' %}?next={{ next_url|urlencode }}'" class="btn btn-emphasized">
 		    <ul class="media-list">
 		        <li class="media">
 		            <a class="pull-left" href="#">
