@@ -96,7 +96,7 @@ class UpdateMessageMixin(object):
             messages.success(request, self.success_msg, fail_silently=True)
             next_url = request.GET.get('next', None)
             next_url = safe_redirect(next_url, request) if next_url else None
-            return redirect(next_url or self.success_url or next_url)
+            return redirect(next_url or self.success_url or request.META.get('HTTP_REFERER', reverse('postman:inbox')))
         else:
             messages.warning(request, _("Select at least one object."), fail_silently=True)
             return redirect(next_url)
