@@ -86,7 +86,7 @@ msgstr "Удалить"
 #: .\templates\postman\menu.html.py:24 .\templates\postman\view.html.py:14
 #: .\templates\postman\view.html.py:22 .\templates\postman\view.html.py:132
 msgid "Archive"
-msgstr "Переместить в архив"
+msgstr "В архив"
 
 #: .\templates\postman\base_folder.html.py:95
 msgid "Undelete"
