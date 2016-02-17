@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 import six
 
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
@@ -22,6 +21,9 @@ from django.shortcuts import redirect
 from django.utils.html import escape
 from django.template.loader import render_to_string
 from cosinnus.utils.urls import safe_redirect
+from django.contrib.auth import get_user_model
+from cosinnus.utils.permissions import check_user_can_see_user
+from cosinnus.models.tagged import BaseTagObject
 
 try:
     from django.utils.timezone import now  # Django 1.4 aware datetimes
@@ -29,6 +31,8 @@ except ImportError:
     from datetime import datetime
     now = datetime.now
 from django.utils.translation import ugettext_lazy as _
+
+User = get_user_model()
 
 
 class CosinnusMessageView(MessageView):
@@ -153,6 +157,11 @@ class UserSelect2View(Select2View):
             q &= Q(first_name__icontains=other_term) | Q(last_name__icontains=other_term) | Q(email__icontains=other_term) 
         
         users = User.objects.filter(q).exclude(id__exact=request.user.id).exclude(is_active=False)
+        # as a last filter, remove all users that that have their privacy setting to "only members of groups i am in",
+        # if they aren't in a group with the user
+        users = [user for user in users if check_user_can_see_user(request.user, user)]
+        
+        
         # | Q(username__icontains=term))
         # Filter all groups the user is a member of, and all public groups for
         # the term.

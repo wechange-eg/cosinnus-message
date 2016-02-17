@@ -13,13 +13,23 @@ from postman.forms import BaseWriteForm
 from cosinnus_message.fields import UserSelect2MultipleChoiceField
 import six
 from django.template.loader import render_to_string
+from cosinnus.utils.permissions import check_user_can_see_user
 
+
+def user_write_permission_filter(sender, recipient, recipients_list):
+    """ Make sure the users can interact with each other """
+    if check_user_can_see_user(sender, recipient):
+        return None
+    return 'This user is private and you are not in any groups/projects with them!'
+    
 
 class CustomWriteForm(BaseWriteForm):
     """The form for an authenticated user, to compose a message."""
     # specify help_text only to avoid the possible default 'Enter text to search.' of ajax_select v1.2.5
     recipients = UserSelect2MultipleChoiceField(label=_("Recipients"), help_text='', 
                                                 data_view='postman:user_select2_view')
+    
+    exchange_filter = staticmethod(user_write_permission_filter)
     
     class Meta(BaseWriteForm.Meta):
         fields = ('recipients', 'subject', 'body')
@@ -47,6 +57,9 @@ class CustomWriteForm(BaseWriteForm):
         
 
 class CustomReplyForm(CustomWriteForm):
+    
+    exchange_filter = staticmethod(user_write_permission_filter)
+    
     def __init__(self, *args, **kwargs):
         recipient = kwargs.pop('recipient', None)
         super(CustomReplyForm, self).__init__(*args, **kwargs)
