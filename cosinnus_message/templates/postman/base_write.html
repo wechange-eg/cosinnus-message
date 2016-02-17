@@ -6,6 +6,7 @@
 <div class="content-box">
     <form action="{% if next_url %}?next={{ next_url|urlencode }}{% endif %}" method="post">
     {% csrf_token %}
+    {{ form.non_field_errors }}
     
 	    <div class="btn btn-default w100 regular-space">
 	        <ul class="media-list">
@@ -14,6 +15,7 @@
 	                    <i class="fa fa-user"></i>
 	                </a>
 	                <div class="media-body">
+	                	{{ form.recipients.errors }}
 	                    {% render_field form.recipients class+="w100" placeholder=form.recipients.label id="id_recipients"%}
 	                </div>
 	            </li>
@@ -27,6 +29,7 @@
 	                    <i class="fa fa-pencil"></i>
 	                </a>
 	                <div class="media-body media-body-form-control">
+	                	{{ form.subject.errors }}
 	                    {% render_field form.subject class+="form-control" placeholder=form.subject.label %}
 	                </div>
 	            </li>
@@ -37,6 +40,7 @@
             <ul class="media-list">
                 <li class="media">
                     <div class="media-body media-body-form-control">
+				        {{ form.body.errors }}
 				        {% captureas label %}{% trans "Please enter message..." %}{% endcaptureas %}
 				        {% render_field form.body class+="app-message-text next-button-is-for-sending" placeholder=label %}
                     </div>
