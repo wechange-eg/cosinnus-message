@@ -156,7 +156,7 @@ class UserSelect2View(Select2View):
         for other_term in other_terms:
             q &= Q(first_name__icontains=other_term) | Q(last_name__icontains=other_term) | Q(email__icontains=other_term) 
         
-        users = User.objects.filter(q).exclude(id__exact=request.user.id).exclude(is_active=False)
+        users = User.objects.filter(q).exclude(id__exact=request.user.id).exclude(is_active=False).exclude(last_login__exact=None)
         # as a last filter, remove all users that that have their privacy setting to "only members of groups i am in",
         # if they aren't in a group with the user
         users = [user for user in users if check_user_can_see_user(request.user, user)]
