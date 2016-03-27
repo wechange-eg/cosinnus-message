@@ -100,7 +100,7 @@ msgstr "Absenden"
 
 #: .\templates\postman\email_user.txt.py:1
 msgid "Dear user,"
-msgstr "Hi,"
+msgstr "Hallo,"
 
 #: .\templates\postman\email_user.txt.py:3
 #: .\templates\postman\email_visitor.txt.py:3
@@ -138,12 +138,12 @@ msgstr ""
 msgid ""
 "You have received a message from the user '%(sender_first)s %(sender_last)s'."
 msgstr ""
-"Sie haben eine Nachricht von Benutzer_in '%(sender_first)s %(sender_last)s' "
-"erhalten."
+"du hast eine Nachricht von '%(sender_first)s %(sender_last)s' "
+"erhalten:"
 
 #: .\templates\postman\email_user.txt.py:16
 msgid "Follow this link to view the message on the site"
-msgstr "Folgen sie diesem Link um die Nachricht auf der Seite anzusehen"
+msgstr "Folge diesem Link, um die Nachricht auf der Seite anzusehen"
 
 #: .\templates\postman\email_user.txt.py:20
 #: .\templates\postman\email_visitor.txt.py:18
@@ -152,7 +152,7 @@ msgid ""
 "Do not reply, this would not be taken into account."
 msgstr ""
 "Diese Nachricht wurde von einem automatisierten System erstellt - bitte "
-"antworten sie nicht darauf. "
+"antworte nicht darauf. "
 
 #: .\templates\postman\email_user_subject.txt.py:1
 #: .\templates\postman\email_visitor_subject.txt.py:1
