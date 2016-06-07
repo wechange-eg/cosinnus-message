@@ -1,5 +1,3 @@
-from django.contrib.auth.models import User
-
 from django_select2 import (HeavyModelSelect2MultipleChoiceField)
 from cosinnus_message.views import UserSelect2View
 from django.core.exceptions import ValidationError
@@ -7,8 +5,13 @@ from cosinnus.conf import settings
 from django.http.response import Http404
 from cosinnus.models.group import CosinnusGroup
 from django_select2.util import JSFunction
+from django.contrib.auth import get_user_model
+from cosinnus.utils.user import filter_active_users
+
+User = get_user_model()
 
 class UserSelect2MultipleChoiceField(HeavyModelSelect2MultipleChoiceField):
+    
     queryset = User.objects
     search_fields = ['username__icontains', ]
     data_view = UserSelect2View
@@ -49,14 +52,10 @@ class UserSelect2MultipleChoiceField(HeavyModelSelect2MultipleChoiceField):
         groups = CosinnusGroup.objects.get_cached(pks=group_ids)
         recipients = set()
         for group in groups:
-            recipients.update(group.users.all().exclude(is_active=False).\
-                              exclude(last_login__exact=None).\
-                              filter(cosinnus_profile__settings__contains='tos_accepted'))
+            recipients.update(filter_active_users(group.users.all()))
             
         # combine the groups users with the directly selected users
-        recipients.update( User.objects.filter(id__in=user_ids).exclude(is_active=False).\
-                           exclude(last_login__exact=None).\
-                           filter(cosinnus_profile__settings__contains='tos_accepted') )
+        recipients.update(filter_active_users(User.objects.filter(id__in=user_ids)))
 
         return list(recipients)
     
