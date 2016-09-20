@@ -7,133 +7,88 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-30 11:52+0200\n"
+"POT-Creation-Date: 2016-09-20 13:27+0200\n"
 "PO-Revision-Date: 2015-11-11 10:42+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "Language: uk\n"
 "X-Generator: Poedit 1.8.6\n"
 
-#: .\cosinnus_app.py:15 .\templates\postman\view.html:4
-#: .\templates\postman\view.html.py:27
 msgid "Message"
 msgstr "Повідомлення"
 
-#: .\cosinnus_app.py:20
 msgctxt "the_app"
 msgid "message"
 msgstr "Повідомлення"
 
-#: .\forms.py:29
 msgid "Recipients"
 msgstr "Отримувачі"
 
-#: .\forms.py:67
 msgid "Additional Recipients"
 msgstr "Додаткові отримувачі"
 
-#: .\forms.py:73
 msgid "Undefined recipient."
 msgstr "Не вказано отримувача."
 
-#: .\templates\cosinnus_message\base.html:6
 msgid "Messages"
 msgstr "Повідомлення"
 
-#: .\templates\postman\archives.html:4 .\templates\postman\archives.html:8
 msgid "Archived Messages"
 msgstr "Заархівовані повідомлення"
 
-#: .\templates\postman\base_folder.html:33
-#: .\templates\postman\base_folder.html:34
-#: .\templates\postman\base_folder.html:37 .\templates\postman\view.html:47
-#: .\templates\postman\view.html.py:52
 msgid "Me"
 msgstr "Я"
 
-#: .\templates\postman\base_folder.html:51
 msgid "No messages"
 msgstr "Жодних повідомлень"
 
-#: .\templates\postman\base_folder.html:67 .\templates\postman\view.html:118
 msgid "Delete"
 msgstr "Видалити"
 
-#: .\templates\postman\base_folder.html:81 .\templates\postman\menu.html:24
-#: .\templates\postman\view.html:14 .\templates\postman\view.html.py:22
-#: .\templates\postman\view.html:132
 msgid "Archive"
 msgstr "Архів"
 
-#: .\templates\postman\base_folder.html:95
 msgid "Undelete"
 msgstr "Скасувати видалення"
 
-#: .\templates\postman\base_write.html:44
 msgid "Please enter message..."
 msgstr "Уведіть, будь ласка, повідомлення..."
 
-#: .\templates\postman\base_write.html:58
 msgid "Send"
 msgstr "Надіслати"
 
-#: .\templates\postman\email_user.txt:1
 msgid "Dear user,"
 msgstr "Шановний/-на користувачу/-ко,"
 
-#: .\templates\postman\email_user.txt:3
-#: .\templates\postman\email_visitor.txt:3
 #, python-format
 msgid "On %(date)s, you asked to send a message to the user '%(recipient)s'."
-msgstr ""
-"%(date)s ви хотіли надіслати повідомлення до користувача/-ки '%(recipient)s'."
+msgstr "%(date)s ви хотіли надіслати повідомлення до користувача/-ки '%(recipient)s'."
 
-#: .\templates\postman\email_user.txt:5
-#: .\templates\postman\email_visitor.txt:5
 msgid "Your message has been rejected by the moderator"
 msgstr "Ваше повідомлення заблокував модератор"
 
-#: .\templates\postman\email_user.txt:5
-#: .\templates\postman\email_visitor.txt:5
 msgid ", for the following reason:"
 msgstr ", з наступної причини:"
 
-#: .\templates\postman\email_user.txt:9
 #, python-format
-msgid ""
-"'%(sender_first)s %(sender_last)s' has replied to your message from %(date)s:"
-msgstr ""
-"'%(sender_first)s %(sender_last)s' відповів/-ла на ваше повідомлення від %"
-"(date)s:"
+msgid "'%(sender_first)s %(sender_last)s' has replied to your message from %(date)s:"
+msgstr "'%(sender_first)s %(sender_last)s' відповів/-ла на ваше повідомлення від %(date)s:"
 
-#: .\templates\postman\email_user.txt:10
 #, python-format
-msgid ""
-"You have received a copy of a response from the user '%(sender_first)s %"
-"(sender_last)s'."
-msgstr ""
-"Ви отримали копію відповіді від користувача/-ки '%(sender_first)s %"
-"(sender_last)s'."
+msgid "You have received a copy of a response from the user '%(sender_first)s %(sender_last)s'."
+msgstr "Ви отримали копію відповіді від користувача/-ки '%(sender_first)s %(sender_last)s'."
 
-#: .\templates\postman\email_user.txt:11
 #, python-format
-msgid ""
-"You have received a message from the user '%(sender_first)s %(sender_last)s'."
-msgstr ""
-"Ви отримали повідомлення від користувача/-ки '%(sender_first)s %(sender_last)"
-"s'."
+msgid "You have received a message from the user '%(sender_first)s %(sender_last)s'."
+msgstr "Ви отримали повідомлення від користувача/-ки '%(sender_first)s %(sender_last)s'."
 
-#: .\templates\postman\email_user.txt:16
 msgid "Follow this link to view the message on the site"
 msgstr "Перейдіть за цим посиланням, щоб переглянути повідомлення на веб-сайті"
 
-#: .\templates\postman\email_user.txt:20
-#: .\templates\postman\email_visitor.txt:18
 msgid ""
 "Note: This message is issued by an automated system.\n"
 "Do not reply, this would not be taken into account."
@@ -141,99 +96,67 @@ msgstr ""
 "Зауважте: це повідомлення надсилається системою автоматично.\n"
 "Будь ласка, не відповідайте на нього."
 
-#: .\templates\postman\email_user_subject.txt:1
-#: .\templates\postman\email_visitor_subject.txt:1
 #, python-format
 msgid "Message \"%(subject)s\" on the site %(sitename)s"
 msgstr "Повідомлення «%(subject)s» на веб-сайті %(sitename)s"
 
-#: .\templates\postman\email_visitor.txt:1
 msgid "Dear visitor,"
 msgstr "Шановний/-на відвідувачу/-ко,"
 
-#: .\templates\postman\email_visitor.txt:8
 msgid "As a reminder, please find below the content of your message."
 msgstr "У якості нагадування, нижче наведено зміст вашого повідомлення."
 
-#: .\templates\postman\email_visitor.txt:10
 #, python-format
-msgid ""
-"On %(date)s, you sent a message to the user '%(sender_first)s %(sender_last)"
-"s'."
-msgstr ""
-"%(date)s ви надіслали повідомлення користувачу/-ці '%(sender_first)s %"
-"(sender_last)s'."
+msgid "On %(date)s, you sent a message to the user '%(sender_first)s %(sender_last)s'."
+msgstr "%(date)s ви надіслали повідомлення користувачу/-ці '%(sender_first)s %(sender_last)s'."
 
-#: .\templates\postman\email_visitor.txt:11
 msgid "Please find below the answer from your correspondent."
 msgstr "Нижче знаходиться відповідь від вашого/-ї кореспондента/-ки."
 
-#: .\templates\postman\email_visitor.txt:14
 msgid "Thank you again for your interest in our services."
 msgstr "Ще раз дякуємо, що користуєтеся нашими сервісами."
 
-#: .\templates\postman\email_visitor.txt:15
 msgid "For more comfort, we encourage you to open an account on the site."
 msgstr "Для більшої зручності ми радимо зареєструватися на веб-сайті."
 
-#: .\templates\postman\email_visitor.txt:16
 msgid "The site administrator"
 msgstr "Адміністратор/-ка веб-сайту"
 
-#: .\templates\postman\inbox.html:4 .\templates\postman\inbox.html.py:8
-#: .\templates\postman\menu.html:16 .\templates\postman\view.html:24
 msgid "Inbox"
 msgstr "Вхідні"
 
-#: .\templates\postman\menu.html:20 .\templates\postman\sent.html:4
-#: .\templates\postman\sent.html.py:8 .\templates\postman\view.html:16
 msgid "Sent"
 msgstr "Надіслані"
 
-#: .\templates\postman\menu.html:28 .\templates\postman\trash.html:4
-#: .\templates\postman\trash.html.py:8 .\templates\postman\view.html:12
-#: .\templates\postman\view.html.py:20
 msgid "Trash"
 msgstr "Кошик"
 
-#: .\templates\postman\menu.html:32 .\templates\postman\write.html:4
-#: .\templates\postman\write.html.py:8
 msgid "Write"
 msgstr "Написати"
 
-#: .\templates\postman\reply.html:4 .\templates\postman\reply.html.py:8
-#: .\templates\postman\view.html:96
 msgid "Reply"
 msgstr "Відповісти"
 
-#: .\templates\postman\reply.html:11
 msgid "Recipient"
 msgstr "Отримувач"
 
-#: .\templates\postman\view.html:27
 msgid "Conversation"
 msgstr "Розмова"
 
-#: .\templates\postman\view.html:73
 msgid "Answer"
 msgstr "Відповісти"
 
-#: .\templates\postman\view.html:83
 msgid "Reply..."
 msgstr "Відповісти..."
 
-#: .\views.py:105
 msgid "Select at least one object."
 msgstr "Виберіть щонайменше одного отримувача."
 
-#: .\views.py:112
 msgid "Messages or conversations successfully archived."
 msgstr "Повідомлення успішно заархівовані."
 
-#: .\views.py:119
 msgid "Messages or conversations successfully deleted."
 msgstr "Повідомлення успішно видалені."
 
-#: .\views.py:126
 msgid "Messages or conversations successfully recovered."
 msgstr "Повідомлення успішно відновлені."
