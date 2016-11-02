@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wechange RU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-20 13:27+0200\n"
-"PO-Revision-Date: 2016-09-20 13:08+0200\n"
+"POT-Creation-Date: 2016-11-02 11:31+0100\n"
+"PO-Revision-Date: 2016-11-02 11:15+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -65,7 +65,7 @@ msgstr "Уважаемый пользователь,"
 
 #, python-format
 msgid "On %(date)s, you asked to send a message to the user '%(recipient)s'."
-msgstr "%(date)s, вы просили отправить сообщение пользователю '%(recipient)s'."
+msgstr "%(date)s, Вы просили отправить сообщение пользователю '%(recipient)s'."
 
 msgid "Your message has been rejected by the moderator"
 msgstr "Ваше сообщение отклонено модератором"
@@ -75,7 +75,7 @@ msgstr ", по следующей причине:"
 
 #, python-format
 msgid "'%(sender_first)s %(sender_last)s' has replied to your message from %(date)s:"
-msgstr "’%(sender_first)s %(sender_last)s' ответил(а) на ваше сообщение от %(date)s:"
+msgstr "’%(sender_first)s %(sender_last)s' ответил(а) на Ваше сообщение от %(date)s:"
 
 #, python-format
 msgid "You have received a copy of a response from the user '%(sender_first)s %(sender_last)s'."
@@ -93,7 +93,7 @@ msgid ""
 "Do not reply, this would not be taken into account."
 msgstr ""
 "Примечание: Это автоматическое сообщение.\n"
-"Не отвечайте на него, ваш ответ не будет прочитан"
+"Не отвечайте на него, Ваш ответ не будет прочитан"
 
 #, python-format
 msgid "Message \"%(subject)s\" on the site %(sitename)s"
@@ -103,20 +103,20 @@ msgid "Dear visitor,"
 msgstr "Уважаемый посетитель,"
 
 msgid "As a reminder, please find below the content of your message."
-msgstr "В качестве напоминания ниже вы найдете содержание вашего сообщения."
+msgstr "В качестве напоминания ниже Вы найдете содержание Вашего сообщения."
 
 #, python-format
 msgid "On %(date)s, you sent a message to the user '%(sender_first)s %(sender_last)s'."
-msgstr "%(date)s вы отправили сообщение пользователю '%(sender_first)s %(sender_last)s‘."
+msgstr "%(date)s Вы отправили сообщение пользователю '%(sender_first)s %(sender_last)s‘."
 
 msgid "Please find below the answer from your correspondent."
-msgstr "Ниже вы найдете ответ вашего собеседника."
+msgstr "Ниже Вы найдете ответ Вашего собеседника."
 
 msgid "Thank you again for your interest in our services."
 msgstr "Еще раз благодарим за интерес, проявленный к нашей работе."
 
 msgid "For more comfort, we encourage you to open an account on the site."
-msgstr "Чтобы вам было еще удобнее, рекомендуем открыть аккаунт на этой странице."
+msgstr "Чтобы Вам было еще удобнее, рекомендуем открыть аккаунт на этой странице."
 
 msgid "The site administrator"
 msgstr "Администратор сайта"
@@ -143,7 +143,7 @@ msgid "Conversation"
 msgstr "Беседа"
 
 msgid "Answer"
-msgstr "Ответить"
+msgstr "Ответ"
 
 msgid "Reply..."
 msgstr "Ответить..."
