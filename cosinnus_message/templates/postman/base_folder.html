@@ -10,6 +10,52 @@
 
 <form action="{% block pm_form_action %}{% endblock %}" method="post">{% csrf_token %}
 
+
+{% block pm_delete_button %}
+<button type="submit" class="btn btn-emphasized messages-delete-button" onclick="this.form.action='{% url 'postman:delete' %}'">
+    <ul class="media-list">
+        <li class="media">
+            <a class="pull-left" href="#">
+                <i class="fa fa-eraser"></i>
+            </a>
+            <div class="media-body">
+                {% trans "Delete" %}
+            </div>
+        </li>
+    </ul>
+</button>
+{% endblock %}
+{% block pm_archive_button %}
+<button type="submit" class="btn btn-emphasized messages-delete-button" onclick="this.form.action='{% url 'postman:archive' %}'">
+    <ul class="media-list">
+        <li class="media">
+            <a class="pull-left" href="#">
+                <i class="fa fa-eraser"></i>
+            </a>
+            <div class="media-body">
+                {% trans "Archive" %}
+            </div>
+        </li>
+    </ul>
+</button>
+{% endblock %}
+{% block pm_undelete_button %}
+<button type="submit" class="btn btn-emphasized messages-delete-button" onclick="this.form.action='{% url 'postman:undelete' %}'">
+    <ul class="media-list">
+        <li class="media">
+            <a class="pull-left" href="#">
+                <i class="fa fa-eraser"></i>
+            </a>
+            <div class="media-body">
+                {% trans "Undelete" %}
+            </div>
+        </li>
+    </ul>
+</button>
+{% endblock %}
+
+<div class="clearfix"></div>
+
 <!-- a box with semi transparent background -->
 <div class="content-box">
     
@@ -56,48 +102,6 @@
 
 <!-- TODO: add values from checkboxes -->
 
-{% block pm_delete_button %}
-<button type="submit" class="btn btn-emphasized messages-delete-button" onclick="this.form.action='{% url 'postman:delete' %}'">
-    <ul class="media-list">
-        <li class="media">
-            <a class="pull-left" href="#">
-                <i class="fa fa-eraser"></i>
-            </a>
-            <div class="media-body">
-                {% trans "Delete" %}
-            </div>
-        </li>
-    </ul>
-</button>
-{% endblock %}
-{% block pm_archive_button %}
-<button type="submit" class="btn btn-emphasized messages-delete-button" onclick="this.form.action='{% url 'postman:archive' %}'">
-    <ul class="media-list">
-        <li class="media">
-            <a class="pull-left" href="#">
-                <i class="fa fa-eraser"></i>
-            </a>
-            <div class="media-body">
-                {% trans "Archive" %}
-            </div>
-        </li>
-    </ul>
-</button>
-{% endblock %}
-{% block pm_undelete_button %}
-<button type="submit" class="btn btn-emphasized messages-delete-button" onclick="this.form.action='{% url 'postman:undelete' %}'">
-    <ul class="media-list">
-        <li class="media">
-            <a class="pull-left" href="#">
-                <i class="fa fa-eraser"></i>
-            </a>
-            <div class="media-body">
-                {% trans "Undelete" %}
-            </div>
-        </li>
-    </ul>
-</button>
-{% endblock %}
 
 </form>
 
