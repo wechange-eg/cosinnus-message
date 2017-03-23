@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from cosinnus.models.group import CosinnusPortal
 try:
     from importlib import import_module
 except ImportError:
@@ -68,15 +69,28 @@ def format_subject(subject):
 
 
 def email(subject_template, message_template, recipient_list, object, action, site):
-    print ">>EMAIYLING", recipient_list
     """Compose and send an email."""
     ctx_dict = {'site': site, 'object': object, 'action': action}
     subject = render_to_string(subject_template, ctx_dict)
     # Email subject *must not* contain newlines
     subject = ''.join(subject.splitlines())
+    # check if we have a connected mailbox for direct replies, and if so, set the sender to a specified email, so that users
+    # can directly reply to them
+    if CosinnusPortal.get_current().mailboxes.all().count() > 0:
+        sender = 'direct-reply+%(portal_id)d+%(hash)s@%(domain)s' % {
+                'portal_id': CosinnusPortal.get_current().id,
+                'hash': object.direct_reply_hash,
+                'domain': settings.DEFAULT_FROM_EMAIL.split('@')[1]
+        }
+        ctx_dict.update({
+            'direct_reply_enabled': True,
+        })
+    else:
+        sender = settings.DEFAULT_FROM_EMAIL
+        
     message = render_to_string(message_template, ctx_dict)
     # during the development phase, consider using the setting: EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, recipient_list, fail_silently=True)
+    send_mail(subject, message, sender, recipient_list, fail_silently=True)
 
 
 def email_visitor(object, action, site):

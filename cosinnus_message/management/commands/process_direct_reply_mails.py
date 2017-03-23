@@ -15,6 +15,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         mailboxes = CosinnusMailbox.active_mailboxes.filter(cosinnusmailbox__portal=CosinnusPortal.get_current())
         
+        if len(mailboxes) == 0:
+            return
+        
         for mailbox in mailboxes:
             logger.info(
                 'Gathering messages for %s',

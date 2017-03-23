@@ -13,9 +13,12 @@
 {{ object.body }}
 
 
+
 {% trans "Follow this link to view the message on the site" %}: http{% if request.is_secure %}s{% endif %}://{{ site.domain }}{% if object.thread_id %}{% url 'postman:view_conversation' object.thread_id %}{% else %}{{object.get_absolute_url }}{% endif %}
-
 {% endif %}{# 'acceptance' #}
-
+{% if direct_reply_enabled %}
+{% blocktrans %}You can also reply to this message directly by replying to this email. When you do, please leave the subject and addressee as it is.{% endblocktrans %}
+{% else %}
 {% blocktrans %}Note: This message is issued by an automated system.
-Do not reply, this would not be taken into account.{% endblocktrans %}{% endautoescape %}
+Do not reply, this would not be taken into account.{% endblocktrans %}
+{% endif %}{% endautoescape %}
