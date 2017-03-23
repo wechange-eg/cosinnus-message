@@ -26,6 +26,10 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from . import OPTION_MESSAGES
 from .query import PostmanQuery
 from .utils import email_visitor, notify_user
+import uuid
+
+def get_uuid():
+    return uuid.uuid4().hex
 
 # moderation constants
 STATUS_PENDING = 'p'
@@ -288,6 +292,10 @@ class Message(models.Model):
         null=True, blank=True, verbose_name=_("moderator"))
     moderation_date = models.DateTimeField(_("moderated at"), null=True, blank=True)
     moderation_reason = models.CharField(_("rejection reason"), max_length=120, blank=True)
+    
+    # used as a reply-address for a catchall mailbox to reply by email 
+    direct_reply_hash = models.CharField(max_length=50, verbose_name=_('Direct Reply Hash'),
+         blank=True, null=True)
 
     objects = MessageManager()
 
@@ -295,6 +303,11 @@ class Message(models.Model):
         verbose_name = _("message")
         verbose_name_plural = _("messages")
         ordering = ['-sent_at', '-id']
+    
+    def __init__(self, *args, **kwargs):
+        super(Message, self).__init__(*args, **kwargs)
+        if self.direct_reply_hash is None and not getattr(self, 'id', None):
+            self.direct_reply_hash = get_uuid()
 
     def __str__(self):
         return "{0}>{1}:{2}".format(self.obfuscated_sender, self.obfuscated_recipient, Truncator(self.subject).words(5))

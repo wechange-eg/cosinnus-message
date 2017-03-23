@@ -98,6 +98,7 @@ class MessageAdmin(admin.ModelAdmin):
             'subject',
             'body',
             ('parent', 'thread'),
+            'direct_reply_hash',
             )}),
         (_('Dates'), {'classes': ('collapse', ), 'fields': (
             ('read_at', 'replied_at'),
