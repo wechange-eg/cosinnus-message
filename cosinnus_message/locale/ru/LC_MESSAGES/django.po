@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wechange RU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-02 11:31+0100\n"
+"POT-Creation-Date: 2017-03-27 16:41+0200\n"
 "PO-Revision-Date: 2016-11-02 11:15+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -33,17 +33,37 @@ msgstr "Дополнительные адресаты"
 msgid "Undefined recipient."
 msgstr "Неопределенный адресат"
 
+msgid "Portal"
+msgstr ""
+
 msgid "Messages"
 msgstr "Сообщения"
 
+#, python-format
+msgid ""
+"Your direct reply could not be processed!\n"
+"\n"
+"The reason was: %(reason)s\n"
+"\n"
+"\n"
+"Your message text was: \n"
+"--------------------------------\n"
+"%(text)s\n"
+"--------------------------------\n"
+"\n"
+"\n"
+"If this keeps happening, consider logging in and sending the reply directly on the site.\n"
+msgstr ""
+
+msgid ""
+"Note: This message is issued by an automated system.\n"
+"Do not reply, this would not be taken into account."
+msgstr ""
+"Примечание: Это автоматическое сообщение.\n"
+"Не отвечайте на него, Ваш ответ не будет прочитан"
+
 msgid "Archived Messages"
 msgstr "Архивированные сообщения"
-
-msgid "Me"
-msgstr "Я"
-
-msgid "No messages"
-msgstr "Сообщений нет"
 
 msgid "Delete"
 msgstr "Удалить"
@@ -53,6 +73,12 @@ msgstr "В архив"
 
 msgid "Undelete"
 msgstr "Восстановить"
+
+msgid "Me"
+msgstr "Я"
+
+msgid "No messages"
+msgstr "Сообщений нет"
 
 msgid "Please enter message..."
 msgstr "Пожалуйста, введите сообщение..."
@@ -88,12 +114,8 @@ msgstr "Вы получили сообщение от пользователя '
 msgid "Follow this link to view the message on the site"
 msgstr "Перейдите по этой ссылке для просмотра сообщения на сайте"
 
-msgid ""
-"Note: This message is issued by an automated system.\n"
-"Do not reply, this would not be taken into account."
+msgid "You can also reply to this message directly by replying to this email. When you do, please leave the subject and addressee as it is. The email you reply from *must* be the one you are registered with on the site."
 msgstr ""
-"Примечание: Это автоматическое сообщение.\n"
-"Не отвечайте на него, Ваш ответ не будет прочитан"
 
 #, python-format
 msgid "Message \"%(subject)s\" on the site %(sitename)s"
@@ -147,6 +169,15 @@ msgstr "Ответ"
 
 msgid "Reply..."
 msgstr "Ответить..."
+
+msgid "The email adress you sent the reply from is not the one associated with your user account. Please send direct replies only from the email adress you are registered with on the site!"
+msgstr ""
+
+msgid "There was an error when processing your message text!"
+msgstr ""
+
+msgid "Your direct reply failed!"
+msgstr ""
 
 msgid "Select at least one object."
 msgstr "Выберите хотя бы один объект"

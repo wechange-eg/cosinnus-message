@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-02 11:31+0100\n"
-"PO-Revision-Date: 2016-09-20 14:53+0200\n"
+"POT-Creation-Date: 2017-03-27 16:41+0200\n"
+"PO-Revision-Date: 2017-03-27 16:48+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -35,17 +35,47 @@ msgstr "Zusätzliche Empfänger"
 msgid "Undefined recipient."
 msgstr "Kein Empfänger angegeben"
 
+msgid "Portal"
+msgstr ""
+
 msgid "Messages"
 msgstr "Nachrichten"
 
+#, python-format
+msgid ""
+"Your direct reply could not be processed!\n"
+"\n"
+"The reason was: %(reason)s\n"
+"\n"
+"\n"
+"Your message text was: \n"
+"--------------------------------\n"
+"%(text)s\n"
+"--------------------------------\n"
+"\n"
+"\n"
+"If this keeps happening, consider logging in and sending the reply directly on the site.\n"
+msgstr ""
+"Deine direkte Antwort konnte nicht erstellt werden!\n"
+"\n"
+"Der Grund war: %(reason)s\n"
+"\n"
+"\n"
+"Dein Antworttext war: \n"
+"--------------------------------\n"
+"%(text)s\n"
+"--------------------------------\n"
+"\n"
+"\n"
+"Wenn dies weiterhin passiert kannst du dich auch auf der Webseite einloggen und die Nachricht direkt dort beantworten.\n"
+
+msgid ""
+"Note: This message is issued by an automated system.\n"
+"Do not reply, this would not be taken into account."
+msgstr "Diese Nachricht wurde von einem automatisierten System erstellt - bitte antworte nicht darauf. "
+
 msgid "Archived Messages"
 msgstr "Archivierte Nachricht"
-
-msgid "Me"
-msgstr "Ich"
-
-msgid "No messages"
-msgstr "Keine Nachrichten."
 
 msgid "Delete"
 msgstr "Löschen"
@@ -55,6 +85,12 @@ msgstr "Archivieren"
 
 msgid "Undelete"
 msgstr "Löschen rückgängig machen"
+
+msgid "Me"
+msgstr "Ich"
+
+msgid "No messages"
+msgstr "Keine Nachrichten."
 
 msgid "Please enter message..."
 msgstr "Bitte Nachricht eingeben..."
@@ -90,10 +126,8 @@ msgstr "du hast eine Nachricht von '%(sender_first)s %(sender_last)s' erhalten:"
 msgid "Follow this link to view the message on the site"
 msgstr "Folge diesem Link, um die Nachricht auf der Seite anzusehen"
 
-msgid ""
-"Note: This message is issued by an automated system.\n"
-"Do not reply, this would not be taken into account."
-msgstr "Diese Nachricht wurde von einem automatisierten System erstellt - bitte antworte nicht darauf. "
+msgid "You can also reply to this message directly by replying to this email. When you do, please leave the subject and addressee as it is. The email you reply from *must* be the one you are registered with on the site."
+msgstr "Du kannst auf diese Nachricht auch direkt antworten, indem du diese E-Mail beantwortest. Wenn du das tust, belasse bitte den Empfänger und den Betreff so wie sie sind. Die E-Mail *muss* von der selben Addresse geschickt werden mit der du auch auf der Webseite registriert bist."
 
 #, python-format
 msgid "Message \"%(subject)s\" on the site %(sitename)s"
@@ -147,6 +181,15 @@ msgstr "Antworten"
 
 msgid "Reply..."
 msgstr "Antworten..."
+
+msgid "The email adress you sent the reply from is not the one associated with your user account. Please send direct replies only from the email adress you are registered with on the site!"
+msgstr "Die Email-Addresse von der die Antwort gesendet hast, ist nicht die, mit der dein Benutzerkonto assoziiert ist. Bitte schicke direkte Antworten nur von der Email-Addresse mit der du auf der Webseite registriert bist!"
+
+msgid "There was an error when processing your message text!"
+msgstr "Es gab einen Fehler beim verarbeiten deines Nachrichtentextes!"
+
+msgid "Your direct reply failed!"
+msgstr "Deine direkte Antwort ist fehlgeschlagen!"
 
 msgid "Select at least one object."
 msgstr "Wählen sie mindestens einen Empfänger aus!"

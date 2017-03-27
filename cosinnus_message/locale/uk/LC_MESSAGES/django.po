@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-02 11:31+0100\n"
+"POT-Creation-Date: 2017-03-27 16:41+0200\n"
 "PO-Revision-Date: 2015-11-11 10:42+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -34,17 +34,37 @@ msgstr "Додаткові отримувачі"
 msgid "Undefined recipient."
 msgstr "Не вказано отримувача."
 
+msgid "Portal"
+msgstr ""
+
 msgid "Messages"
 msgstr "Повідомлення"
 
+#, python-format
+msgid ""
+"Your direct reply could not be processed!\n"
+"\n"
+"The reason was: %(reason)s\n"
+"\n"
+"\n"
+"Your message text was: \n"
+"--------------------------------\n"
+"%(text)s\n"
+"--------------------------------\n"
+"\n"
+"\n"
+"If this keeps happening, consider logging in and sending the reply directly on the site.\n"
+msgstr ""
+
+msgid ""
+"Note: This message is issued by an automated system.\n"
+"Do not reply, this would not be taken into account."
+msgstr ""
+"Зауважте: це повідомлення надсилається системою автоматично.\n"
+"Будь ласка, не відповідайте на нього."
+
 msgid "Archived Messages"
 msgstr "Заархівовані повідомлення"
-
-msgid "Me"
-msgstr "Я"
-
-msgid "No messages"
-msgstr "Жодних повідомлень"
 
 msgid "Delete"
 msgstr "Видалити"
@@ -54,6 +74,12 @@ msgstr "Архів"
 
 msgid "Undelete"
 msgstr "Скасувати видалення"
+
+msgid "Me"
+msgstr "Я"
+
+msgid "No messages"
+msgstr "Жодних повідомлень"
 
 msgid "Please enter message..."
 msgstr "Уведіть, будь ласка, повідомлення..."
@@ -89,12 +115,8 @@ msgstr "Ви отримали повідомлення від користува
 msgid "Follow this link to view the message on the site"
 msgstr "Перейдіть за цим посиланням, щоб переглянути повідомлення на веб-сайті"
 
-msgid ""
-"Note: This message is issued by an automated system.\n"
-"Do not reply, this would not be taken into account."
+msgid "You can also reply to this message directly by replying to this email. When you do, please leave the subject and addressee as it is. The email you reply from *must* be the one you are registered with on the site."
 msgstr ""
-"Зауважте: це повідомлення надсилається системою автоматично.\n"
-"Будь ласка, не відповідайте на нього."
 
 #, python-format
 msgid "Message \"%(subject)s\" on the site %(sitename)s"
@@ -148,6 +170,15 @@ msgstr "Відповісти"
 
 msgid "Reply..."
 msgstr "Відповісти..."
+
+msgid "The email adress you sent the reply from is not the one associated with your user account. Please send direct replies only from the email adress you are registered with on the site!"
+msgstr ""
+
+msgid "There was an error when processing your message text!"
+msgstr ""
+
+msgid "Your direct reply failed!"
+msgstr ""
 
 msgid "Select at least one object."
 msgstr "Виберіть щонайменше одного отримувача."

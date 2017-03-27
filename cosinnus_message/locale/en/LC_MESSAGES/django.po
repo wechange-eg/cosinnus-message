@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-02 11:31+0100\n"
+"POT-Creation-Date: 2017-03-27 16:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,16 +32,34 @@ msgstr ""
 msgid "Undefined recipient."
 msgstr ""
 
+msgid "Portal"
+msgstr ""
+
 msgid "Messages"
 msgstr ""
 
+#, python-format
+msgid ""
+"Your direct reply could not be processed!\n"
+"\n"
+"The reason was: %(reason)s\n"
+"\n"
+"\n"
+"Your message text was: \n"
+"--------------------------------\n"
+"%(text)s\n"
+"--------------------------------\n"
+"\n"
+"\n"
+"If this keeps happening, consider logging in and sending the reply directly on the site.\n"
+msgstr ""
+
+msgid ""
+"Note: This message is issued by an automated system.\n"
+"Do not reply, this would not be taken into account."
+msgstr ""
+
 msgid "Archived Messages"
-msgstr ""
-
-msgid "Me"
-msgstr ""
-
-msgid "No messages"
 msgstr ""
 
 msgid "Delete"
@@ -51,6 +69,12 @@ msgid "Archive"
 msgstr ""
 
 msgid "Undelete"
+msgstr ""
+
+msgid "Me"
+msgstr ""
+
+msgid "No messages"
 msgstr ""
 
 msgid "Please enter message..."
@@ -87,9 +111,7 @@ msgstr ""
 msgid "Follow this link to view the message on the site"
 msgstr ""
 
-msgid ""
-"Note: This message is issued by an automated system.\n"
-"Do not reply, this would not be taken into account."
+msgid "You can also reply to this message directly by replying to this email. When you do, please leave the subject and addressee as it is. The email you reply from *must* be the one you are registered with on the site."
 msgstr ""
 
 #, python-format
@@ -143,6 +165,15 @@ msgid "Answer"
 msgstr ""
 
 msgid "Reply..."
+msgstr ""
+
+msgid "The email adress you sent the reply from is not the one associated with your user account. Please send direct replies only from the email adress you are registered with on the site!"
+msgstr ""
+
+msgid "There was an error when processing your message text!"
+msgstr ""
+
+msgid "Your direct reply failed!"
 msgstr ""
 
 msgid "Select at least one object."
