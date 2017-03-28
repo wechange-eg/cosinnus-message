@@ -44,8 +44,10 @@ class CustomWriteForm(BaseWriteForm):
             for username in initial_users.split(', '):
                 users.append( get_user_model()._default_manager.get(username=username) )
                 # delete the initial data or our select2 field initials will be overwritten by django
-                del kwargs['initial']['recipients']
-                del self.initial['recipients']
+                if 'recipients' in kwargs['initial']:
+                    del kwargs['initial']['recipients']
+                if 'recipients' in self.initial:
+                    del self.initial['recipients']
                 
             # TODO: sascha: returning unescaped html here breaks the javascript of django-select2
             preresults = [("user:" + six.text_type(user.id), escape(user.first_name) + " " + escape(user.last_name),)#render_to_string('cosinnus_message/user_select_pill.html', {'type':'user','text':escape(user.first_name) + " " + escape(user.last_name)}),)
