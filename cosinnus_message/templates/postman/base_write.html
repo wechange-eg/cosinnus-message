@@ -30,7 +30,7 @@
 	                </a>
 	                <div class="media-body media-body-form-control">
 	                	{{ form.subject.errors }}
-	                    {% render_field form.subject class+="form-control" placeholder=form.subject.label %}
+	                    {% render_field form.subject class+="form-control" placeholder=form.subject.label value=request.GET.subject %}
 	                </div>
 	            </li>
 	        </ul>
