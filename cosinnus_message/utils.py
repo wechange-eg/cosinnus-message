@@ -21,7 +21,7 @@ from cosinnus.models.group import CosinnusPortal
 logger = logging.getLogger('cosinnus')
 
 
-DIRECT_REPLY_ADDRESSEE = re.compile(r'direct-reply\+([0-9]+)\+([a-zA-Z0-9]+)@', re.IGNORECASE)
+DIRECT_REPLY_ADDRESSEE = re.compile(r'directreply\+([0-9]+)\+([a-zA-Z0-9]+)@', re.IGNORECASE)
 EMAIL_RE = re.compile(
     r"([-!#$%&'*+/=?^_`{}|~0-9A-Z]+(\.[-!#$%&'*+/=?^_`{}|~0-9A-Z]+)*"  # dot-atom
     r'|^"([\001-\010\013\014\016-\037!#-\[\]-\177]|\\[\001-011\013\014\016-\177])*"' # quoted-string
@@ -30,7 +30,7 @@ EMAIL_RE = re.compile(
 
 def process_direct_reply_messages():
     """ Will check all existing django_mail Messages:
-        - drop all mail addressed to emails not matching the Pattern: direct-reply+<portal-id>+<hash>@<mailbox-domain> 
+        - drop all mail not containing this Pattern in the body text: directreply+<portal-id>+<hash>@<mailbox-domain> 
         - take all mail for this portal. 
             - if there is a hash matching a postman message, match sender to user, reply as that user using body text
             - delete the mail, no matter if a match was found or not
@@ -41,7 +41,7 @@ def process_direct_reply_messages():
     messages_to_delete = []
     
     for message in all_messages:
-        match = DIRECT_REPLY_ADDRESSEE.search(message.to_header)
+        match = DIRECT_REPLY_ADDRESSEE.search(message.text)
         if not match or not len(match.groups()) == 2:
             # message is spam or unrelated to direct messages: remove it
             messages_to_delete.append(message)

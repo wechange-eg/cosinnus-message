@@ -77,13 +77,16 @@ def email(subject_template, message_template, recipient_list, object, action, si
     # check if we have a connected mailbox for direct replies, and if so, set the sender to a specified email, so that users
     # can directly reply to them
     if CosinnusPortal.get_current().mailboxes.all().count() > 0:
-        sender = 'direct-reply+%(portal_id)d+%(hash)s@%(domain)s' % {
+        hash_vars = {
                 'portal_id': CosinnusPortal.get_current().id,
                 'hash': object.direct_reply_hash,
                 'domain': settings.DEFAULT_FROM_EMAIL.split('@')[1]
         }
+        sender = 'directreply@%(domain)s' % hash_vars
+        hash_code = 'directreply+%(portal_id)d+%(hash)s@%(domain)s' % hash_vars
         ctx_dict.update({
             'direct_reply_enabled': True,
+            'hash_code': hash_code,
         })
     else:
         sender = settings.DEFAULT_FROM_EMAIL

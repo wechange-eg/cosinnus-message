@@ -18,6 +18,12 @@
 {% endif %}{# 'acceptance' #}
 {% if direct_reply_enabled %}
 {% blocktrans %}You can also reply to this message directly by replying to this email. When you do, please leave the subject and addressee as it is. The email you reply from *must* be the one you are registered with on the site.{% endblocktrans %}
+
+
+
+> --------------------------------------------------------------------
+> DIRECT-REPLY CODE: 
+> {{ hash_code }} 
 {% else %}
 {% blocktrans %}Note: This message is issued by an automated system.
 Do not reply, this would not be taken into account.{% endblocktrans %}
