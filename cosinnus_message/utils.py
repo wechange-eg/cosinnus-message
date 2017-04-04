@@ -104,7 +104,14 @@ def clean_reply_message_quotation(text):
     had_reply = False
     
     lines = text.split('\n')
-    clean_lines = [line for line in lines if not line.startswith('>')]
+    clean_lines = []
+    
+    # aggressively remove all lines after the first reply-quote character
+    for line in lines:
+        if line.startswith('>'):
+            break
+        clean_lines.append(line)
+    
     if len(clean_lines) < lines:
         # we have removed a reply, mark this!
         had_reply = True
