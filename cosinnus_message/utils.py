@@ -15,7 +15,7 @@ from postman.models import Message as PostmanMessage
 from postman.utils import format_subject
 
 from cosinnus.core.mail import send_mail_or_fail_threaded
-from cosinnus_message.forms import CustomReplyForm
+from cosinnus_message.forms import CustomReplyForm, CustomWriteForm
 from cosinnus.models.group import CosinnusPortal
 
 logger = logging.getLogger('cosinnus')
@@ -144,7 +144,7 @@ def reply_to_postman_message(message, user, text):
         @param message: The postman message to reply to (usually the last message in the thread that is not from `user`)
         @param user: The replying user as User model 
         @param text: The text-only body text of the reply. 
-        @param return:  """
+        @param return: True if successful, else False """
     kwargs = {
        'initial': {},
        'recipient': message.sender,
@@ -162,6 +162,34 @@ def reply_to_postman_message(message, user, text):
         return True
     else:
         logger.warning('Could not direct-reply to a postman message, because the form was invalid!', extra={'form-errors': force_text(form.errors), 'wechange-user-email': user.email, 'text': text})
+        return False
+
+
+def write_postman_message(user, sender, subject, text):
+    """ When you want to directly create a postman message as if sent from one user to another.
+        Will not trigger a notification being sent. 
+        @param user: The recipient user as User model
+        @param sender: The sending user as User model 
+        @param subject: The text-only subject text of the message.
+        @param text: The text-only body text of the message. 
+        @param return: True if successful, else False """
+    kwargs = {
+       'initial': {},
+       'sender': sender,
+       'site': CosinnusPortal.get_current().site,
+       'data': MultiValueDict({
+           'recipients': ['user:%d' % user.id],
+           'body': [text],
+           'subject': [subject],
+       }),
+        
+    }
+    form = CustomWriteForm(**kwargs)
+    if form.is_valid():
+        form.save()
+        return True
+    else:
+        logger.warning('Could not direct-write a postman message, because the form was invalid!', extra={'form-errors': force_text(form.errors), 'sender-user-email': user.email, 'text': text})
         return False
     
     
