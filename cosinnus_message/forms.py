@@ -50,7 +50,7 @@ class CustomWriteForm(BaseWriteForm):
                     del self.initial['recipients']
                 
             # TODO: sascha: returning unescaped html here breaks the javascript of django-select2
-            preresults = [("user:" + six.text_type(user.id), escape(user.first_name) + " " + escape(user.last_name),)#render_to_string('cosinnus_message/user_select_pill.html', {'type':'user','text':escape(user.first_name) + " " + escape(user.last_name)}),)
+            preresults = [("user:" + six.text_type(user.id), escape(user.first_name) + " " + escape(user.last_name),)
                        for user in users]
             
             # we need to cheat our way around select2's annoying way of clearing initial data fields

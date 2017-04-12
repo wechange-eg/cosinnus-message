@@ -174,7 +174,7 @@ class UserSelect2View(Select2View):
 
         # these result sets are what select2 uses to build the choice list
         
-        results = [("user:" + six.text_type(user.id), render_to_string('cosinnus_message/user_select_pill.html', {'type':'user','text':escape(user.first_name) + " " + escape(user.last_name)}),)
+        results = [("user:" + six.text_type(user.id), render_to_string('cosinnus_message/user_select_pill.html', {'type':'user','text':escape(user.first_name) + " " + escape(user.last_name), 'user': user}),)
                    for user in users]
         results.extend([("group:" + six.text_type(group.id), render_to_string('cosinnus_message/user_select_pill.html', {'type':'group','text':escape(group.name)}),)
                        for group in groups])
