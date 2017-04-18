@@ -18,6 +18,8 @@ from cosinnus.core.mail import send_mail_or_fail_threaded
 from cosinnus_message.forms import CustomReplyForm, CustomWriteForm
 from cosinnus.models.group import CosinnusPortal
 
+from cosinnus_message.models import CosinnusMailbox
+
 logger = logging.getLogger('cosinnus')
 
 
@@ -26,6 +28,28 @@ EMAIL_RE = re.compile(
     r"([-!#$%&'*+/=?^_`{}|~0-9A-Z]+(\.[-!#$%&'*+/=?^_`{}|~0-9A-Z]+)*"  # dot-atom
     r'|^"([\001-\010\013\014\016-\037!#-\[\]-\177]|\\[\001-011\013\014\016-\177])*"' # quoted-string
     r')@(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?', re.IGNORECASE)  # domain
+
+
+def update_mailboxes():
+    """ Downloads all mail from the SMTP/IMAP accounts from Mailboxes assigned to this portal """
+    
+    mailboxes = CosinnusMailbox.active_mailboxes.filter(cosinnusmailbox__portal=CosinnusPortal.get_current())
+        
+    if len(mailboxes) == 0:
+        return
+    
+    for mailbox in mailboxes:
+        logger.info(
+            'Gathering messages for %s',
+            mailbox.name
+        )
+        messages = mailbox.get_new_mail()
+        for message in messages:
+            logger.info(
+                'Received %s (from %s)',
+                message.subject,
+                message.from_address
+            )
 
 
 def process_direct_reply_messages():
