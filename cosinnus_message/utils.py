@@ -206,7 +206,7 @@ def write_postman_message(user, sender, subject, text):
            'body': [text],
            'subject': [subject],
        }),
-        
+       'do_not_notify_users': True,
     }
     form = CustomWriteForm(**kwargs)
     if form.is_valid():

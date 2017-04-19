@@ -41,6 +41,9 @@ class BaseWriteForm(forms.ModelForm):
 
     error_css_class = 'error'
     required_css_class = 'required'
+    
+    # can be set on init to prevent any notifications going out
+    do_not_notify_users = False
 
     def __init__(self, *args, **kwargs):
         sender = kwargs.pop('sender', None)
@@ -49,6 +52,7 @@ class BaseWriteForm(forms.ModelForm):
         max = kwargs.pop('max', None)
         channel = kwargs.pop('channel', None)
         self.site = kwargs.pop('site', None)
+        self.do_not_notify_users = kwargs.pop('do_not_notify_users', self.do_not_notify_users)
         super(BaseWriteForm, self).__init__(*args, **kwargs)
 
         self.instance.sender = sender if (sender and sender.is_authenticated()) else None
@@ -141,7 +145,8 @@ class BaseWriteForm(forms.ModelForm):
             if self.instance.is_rejected():
                 is_successful = False
             self.instance.update_parent(initial_status)
-            self.instance.notify_users(initial_status, self.site)
+            if not self.do_not_notify_users:
+                self.instance.notify_users(initial_status, self.site)
             # some resets for next reuse
             if not isinstance(r, get_user_model()):
                 self.instance.email = ''
