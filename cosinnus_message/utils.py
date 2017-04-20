@@ -180,7 +180,7 @@ def reply_to_postman_message(message, user, text):
        'site': CosinnusPortal.get_current().site,
        'data': MultiValueDict({
            'body': [text],
-           'subject': message.quote(format_subject)['subject'],
+           'subject': [message.quote(format_subject)['subject']],
        }),
         
     }
