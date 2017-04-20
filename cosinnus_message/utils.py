@@ -69,13 +69,16 @@ def process_direct_reply_messages():
         if not match or not len(match.groups()) == 2:
             # message is spam or unrelated to direct messages: remove it
             messages_to_delete.append(message)
+            logger.info('A directreply-received message did not contain a directreply code.', extra={'message-text': message.text, 'portal-id': CosinnusPortal.get_current().id})
             continue
         
         portal_id, hash = match.groups()
         portal_id = int(portal_id)
         hash = hash.lower()
+        logger.info('A directreply-received message was matched with a directreply code.', extra={'message-text': message.text, 'portal-id': CosinnusPortal.get_current().id, 'hash': hash, 'parsed-portal-id': portal_id})
         if not portal_id == CosinnusPortal.get_current().id:
             # message is not for this portal, retain message for other portals
+            logger.info('A directreply-received message was matched with a directreply code.', extra={'message-text': message.text, 'portal-id': CosinnusPortal.get_current().id, 'hash': hash, 'parsed-portal-id': portal_id})
             continue
         
         # from now we either process the message or not, but we definitely delete it, so:
@@ -85,6 +88,7 @@ def process_direct_reply_messages():
         try:
             postman_message = PostmanMessage.objects.get(direct_reply_hash=hash)
         except PostmanMessage.DoesNotExist:
+            logger.info('A directreply-received message was matched, but a postman message could not be found with that hash.', extra={'message-text': message.text, 'portal-id': CosinnusPortal.get_current().id, 'hash': hash, 'parsed-portal-id': portal_id})
             continue
             
         # try to find the sender email in the user accounts
@@ -220,4 +224,5 @@ def write_postman_message(user, sender, subject, text):
 def send_direct_reply_error_mail(recipient_email, text, reason):
     subject = _('Your direct reply failed!')
     template = 'cosinnus_message/email_direct_reply_failed.txt'
+    logger.warning('Sending out a direct-reply error mail', extra={'recipient': recipient_email, 'reason': reason, 'text': text})
     send_mail_or_fail_threaded(recipient_email, subject, template, {'reason': reason, 'text': text})
