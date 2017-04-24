@@ -62,7 +62,8 @@ def process_direct_reply_messages():
         - retain the rest (other portals might be using the same mailbox)
         """
     USER_MODEL = get_user_model()
-    all_messages = Message.objects.all()
+    # order by date incoming, ascending to not confuse order for consecutive messages
+    all_messages = Message.objects.all().order_by('read') 
     messages_to_delete = []
     
     for message in all_messages:
