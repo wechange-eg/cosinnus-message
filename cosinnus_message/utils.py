@@ -75,7 +75,6 @@ def process_direct_reply_messages():
         
         portal_id, hash = match.groups()
         portal_id = int(portal_id)
-        hash = hash.lower()
         logger.info('A directreply-received message was matched with a directreply code.', extra={'message-id': message.id, 'portal-id': CosinnusPortal.get_current().id, 'hash': hash, 'parsed-portal-id': portal_id})
         if not portal_id == CosinnusPortal.get_current().id:
             # message is not for this portal, retain message for other portals
