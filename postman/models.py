@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 import hashlib
+from django.utils.crypto import get_random_string
 try:
     from importlib import import_module
 except ImportError:
@@ -307,7 +308,7 @@ class Message(models.Model):
     def __init__(self, *args, **kwargs):
         super(Message, self).__init__(*args, **kwargs)
         if self.direct_reply_hash is None and not getattr(self, 'id', None):
-            self.direct_reply_hash = get_uuid()
+            self.direct_reply_hash = get_random_string(32)
 
     def __str__(self):
         return "{0}>{1}:{2}".format(self.obfuscated_sender, self.obfuscated_recipient, Truncator(self.subject).words(5))
