@@ -71,15 +71,15 @@ def process_direct_reply_messages():
         if not match or not len(match.groups()) == 2:
             # message is spam or unrelated to direct messages: remove it
             messages_to_delete.append(message)
-            logger.info('A directreply-received message did not contain a directreply code.', extra={'message-id': message.id, 'portal-id': CosinnusPortal.get_current().id})
+            logger.info('A directreply-received message did not contain a directreply code.', extra={'message-from': message.from_header, 'message-text': message.text, 'portal-id': CosinnusPortal.get_current().id})
             continue
         
         portal_id, hash = match.groups()
         portal_id = int(portal_id)
-        logger.info('A directreply-received message was matched with a directreply code.', extra={'message-id': message.id, 'portal-id': CosinnusPortal.get_current().id, 'hash': hash, 'parsed-portal-id': portal_id})
+        logger.info('A directreply-received message was matched with a directreply code.', extra={'message-from': message.from_header, 'message-text': message.text, 'portal-id': CosinnusPortal.get_current().id, 'hash': hash, 'parsed-portal-id': portal_id})
         if not portal_id == CosinnusPortal.get_current().id:
             # message is not for this portal, retain message for other portals
-            logger.info('A directreply-received message was matched with a directreply code.', extra={'message-id': message.id, 'portal-id': CosinnusPortal.get_current().id, 'hash': hash, 'parsed-portal-id': portal_id})
+            logger.info('A directreply-received message was matched with a directreply code.', extra={'message-from': message.from_header, 'message-text': message.text, 'portal-id': CosinnusPortal.get_current().id, 'hash': hash, 'parsed-portal-id': portal_id})
             continue
         
         # from now we either process the message or not, but we definitely delete it, so:
@@ -89,10 +89,10 @@ def process_direct_reply_messages():
         try:
             postman_message = PostmanMessage.objects.get(direct_reply_hash=hash)
         except PostmanMessage.DoesNotExist:
-            logger.info('A directreply-received message was matched, but a postman message could not be found with that hash.', extra={'message-id': message.id, 'portal-id': CosinnusPortal.get_current().id, 'hash': hash, 'parsed-portal-id': portal_id})
+            logger.info('A directreply-received message was matched, but a postman message could not be found with that hash.', extra={'message-from': message.from_header, 'message-text': message.text, 'portal-id': CosinnusPortal.get_current().id, 'hash': hash, 'parsed-portal-id': portal_id})
             continue
         except MultipleObjectsReturned:
-            logger.error('A directreply-received message was matched, but more than 1 postman message were be found with that hash.', extra={'message-id': message.id, 'portal-id': CosinnusPortal.get_current().id, 'hash': hash, 'parsed-portal-id': portal_id})
+            logger.error('A directreply-received message was matched, but more than 1 postman message were be found with that hash.', extra={'message-from': message.from_header, 'message-text': message.text, 'portal-id': CosinnusPortal.get_current().id, 'hash': hash, 'parsed-portal-id': portal_id})
             continue
         
         # try to find the sender email in the user accounts
