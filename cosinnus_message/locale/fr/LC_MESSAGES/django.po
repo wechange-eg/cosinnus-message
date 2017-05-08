@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-27 16:41+0200\n"
+"POT-Creation-Date: 2017-05-08 13:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -166,6 +166,12 @@ msgid "Answer"
 msgstr ""
 
 msgid "Reply..."
+msgstr ""
+
+msgid "Your reply could not be matched to an existing message."
+msgstr ""
+
+msgid "An internal error occured."
 msgstr ""
 
 msgid "The email adress you sent the reply from is not the one associated with your user account. Please send direct replies only from the email adress you are registered with on the site!"

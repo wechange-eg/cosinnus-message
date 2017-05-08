@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wechange RU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-27 16:41+0200\n"
+"POT-Creation-Date: 2017-05-08 13:31+0200\n"
 "PO-Revision-Date: 2016-11-02 11:15+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -169,6 +169,12 @@ msgstr "Ответ"
 
 msgid "Reply..."
 msgstr "Ответить..."
+
+msgid "Your reply could not be matched to an existing message."
+msgstr ""
+
+msgid "An internal error occured."
+msgstr ""
 
 msgid "The email adress you sent the reply from is not the one associated with your user account. Please send direct replies only from the email adress you are registered with on the site!"
 msgstr ""

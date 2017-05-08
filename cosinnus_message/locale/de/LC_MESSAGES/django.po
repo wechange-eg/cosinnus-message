@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-27 16:41+0200\n"
-"PO-Revision-Date: 2017-03-27 16:48+0200\n"
+"POT-Creation-Date: 2017-05-08 13:31+0200\n"
+"PO-Revision-Date: 2017-05-08 13:31+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -181,6 +181,12 @@ msgstr "Antworten"
 
 msgid "Reply..."
 msgstr "Antworten..."
+
+msgid "Your reply could not be matched to an existing message."
+msgstr "Für deine Antwort kontte die Urpsrungsnachricht nicht gefunden werden."
+
+msgid "An internal error occured."
+msgstr "Ein interner Fehler ist aufgetreten."
 
 msgid "The email adress you sent the reply from is not the one associated with your user account. Please send direct replies only from the email adress you are registered with on the site!"
 msgstr "Die Email-Addresse von der die Antwort gesendet hast, ist nicht die, mit der dein Benutzerkonto assoziiert ist. Bitte schicke direkte Antworten nur von der Email-Addresse mit der du auf der Webseite registriert bist!"
