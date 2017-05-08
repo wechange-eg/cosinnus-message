@@ -68,10 +68,23 @@ def process_direct_reply_messages():
     
     for message in all_messages:
         match = DIRECT_REPLY_ADDRESSEE.search(message.text)
+        
+        # get sender email
+        from_email_match = EMAIL_RE.search(message.from_header)
+        if not from_email_match or not from_email_match.group(): 
+            messages_to_delete.append(message)
+            continue
+        replier_email = from_email_match.group()
+        
+        # get and clean message body
+        text = message.text or ''
+        text = clean_reply_message_quotation(text)
+        
+        # message is spam or unrelated to direct messages: remove it
         if not match or not len(match.groups()) == 2:
-            # message is spam or unrelated to direct messages: remove it
             messages_to_delete.append(message)
             logger.info('A directreply-received message did not contain a directreply code.', extra={'message-from': message.from_header, 'message-text': message.text, 'portal-id': CosinnusPortal.get_current().id})
+            send_direct_reply_error_mail(replier_email, text, _('Your reply could not be matched to an existing message.'))
             continue
         
         portal_id, hash = match.groups()
@@ -79,7 +92,7 @@ def process_direct_reply_messages():
         logger.info('A directreply-received message was matched with a directreply code.', extra={'message-from': message.from_header, 'message-text': message.text, 'portal-id': CosinnusPortal.get_current().id, 'hash': hash, 'parsed-portal-id': portal_id})
         if not portal_id == CosinnusPortal.get_current().id:
             # message is not for this portal, retain message for other portals
-            logger.info('A directreply-received message was matched with a directreply code.', extra={'message-from': message.from_header, 'message-text': message.text, 'portal-id': CosinnusPortal.get_current().id, 'hash': hash, 'parsed-portal-id': portal_id})
+            logger.info('A directreply-received message was matched for a different portal and is being retained.', extra={'message-from': message.from_header, 'message-text': message.text, 'portal-id': CosinnusPortal.get_current().id, 'hash': hash, 'parsed-portal-id': portal_id})
             continue
         
         # from now we either process the message or not, but we definitely delete it, so:
@@ -90,25 +103,19 @@ def process_direct_reply_messages():
             postman_message = PostmanMessage.objects.get(direct_reply_hash=hash)
         except PostmanMessage.DoesNotExist:
             logger.info('A directreply-received message was matched, but a postman message could not be found with that hash.', extra={'message-from': message.from_header, 'message-text': message.text, 'portal-id': CosinnusPortal.get_current().id, 'hash': hash, 'parsed-portal-id': portal_id})
+            send_direct_reply_error_mail(replier_email, text, _('Your reply could not be matched to an existing message.'))
             continue
         except MultipleObjectsReturned:
             logger.error('A directreply-received message was matched, but more than 1 postman message were be found with that hash.', extra={'message-from': message.from_header, 'message-text': message.text, 'portal-id': CosinnusPortal.get_current().id, 'hash': hash, 'parsed-portal-id': portal_id})
+            send_direct_reply_error_mail(replier_email, text, _('An internal error occured.'))
             continue
         
         # try to find the sender email in the user accounts
         sender_email_bad = False
         try:
-            from_email_match = EMAIL_RE.search(message.from_header)
-            if not from_email_match or not from_email_match.group(): 
-                continue
-            replier_email = from_email_match.group()
             user = USER_MODEL.objects.get(is_active=True, email__iexact=replier_email)
         except USER_MODEL.DoesNotExist:
             sender_email_bad = True
-        
-        # get and clean message body
-        text = message.text or ''
-        text = clean_reply_message_quotation(text)
         
         # make sure the sender of the reply is really the recipient of the replied-to message!
         # if this doesn't match, likely a valid user just replied from the wrong email account, so we send them an error message back
