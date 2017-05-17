@@ -57,6 +57,8 @@
 	        </ul>
 	    </div>
 	    <p class="regular-space">{{ message.body|urlize|url_target_blank|linebreaksbr }}</p>
+	    
+	    {% include 'cosinnus_message/message_attachments.html' with message=message %}
     
     {% endfor %}
 
@@ -76,17 +78,33 @@
 	        </ul>
 	    </div>
 	    
-	    <div class="btn btn-default w100">
+	    <div class="btn btn-default w100 fine-space">
             <ul class="media-list">
                 <li class="media">
                     <div class="media-body">
                         {% captureas label %}{% trans "Reply..." %}{% endcaptureas %}
-                        {% render_field form.body class+="app-message-text next-button-is-for-sending" placeholder=label %}
+                        {% render_field form.body class+="app-message-text" placeholder=label %}
                     </div>
                 </li>
             </ul>
         </div>
-	    <button type="submit" class="btn btn-emphasized" style="display: none;">
+        
+        
+        <div class="btn btn-default w100">
+            <ul class="media-list">
+                <li class="media">
+                    <a class="pull-left" href="#">
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                    <div class="media-body media-body-form-control" id="attachments-selector">
+                        <i class="fa fa-fw fa-paperclip"></i>
+                        {% include 'cosinnus/attached/attached_objects_widget.html' with form=form %}
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+	    <button type="submit" class="btn btn-emphasized">
             <ul class="media-list">
                 <li class="media">
                     <a class="pull-left" href="#">

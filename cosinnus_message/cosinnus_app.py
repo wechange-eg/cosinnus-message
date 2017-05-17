@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from cosinnus.conf import settings
+from cosinnus.core.registries.attached_objects import attached_object_registry
 
 def register():
     if 'cosinnus_message' in getattr(settings, 'COSINNUS_DISABLED_COSINNUS_APPS', []):
@@ -17,6 +18,8 @@ def register():
         cosinnus_root_patterns)
 
     app_registry.register('cosinnus_message', 'message', _('Message'))
+    attached_object_registry.register('postman.Message',
+                             'cosinnus_message.utils.renderer.MessageRenderer')
     url_registry.register('cosinnus_message', cosinnus_root_patterns,
         cosinnus_group_patterns)
 

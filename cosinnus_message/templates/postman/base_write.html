@@ -36,19 +36,36 @@
 	        </ul>
 	    </div>
         
-        <div class="btn btn-default w100">
+        <div class="btn btn-default w100 f-space"">
             <ul class="media-list">
                 <li class="media">
                     <div class="media-body media-body-form-control">
 				        {{ form.body.errors }}
 				        {% captureas label %}{% trans "Please enter message..." %}{% endcaptureas %}
-				        {% render_field form.body class+="app-message-text next-button-is-for-sending" placeholder=label %}
+				        {% render_field form.body class+="app-message-text" placeholder=label %}
                     </div>
                 </li>
             </ul>
         </div>
         
-        <button type="submit" class="btn btn-emphasized" style="display: none;">
+        <div class="btn btn-default w100 regular-space">
+            <ul class="media-list">
+                <li class="media">
+                    <a class="pull-left" href="#">
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                    <div class="media-body media-body-form-control" id="attachments-selector">
+                        <i class="fa fa-fw fa-paperclip"></i>
+                        {% include 'cosinnus/attached/attached_objects_widget.html' with form=form %}
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="clearfix"></div>
+        
+        
+        <button type="submit" class="btn btn-emphasized" >
             <ul class="media-list">
                 <li class="media">
                     <a class="pull-left" href="#">

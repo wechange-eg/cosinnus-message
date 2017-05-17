@@ -4,6 +4,7 @@ from django import VERSION
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from cosinnus.views.attached_object import AttachableViewMixin
 try:
     from django.contrib.auth import get_user_model  # Django 1.5
 except ImportError:
@@ -157,7 +158,7 @@ class TrashView(FolderMixin, TemplateView):
     template_name = 'postman/trash.html'
 
 
-class ComposeMixin(NamespaceMixin, object):
+class ComposeMixin(AttachableViewMixin, NamespaceMixin, object):
     """
     Code common to the write and reply views.
 
@@ -196,6 +197,7 @@ class ComposeMixin(NamespaceMixin, object):
         if hasattr(self, 'parent'):  # only in the ReplyView case
             params['parent'] = self.parent
         is_successful = form.save(**params)
+        super(ComposeMixin, self).form_valid(form)
         if is_successful:
             messages.success(self.request, _("Message successfully sent."), fail_silently=True)
         else:

@@ -16,6 +16,7 @@ from __future__ import unicode_literals
 
 from django import forms
 from django.conf import settings
+from cosinnus.forms.attached_object import FormAttachableMixin
 try:
     from django.contrib.auth import get_user_model  # Django 1.5
 except ImportError:
@@ -28,7 +29,7 @@ from .models import Message, get_user_name
 from .utils import WRAP_WIDTH
 
 
-class BaseWriteForm(forms.ModelForm):
+class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
     """The base class for other forms."""
     class Meta:
         model = Message
