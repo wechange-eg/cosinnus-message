@@ -48,19 +48,7 @@
             </ul>
         </div>
         
-        <div class="btn btn-default w100 regular-space">
-            <ul class="media-list">
-                <li class="media">
-                    <a class="pull-left" href="#">
-                        <i class="fa fa-pencil"></i>
-                    </a>
-                    <div class="media-body media-body-form-control" id="attachments-selector">
-                        <i class="fa fa-fw fa-paperclip"></i>
-                        {% include 'cosinnus/attached/attached_objects_widget.html' with form=form %}
-                    </div>
-                </li>
-            </ul>
-        </div>
+        {% include 'cosinnus_message/attachments_form.html' with form=form %}
         
         <div class="clearfix"></div>
         

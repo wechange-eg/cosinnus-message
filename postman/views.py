@@ -198,6 +198,12 @@ class ComposeMixin(AttachableViewMixin, NamespaceMixin, object):
             params['parent'] = self.parent
         is_successful = form.save(**params)
         super(ComposeMixin, self).form_valid(form)
+        
+        # if we have uploaded any attachments, then those are set to private
+        # we tag the recipient in that file so they can see it
+        for attached_object in form.instance.attached_objects.all():
+            attached_object.target_object.media_tag.persons.add(form.instance.recipient)
+        
         if is_successful:
             messages.success(self.request, _("Message successfully sent."), fail_silently=True)
         else:
