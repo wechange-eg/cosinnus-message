@@ -17,6 +17,7 @@ from __future__ import unicode_literals
 from django import forms
 from django.conf import settings
 from cosinnus.forms.attached_object import FormAttachableMixin
+from copy import copy
 try:
     from django.contrib.auth import get_user_model  # Django 1.5
 except ImportError:
@@ -42,6 +43,9 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
 
     error_css_class = 'error'
     required_css_class = 'required'
+    # any 'saved-away' instances for extra recipients that are just copied out
+    # by setting pk=None are stored here
+    extra_instances = []
     
     # can be set on init to prevent any notifications going out
     do_not_notify_users = False
@@ -138,6 +142,11 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
             else:
                 self.instance.recipient = None
                 self.instance.email = r
+            
+            # save away a copied message to another recipient so we can access them all later
+            if self.instance.pk:
+                self.extra_instances.append(copy(self.instance))
+                
             self.instance.pk = None  # force_insert=True is not accessible from here
             self.instance.auto_moderate(auto_moderators)
             self.instance.clean_moderation(initial_status)

@@ -200,9 +200,12 @@ class ComposeMixin(AttachableViewMixin, NamespaceMixin, object):
         super(ComposeMixin, self).form_valid(form)
         
         # if we have uploaded any attachments, then those are set to private
-        # we tag the recipient in that file so they can see it
+        # we tag the recipient in that file so they can see it (or recipients if the form copied many)
+        all_recipients = [form.instance.recipient]
+        all_recipients.extend([msg.recipient for msg in getattr(form, 'extra_instances', [])])
         for attached_object in form.instance.attached_objects.all():
-            attached_object.target_object.media_tag.persons.add(form.instance.recipient)
+            for recipient in all_recipients:
+                attached_object.target_object.media_tag.persons.add(recipient)
         
         if is_successful:
             messages.success(self.request, _("Message successfully sent."), fail_silently=True)
