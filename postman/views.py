@@ -4,6 +4,7 @@ from django import VERSION
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from cosinnus.views.attached_object import AttachableViewMixin
 try:
     from django.contrib.auth import get_user_model  # Django 1.5
 except ImportError:
@@ -157,7 +158,7 @@ class TrashView(FolderMixin, TemplateView):
     template_name = 'postman/trash.html'
 
 
-class ComposeMixin(NamespaceMixin, object):
+class ComposeMixin(AttachableViewMixin, NamespaceMixin, object):
     """
     Code common to the write and reply views.
 
@@ -196,6 +197,16 @@ class ComposeMixin(NamespaceMixin, object):
         if hasattr(self, 'parent'):  # only in the ReplyView case
             params['parent'] = self.parent
         is_successful = form.save(**params)
+        super(ComposeMixin, self).form_valid(form)
+        
+        # if we have uploaded any attachments, then those are set to private
+        # we tag the recipient in that file so they can see it (or recipients if the form copied many)
+        all_recipients = [form.instance.recipient]
+        all_recipients.extend([msg.recipient for msg in getattr(form, 'extra_instances', [])])
+        for attached_object in form.instance.attached_objects.all():
+            for recipient in all_recipients:
+                attached_object.target_object.media_tag.persons.add(recipient)
+        
         if is_successful:
             messages.success(self.request, _("Message successfully sent."), fail_silently=True)
         else:

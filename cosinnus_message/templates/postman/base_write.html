@@ -36,19 +36,24 @@
 	        </ul>
 	    </div>
         
-        <div class="btn btn-default w100">
+        <div class="btn btn-default w100 fine-space">
             <ul class="media-list">
                 <li class="media">
                     <div class="media-body media-body-form-control">
 				        {{ form.body.errors }}
 				        {% captureas label %}{% trans "Please enter message..." %}{% endcaptureas %}
-				        {% render_field form.body class+="app-message-text next-button-is-for-sending" placeholder=label %}
+				        {% render_field form.body class+="app-message-text" placeholder=label %}
                     </div>
                 </li>
             </ul>
         </div>
         
-        <button type="submit" class="btn btn-emphasized" style="display: none;">
+        {% include 'cosinnus_message/attachments_form.html' with form=form %}
+        
+        <div class="clearfix"></div>
+        
+        
+        <button type="submit" class="btn btn-emphasized" >
             <ul class="media-list">
                 <li class="media">
                     <a class="pull-left" href="#">

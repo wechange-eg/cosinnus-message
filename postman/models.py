@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 import hashlib
 from django.utils.crypto import get_random_string
+from cosinnus.models.tagged import AttachableObjectModel
 try:
     from importlib import import_module
 except ImportError:
@@ -266,7 +267,7 @@ class MessageManager(models.Manager):
 
 
 @python_2_unicode_compatible
-class Message(models.Model):
+class Message(AttachableObjectModel):
     """
     A message between a User and another User or an AnonymousUser.
     """

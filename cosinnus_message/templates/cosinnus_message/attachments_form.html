@@ -1,0 +1,12 @@
+<div class="btn btn-default w100 regular-space">
+    <ul class="media-list">
+        <li class="media">
+            <a class="pull-left" href="#">
+                <i class="fa fa-paperclip"></i>
+            </a>
+            <div class="media-body media-body-form-control" id="attachments-selector">
+                {% include 'cosinnus/attached/attached_objects_widget.html' with form=form form_data='{"private_upload": "1"}' hide_existing_file_field=True %}
+            </div>
+        </li>
+    </ul>
+</div>
