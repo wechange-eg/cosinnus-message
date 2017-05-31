@@ -1,8 +1,12 @@
 {% load i18n cosinnus_tags %}
 
+{% if message.attached_objects.exists %}
+    {% cosinnus_render_attached_objects message %}
+{% endif %}
+
 {% if message.attached_images %}
     <div class="indented row">
-        {% for image in message.attached_images|slice:":3" %}
+        {% for image in message.attached_images %}
             <div class="col-sm-4">
                 <a href="{{ image.static_image_url }}" data-lightbox="image-note-detailed" data-title="{{ image.title }}" class="thumbnail">
                     <img src="{{ image.static_image_url_thumbnail }}" title='{{ image.title }}'/>
@@ -10,8 +14,4 @@
             </div>
         {% endfor %}
     </div>
-{% endif %}
-
-{% if message.attached_objects.exists %}
-    {% cosinnus_render_attached_objects message %}
 {% endif %}

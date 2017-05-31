@@ -34,31 +34,37 @@
 <div class="content-box">
     
     {% for message in pm_messages %}
-    
-	    <div class="btn btn-{% if message.sender == user %}extra-{% endif %}emphasized w100">
-	        <ul class="media-list">
-	            <li class="media">
-	                <a class="pull-left" href="{{ message.sender|profile_url }}">
-	                    {% include "cosinnus/user/user_avatar_image.html" with user=message.sender %}
-	                </a>
-	                <div class="media-body">
-	                    <a href="{{ message.sender|profile_url }}">
-	                        <span class="annotation moment-data-date" data-date="{{ message.sent_at|date:"c" }}"></span>
-	                        <strong>{% if message.sender == user %}<i>{% trans "Me" %}</i>{% else %}{{ message.sender|full_name }}{% endif %}</strong>
-	                    </a>
-	                    {% if not message.recipient == user %}
-		                    &gt;
-		                    <a href="{{ message.recipient|profile_url }}">
-	                            <strong>{% if message.recipient == user %}<i>{% trans "Me" %}</i>{% else %}{{ message.recipient|full_name }}{% endif %}</strong>
-	                        </a>
-                        {% endif %}
-	                </div>
-	            </li>
-	        </ul>
-	    </div>
-	    <p class="regular-space">{{ message.body|urlize|url_target_blank|linebreaksbr }}</p>
-	    
-	    {% include 'cosinnus_message/message_attachments.html' with message=message %}
+        
+        <div class="regular-space">
+            <div class="btn btn-{% if message.sender == user %}extra-{% endif %}emphasized w100">
+                <ul class="media-list">
+                    <li class="media">
+                        <a class="pull-left" href="{{ message.sender|profile_url }}">
+                            {% include "cosinnus/user/user_avatar_image.html" with user=message.sender %}
+                        </a>
+                        <div class="media-body">
+                            <a href="{{ message.sender|profile_url }}">
+                                <span class="annotation moment-data-date" data-date="{{ message.sent_at|date:"c" }}"></span>
+                                <strong>{% if message.sender == user %}<i>{% trans "Me" %}</i>{% else %}{{ message.sender|full_name }}{% endif %}</strong>
+                            </a>
+                            {% if not message.recipient == user %}
+                                &gt;
+                                <a href="{{ message.recipient|profile_url }}">
+                                    <strong>{% if message.recipient == user %}<i>{% trans "Me" %}</i>{% else %}{{ message.recipient|full_name }}{% endif %}</strong>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <p>
+               {{ message.body|urlize|url_target_blank|linebreaksbr }}
+            </p>
+            
+            {% include 'cosinnus_message/message_attachments.html' with message=message %}
+        </div>
+        
     
     {% endfor %}
 
