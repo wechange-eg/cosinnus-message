@@ -2,7 +2,7 @@ import logging
 
 from django.core.management.base import BaseCommand
 
-from cosinnus_message.utils import process_direct_reply_messages,\
+from cosinnus_message.utils.utils import process_direct_reply_messages,\
     update_mailboxes
 
 

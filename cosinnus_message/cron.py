@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django_cron import CronJobBase, Schedule
 
 from cosinnus.cron import CosinnusCronJobBase
-from cosinnus_message.utils import update_mailboxes,\
+from cosinnus_message.utils.utils import update_mailboxes,\
     process_direct_reply_messages
 
 
