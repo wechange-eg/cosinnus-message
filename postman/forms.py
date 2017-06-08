@@ -136,16 +136,19 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
                 recipients.remove(recipient)
             recipients.insert(0, recipient)
         is_successful = True
+        
+        # important to clear because forms are reused
+        self.extra_instances = []
         for r in recipients:
+            # save away a copied message to another recipient so we can access them all later
+            if self.instance.pk:
+                self.extra_instances.append(copy(self.instance))
+                
             if isinstance(r, get_user_model()):
                 self.instance.recipient = r
             else:
                 self.instance.recipient = None
                 self.instance.email = r
-            
-            # save away a copied message to another recipient so we can access them all later
-            if self.instance.pk:
-                self.extra_instances.append(copy(self.instance))
                 
             self.instance.pk = None  # force_insert=True is not accessible from here
             self.instance.auto_moderate(auto_moderators)
