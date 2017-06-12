@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-08 13:31+0200\n"
+"POT-Creation-Date: 2017-06-12 17:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,6 +34,12 @@ msgid "Undefined recipient."
 msgstr ""
 
 msgid "Portal"
+msgstr ""
+
+msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
+msgstr ""
+
+msgid "Forum"
 msgstr ""
 
 msgid "Messages"

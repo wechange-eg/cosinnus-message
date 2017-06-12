@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-08 13:31+0200\n"
+"POT-Creation-Date: 2017-06-12 17:08+0200\n"
 "PO-Revision-Date: 2015-11-11 10:42+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -35,6 +35,12 @@ msgid "Undefined recipient."
 msgstr "Не вказано отримувача."
 
 msgid "Portal"
+msgstr ""
+
+msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
+msgstr ""
+
+msgid "Forum"
 msgstr ""
 
 msgid "Messages"
