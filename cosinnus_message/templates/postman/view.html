@@ -1,6 +1,11 @@
 {% extends "postman/base.html" %}
 {% load i18n postman_tags widget_tweaks cosinnus_tags thumbnail %}
 
+{% block extrahead %}
+    {{ block.super }}
+    {% include 'cosinnus/common/simplemde_dependencies.html' with element_id=form.body.id_for_label %}
+{% endblock %}
+
 {% block page_title %}{% trans "Message" %}{{ block.super }}{% endblock %}
 
 {% block breadcrumb %}
@@ -58,9 +63,9 @@
                 </ul>
             </div>
             
-            <p>
-               {{ message.body|urlize|url_target_blank|linebreaksbr }}
-            </p>
+            <div class="textfield">
+               {{ message.body|textfield }}
+            </div>
             
             {% include 'cosinnus_message/message_attachments.html' with message=message %}
         </div>

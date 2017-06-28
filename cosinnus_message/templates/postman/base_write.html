@@ -1,6 +1,11 @@
 {% extends "postman/base.html" %}
 {% load i18n bootstrap3 widget_tweaks cosinnus_tags %}
 
+{% block extrahead %}
+    {{ block.super }}
+    {% include 'cosinnus/common/simplemde_dependencies.html' with element_id=form.body.id_for_label %}
+{% endblock %}
+
 {% block postman_content %}
 <!-- a box with semi transparent background -->
 <div class="content-box">
