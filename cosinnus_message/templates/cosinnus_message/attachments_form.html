@@ -1,8 +1,6 @@
 {% load i18n cosinnus_tags %}
 
-<!-- ttx1 -->
 {% if user|is_member_in_forum %} 
-    <!-- ttx2 -->
 	<div class="btn btn-default w100 regular-space">
 	    <ul class="media-list">
 	        <li class="media">
@@ -16,11 +14,9 @@
 	    </ul>
 	</div>
 {% else %}
-    <!-- ttx3 -->
     {% comment %} Users can only attach files if they are members of the forum {% endcomment %}
     {% group_url 'cosinnus:group-dashboard' group=SETTINGS.NEWW_FORUM_GROUP_SLUG ignoreErrors=True as blog_url %}
 	{% if blog_url %}
-	    <!-- ttx4 -->
 	    <div class="btn btn-default w100 regular-space">
 	        <ul class="media-list">
 	            <li class="media">
