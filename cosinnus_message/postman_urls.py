@@ -89,7 +89,8 @@ Refer to documentation.
 from __future__ import unicode_literals
 from cosinnus_message.forms import CustomReplyForm, CustomWriteForm
 from cosinnus_message.views import UserSelect2View, CosinnusMessageView,\
-    CosinnusConversationView, ArchiveView, DeleteView, UndeleteView
+    CosinnusConversationView, ArchiveView, DeleteView, UndeleteView,\
+    MarkAsReadView
 
 try:
     from django.conf.urls import patterns, url  # django 1.4
@@ -111,6 +112,7 @@ urlpatterns = patterns('',
     url(r'^archiv/$', ArchiveView.as_view(), name='archive'),
     url(r'^loeschen/$', DeleteView.as_view(), name='delete'),
     url(r'^wiederherstellen/$', UndeleteView.as_view(), name='undelete'),
+    url(r'^gelesen/$', MarkAsReadView.as_view(), name='markasread'),
 
     url(r'^posteingang/(?:(?P<option>'+OPTIONS+')/)?$', InboxView.as_view(), name='inbox'),
     url(r'^gesendet/(?:(?P<option>'+OPTIONS+')/)?$', SentView.as_view(), name='sent'),

@@ -72,6 +72,8 @@ class UpdateMessageMixin(object):
     """
     http_method_names = ['post']
     field_value = None
+    field_bit = None
+    recipient_only_field_bit = None
     success_url = None
 
     @csrf_protect_m
@@ -94,8 +96,11 @@ class UpdateMessageMixin(object):
         if pks or tpks:
             user = request.user
             filter = Q(pk__in=pks) | Q(thread__in=tpks)
-            recipient_rows = Message.objects.as_recipient(user, filter).update(**{'recipient_{0}'.format(self.field_bit): self.field_value})
-            sender_rows = Message.objects.as_sender(user, filter).update(**{'sender_{0}'.format(self.field_bit): self.field_value})
+            if self.recipient_only_field_bit:
+                recipient_rows = Message.objects.as_recipient(user, filter).update(**{self.recipient_only_field_bit: self.field_value})
+            else:
+                recipient_rows = Message.objects.as_recipient(user, filter).update(**{'recipient_{0}'.format(self.field_bit): self.field_value})
+                sender_rows = Message.objects.as_sender(user, filter).update(**{'sender_{0}'.format(self.field_bit): self.field_value})
             if not (recipient_rows or sender_rows):
                 raise Http404  # abnormal enough, like forged ids
             messages.success(request, self.success_msg, fail_silently=True)
@@ -118,6 +123,12 @@ class DeleteView(UpdateMessageMixin, View):
     """Mark messages/conversations as deleted."""
     field_bit = 'deleted_at'
     success_msg = _("Messages or conversations successfully deleted.")
+    field_value = now()
+    
+class MarkAsReadView(UpdateMessageMixin, View):
+    """Mark messages/conversations as read."""
+    recipient_only_field_bit = 'read_at'
+    success_msg = _("Messages were marked as read.")
     field_value = now()
 
 
@@ -181,3 +192,6 @@ class UserSelect2View(Select2View):
 
         # Any error response, Has more results, options list
         return (NO_ERR_RESP, False, results)
+
+
+

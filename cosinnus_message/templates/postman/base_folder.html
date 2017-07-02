@@ -53,6 +53,20 @@
     </ul>
 </button>
 {% endblock %}
+{% block pm_markasread_button %}
+<button type="submit" class="btn btn-emphasized messages-delete-button" onclick="this.form.action='{% url 'postman:markasread' %}'">
+    <ul class="media-list">
+        <li class="media">
+            <a class="pull-left" href="#">
+                <i class="fa fa-check"></i>
+            </a>
+            <div class="media-body">
+                {% trans "Mark as Read" %}
+            </div>
+        </li>
+    </ul>
+</button>
+{% endblock %}
 
 <div class="clearfix"></div>
 
