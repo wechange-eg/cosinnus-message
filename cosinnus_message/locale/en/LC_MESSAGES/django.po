@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-12 17:08+0200\n"
+"POT-Creation-Date: 2017-07-02 16:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,6 +75,15 @@ msgid "Archive"
 msgstr ""
 
 msgid "Undelete"
+msgstr ""
+
+msgid "Mark as Read"
+msgstr ""
+
+msgid "Mark All"
+msgstr ""
+
+msgid "Deselect All"
 msgstr ""
 
 msgid "Me"
@@ -195,6 +204,9 @@ msgid "Messages or conversations successfully archived."
 msgstr ""
 
 msgid "Messages or conversations successfully deleted."
+msgstr ""
+
+msgid "Messages were marked as read."
 msgstr ""
 
 msgid "Messages or conversations successfully recovered."

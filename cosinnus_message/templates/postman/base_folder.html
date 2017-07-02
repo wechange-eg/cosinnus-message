@@ -8,7 +8,7 @@
 
 
 
-<form action="{% block pm_form_action %}{% endblock %}" method="post">{% csrf_token %}
+<form action="{% block pm_form_action %}{% endblock %}" method="post" class="messages_form">{% csrf_token %}
 
 
 {% block pm_delete_button %}
@@ -58,10 +58,37 @@
     <ul class="media-list">
         <li class="media">
             <a class="pull-left" href="#">
-                <i class="fa fa-check"></i>
+                <i class="fa fa-book"></i>
             </a>
             <div class="media-body">
                 {% trans "Mark as Read" %}
+            </div>
+        </li>
+    </ul>
+</button>
+{% endblock %}
+{% block pm_mark_messages_buttons %}
+<button type="submit" class="btn btn-emphasized pull-left no-margin mark_messages mark_messages_true">
+    <ul class="media-list">
+        <li class="media">
+            <a class="pull-left" href="#" disabled="true">
+                <i class="fa fa-check"></i>
+            </a>
+            <div class="media-body">
+                {% trans "Mark All" %}
+            </div>
+        </li>
+    </ul>
+</button>
+
+<button type="submit" class="btn btn-emphasized pull-left no-margin mark_messages mark_messages_false" style="display: none;">
+    <ul class="media-list">
+        <li class="media">
+            <a class="pull-left" href="#" disabled="true">
+                <i class="fa fa-close"></i>
+            </a>
+            <div class="media-body">
+                {% trans "Deselect All" %}
             </div>
         </li>
     </ul>
@@ -76,7 +103,7 @@
     {% if pm_messages %}
         
         {% for message in pm_messages %}
-            <div class="btn btn{% if message.is_new %}-extra{% endif %}-emphasized w100 {% if not forloop.last %}regular-space{% endif %}">
+            <div class="message_row btn btn{% if message.is_new %}-extra{% endif %}-emphasized w100 {% if not forloop.last %}regular-space{% endif %}">
 		        <ul class="media-list">
 		            <li class="media">
 		                <a class="pull-left" href="#">

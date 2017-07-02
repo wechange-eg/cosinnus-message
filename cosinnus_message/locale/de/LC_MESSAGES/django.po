@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-12 17:08+0200\n"
-"PO-Revision-Date: 2017-06-12 17:09+0200\n"
+"POT-Creation-Date: 2017-07-02 16:23+0200\n"
+"PO-Revision-Date: 2017-07-02 16:25+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -91,6 +91,15 @@ msgstr "Archivieren"
 
 msgid "Undelete"
 msgstr "Löschen rückgängig machen"
+
+msgid "Mark as Read"
+msgstr "Als Gelesen"
+
+msgid "Mark All"
+msgstr "Alle markieren"
+
+msgid "Deselect All"
+msgstr "Keine markieren"
 
 msgid "Me"
 msgstr "Ich"
@@ -211,6 +220,9 @@ msgstr "Nachrichten wurden erfolgreich archiviert."
 
 msgid "Messages or conversations successfully deleted."
 msgstr "Nachrichten wurden erfolgreich gelöscht."
+
+msgid "Messages were marked as read."
+msgstr "Nachrichten als Gelesen markiert."
 
 msgid "Messages or conversations successfully recovered."
 msgstr "Nachrichten wurden erfolgreich wiederhergestellt."

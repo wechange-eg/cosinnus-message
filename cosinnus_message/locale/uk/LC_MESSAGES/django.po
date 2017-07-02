@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-12 17:08+0200\n"
+"POT-Creation-Date: 2017-07-02 16:23+0200\n"
 "PO-Revision-Date: 2015-11-11 10:42+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -80,6 +80,15 @@ msgstr "Архів"
 
 msgid "Undelete"
 msgstr "Скасувати видалення"
+
+msgid "Mark as Read"
+msgstr ""
+
+msgid "Mark All"
+msgstr ""
+
+msgid "Deselect All"
+msgstr ""
 
 msgid "Me"
 msgstr "Я"
@@ -200,6 +209,9 @@ msgstr "Повідомлення успішно заархівовані."
 
 msgid "Messages or conversations successfully deleted."
 msgstr "Повідомлення успішно видалені."
+
+msgid "Messages were marked as read."
+msgstr ""
 
 msgid "Messages or conversations successfully recovered."
 msgstr "Повідомлення успішно відновлені."
