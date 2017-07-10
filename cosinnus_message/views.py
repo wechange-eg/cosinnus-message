@@ -24,7 +24,8 @@ from cosinnus.utils.urls import safe_redirect
 from django.contrib.auth import get_user_model
 from cosinnus.utils.permissions import check_user_can_see_user
 from cosinnus.models.tagged import BaseTagObject
-from cosinnus.utils.user import filter_active_users
+from cosinnus.utils.user import filter_active_users,\
+    get_user_query_filter_for_search_terms
 
 try:
     from django.utils.timezone import now  # Django 1.4 aware datetimes
@@ -160,13 +161,7 @@ class UserSelect2View(Select2View):
 
     def get_results(self, request, term, page, context):
         terms = term.strip().lower().split(' ')
-        first_term, other_terms = terms[0], terms[1:]
-
-        # username is not used as filter for the term for now, might confuse
-        # users why a search result is found
-        q = Q(first_name__icontains=first_term) | Q(last_name__icontains=first_term) | Q(email__icontains=first_term) 
-        for other_term in other_terms:
-            q &= Q(first_name__icontains=other_term) | Q(last_name__icontains=other_term) | Q(email__icontains=other_term) 
+        q = get_user_query_filter_for_search_terms(terms)
         
         users = filter_active_users(User.objects.filter(q).exclude(id__exact=request.user.id))
         # as a last filter, remove all users that that have their privacy setting to "only members of groups i am in",
