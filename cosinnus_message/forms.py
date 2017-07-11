@@ -5,15 +5,13 @@ from __future__ import unicode_literals
 from django import forms
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
-from django.utils.html import escape
 
 from postman.forms import BaseWriteForm
 
 
-from cosinnus_message.fields import UserSelect2MultipleChoiceField
-import six
-from django.template.loader import render_to_string
 from cosinnus.utils.permissions import check_user_can_see_user
+from cosinnus.utils.user import get_user_select2_pills
+from cosinnus.fields import UserSelect2MultipleChoiceField
 
 
 def user_write_permission_filter(sender, recipient, recipients_list):
@@ -50,8 +48,7 @@ class CustomWriteForm(BaseWriteForm):
                     del self.initial['recipients']
                 
             # TODO: sascha: returning unescaped html here breaks the javascript of django-select2
-            preresults = [("user:" + six.text_type(user.id), escape(user.first_name) + " " + escape(user.last_name),)
-                       for user in users]
+            preresults = get_user_select2_pills(users)
             
             # we need to cheat our way around select2's annoying way of clearing initial data fields
             self.fields['recipients'].choices = preresults #((1, 'hi'),)
