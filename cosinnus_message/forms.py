@@ -10,8 +10,9 @@ from postman.forms import BaseWriteForm
 
 
 from cosinnus.utils.permissions import check_user_can_see_user
-from cosinnus.utils.user import get_user_select2_pills
+from cosinnus.utils.user import get_user_select2_pills, get_group_select2_pills
 from cosinnus.fields import UserSelect2MultipleChoiceField
+from cosinnus.models.group import CosinnusGroup
 
 
 def user_write_permission_filter(sender, recipient, recipients_list):
@@ -38,22 +39,31 @@ class CustomWriteForm(BaseWriteForm):
         # retrieve the attached objects ids to select them in the update view
         users = []
         initial_users = kwargs['initial'].get('recipients', None)
+        preresults = []
         if initial_users:
-            for username in initial_users.split(', '):
-                users.append( get_user_model()._default_manager.get(username=username) )
-                # delete the initial data or our select2 field initials will be overwritten by django
-                if 'recipients' in kwargs['initial']:
-                    del kwargs['initial']['recipients']
-                if 'recipients' in self.initial:
-                    del self.initial['recipients']
-                
-            # TODO: sascha: returning unescaped html here breaks the javascript of django-select2
-            preresults = get_user_select2_pills(users)
+            usernames = initial_users.split(', ')
+            users = get_user_model().objects.filter(username__in=usernames)
+            preresults = get_user_select2_pills(users, text_only=True)
+            # delete the initial data or our select2 field initials will be overwritten by django
+            if 'recipients' in kwargs['initial']:
+                del kwargs['initial']['recipients']
+            if 'recipients' in self.initial:
+                del self.initial['recipients']
             
-            # we need to cheat our way around select2's annoying way of clearing initial data fields
-            self.fields['recipients'].choices = preresults #((1, 'hi'),)
-            self.fields['recipients'].initial = [key for key,val in preresults] #[1]
-        
+        elif 'data' in kwargs and kwargs['data'].getlist('recipients'):
+            user_ids, group_ids = self.fields['recipients'].get_user_and_group_ids_for_value(kwargs['data'].getlist('recipients'))
+            users = get_user_model().objects.filter(id__in=user_ids)
+            groups = CosinnusGroup.objects.get_cached(pks=group_ids)
+            
+            preresults = get_user_select2_pills(users, text_only=True)
+            preresults.extend(get_group_select2_pills(groups, text_only=True))
+                
+        # TODO: sascha: returning unescaped html here breaks the javascript of django-select2
+        # we need to cheat our way around select2's annoying way of clearing initial data fields
+        self.fields['recipients'].choices = preresults
+        self.fields['recipients'].initial = [key for key,val in preresults]
+        self.initial['recipients'] = self.fields['recipients'].initial
+
 
 class CustomReplyForm(CustomWriteForm):
     
