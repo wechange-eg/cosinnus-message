@@ -21,7 +21,7 @@
 {% include "cosinnus/leftnav_button.html" with extra_classes="fine-space" active=active icon="fa-share" label=label href=sent_url  %}
 
 {% captureas active %}{% if request.get_full_path == archives_url %}True{% endif %}{% endcaptureas %}
-{% captureas label %}{% trans "Archive" %}{% endcaptureas %}
+{% captureas label %}{% trans "Archive" context "the noun for an Archive" %}{% endcaptureas %}
 {% include "cosinnus/leftnav_button.html" with extra_classes="fine-space" active=active icon="fa-folder" label=label href=archives_url  %}
 
 {% captureas active %}{% if request.get_full_path == trash_url %}True{% endif %}{% endcaptureas %}
