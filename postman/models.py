@@ -7,7 +7,7 @@ try:
 except ImportError:
     from django.utils.importlib import import_module  # Django 1.6 / py2.6
 
-from django.conf import settings
+from cosinnus.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -122,6 +122,32 @@ def get_user_name(user):
         return getattr(user, name_user_as)
     return user.get_username()  # default
 
+
+class MultiConversation(models.Model):
+    """ A model to reference to keep track of which conversation between multiple users a message belongs to """
+    
+    participants = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=False,
+        related_name='postman_multiconversations')
+    targetted_groups = models.ManyToManyField(settings.COSINNUS_GROUP_OBJECT_MODEL, blank=True, null=True,
+        related_name='+', help_text='Groups that the message has been sent to. This is kept for purely '
+        'informative reasons, so we can show the user the involved groups, but will not be used for '
+        'something like keeping the participants list up to date')
+    
+
+class MultiConversationModel(models.Model):
+    """ To be used by Message, models the functionality of many users sharing a messages through a thread,
+        even though each message has its own object for each of the participating users """
+    
+    class Meta:
+        abstract = True
+    
+    multi_conversation = models.ForeignKey('postman.MultiConversation', null=True, blank=True)
+    level = models.IntegerField(_(''), default=0, help_text='Used to identify the Message objects belonging '
+        'to a MultiConversation that belong to the same "physical" message. Unused for default 2-person conversations.')
+    master_for_sender = models.BooleanField(default=False, help_text='Since in a MultiConversation, for one message '
+        'there exist multiple Message objects with the same level and same sender, only one those exists with '
+        'master_for_sender==True. This is the one that is checked for info like `sender_archived` and `sender_deleted_at`')
+    
 
 class MessageManager(models.Manager):
     """The manager for Message."""
@@ -267,7 +293,7 @@ class MessageManager(models.Manager):
 
 
 @python_2_unicode_compatible
-class Message(AttachableObjectModel):
+class Message(AttachableObjectModel, MultiConversationModel):
     """
     A message between a User and another User or an AnonymousUser.
     """
