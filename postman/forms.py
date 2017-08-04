@@ -18,6 +18,7 @@ from django import forms
 from django.conf import settings
 from cosinnus.forms.attached_object import FormAttachableMixin
 from copy import copy
+from postman.models import MultiConversation
 try:
     from django.contrib.auth import get_user_model  # Django 1.5
 except ImportError:
@@ -137,6 +138,18 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
             recipients.insert(0, recipient)
         is_successful = True
         
+        
+        multiconv = None
+        level = 0
+        is_master = True
+        if len(recipients) > 1 and all([isinstance(rec, get_user_model()) for rec in recipients]):
+            """ TODO: unterscheide zwischen first-create und reply-create!!! """
+            level = 0 # TODO change accordingly!
+            multiconv = MultiConversation.objects.create()
+            """ TODO: add groups if they were selected """
+            multiconv.participants.add(*recipients)
+            
+        
         # important to clear because forms are reused
         self.extra_instances = []
         for r in recipients:
@@ -154,6 +167,14 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
             self.instance.auto_moderate(auto_moderators)
             self.instance.clean_moderation(initial_status)
             self.instance.clean_for_visitor()
+            
+            if multiconv:
+                self.instance.multi_conversation = multiconv
+                self.instance.level = level
+                self.instance.master_for_sender = is_master
+                is_master = False
+            
+            
             m = super(BaseWriteForm, self).save()
             if self.instance.is_rejected():
                 is_successful = False
