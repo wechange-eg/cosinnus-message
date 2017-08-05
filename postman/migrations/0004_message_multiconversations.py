@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='message',
             name='master_for_sender',
-            field=models.BooleanField(default=False, help_text='Since in a MultiConversation, for one message there exist multiple Message objects with the same level and same sender, only one those exists with master_for_sender==True. This is the one that is checked for info like `sender_archived` and `sender_deleted_at`'),
+            field=models.BooleanField(default=True, help_text='Since in a MultiConversation, for one message there exist multiple Message objects with the same level and same sender, only one those exists with master_for_sender==True. This is the one that is checked for info like `sender_archived` and `sender_deleted_at`'),
         ),
         migrations.AddField(
             model_name='message',

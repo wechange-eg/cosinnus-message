@@ -133,6 +133,9 @@ class MultiConversation(models.Model):
         'informative reasons, so we can show the user the involved groups, but will not be used for '
         'something like keeping the participants list up to date')
     
+    def __str__(self):
+        return 'MultiConv <%d>: %s' % (getattr(self, 'id', -1), ','.join([part.username for part in self.participants.all()]))
+    
 
 class MultiConversationModel(models.Model):
     """ To be used by Message, models the functionality of many users sharing a messages through a thread,
@@ -144,7 +147,7 @@ class MultiConversationModel(models.Model):
     multi_conversation = models.ForeignKey('postman.MultiConversation', null=True, blank=True)
     level = models.IntegerField(_(''), default=0, help_text='Used to identify the Message objects belonging '
         'to a MultiConversation that belong to the same "physical" message. Unused for default 2-person conversations.')
-    master_for_sender = models.BooleanField(default=False, help_text='Since in a MultiConversation, for one message '
+    master_for_sender = models.BooleanField(default=True, help_text='Since in a MultiConversation, for one message '
         'there exist multiple Message objects with the same level and same sender, only one those exists with '
         'master_for_sender==True. This is the one that is checked for info like `sender_archived` and `sender_deleted_at`')
     
@@ -166,7 +169,7 @@ class MessageManager(models.Manager):
         else:
             lookups = models.Q(**filters)
         if option == OPTION_MESSAGES:
-            return qs.filter(lookups)
+            qs = qs.filter(lookups)
             # Adding a 'count' attribute, to be similar to the by-conversation case,
             # should not be necessary. Otherwise add:
             # .extra(select={'count': 'SELECT 1'})
@@ -181,7 +184,8 @@ class MessageManager(models.Manager):
                 self.filter(lookups, thread_id__isnull=False).values('thread').annotate(count=models.Count('pk')).annotate(id=models.Max('pk'))\
                     .values_list('id', 'count').order_by(),
             ))
-            return qs
+        qs_final = qs.order_by('multi_conversation_id').distinct('multi_conversation_id')
+        return qs_final
 
     def inbox(self, user, related=True, **kwargs):
         """
@@ -214,6 +218,7 @@ class MessageManager(models.Manager):
             'sender': user,
             'sender_archived': False,
             'sender_deleted_at__isnull': True,
+            'master_for_sender': True,
             # allow to see pending and rejected messages as well
         }
         return self._folder(related, filters, **kwargs)
@@ -227,6 +232,7 @@ class MessageManager(models.Manager):
             'recipient': user,
             'recipient_archived': True,
             'recipient_deleted_at__isnull': True,
+            'master_for_sender': True,
             'moderation_status': STATUS_ACCEPTED,
         }, {
             'sender': user,
@@ -243,6 +249,7 @@ class MessageManager(models.Manager):
         filters = ({
             'recipient': user,
             'recipient_deleted_at__isnull': False,
+            'master_for_sender': True,
             'moderation_status': STATUS_ACCEPTED,
         }, {
             'sender': user,
@@ -269,7 +276,7 @@ class MessageManager(models.Manager):
         """
         Return messages matching a filter AND being visible to a user as the sender.
         """
-        return self.filter(filter, sender=user)  # any status is fine
+        return self.filter(filter, sender=user, master_for_sender=True)  # any status is fine
 
     def perms(self, user):
         """
@@ -333,7 +340,7 @@ class Message(AttachableObjectModel, MultiConversationModel):
         ordering = ['-sent_at', '-id']
 
     def __str__(self):
-        return "{0}>{1}:{2}".format(self.obfuscated_sender, self.obfuscated_recipient, Truncator(self.subject).words(5))
+        return "{0}:: {1}>{2}:{3}".format(self.id, self.obfuscated_sender, self.obfuscated_recipient, Truncator(self.subject).words(5))
     
     def save(self, *args, **kwargs):
         if not getattr(self, 'id', None):

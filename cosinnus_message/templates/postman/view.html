@@ -124,7 +124,7 @@
 	<form action="" method="post">{% csrf_token %}
 		<input type="hidden" {% if pm_messages|length > 1 and message.thread_id %}name="delete_tpk__{{message.thread_id}}" value="true"{% else %}name="delete_pk__{{ message.pk }}" value="true"{% endif %} />
 		
-		<button type="submit"  onclick="this.form.action='{% url 'postman:delete' %}?next={{ next_url|urlencode }}'" class="btn btn-emphasized">
+		<button type="submit"  onclick="this.form.action='{% url 'postman:delete' %}?next={{ next_url|urlencode }}'" class="btn btn-emphasized pull-left">
 		    <ul class="media-list">
 		        <li class="media">
 		            <a class="pull-left" href="#">
@@ -138,7 +138,7 @@
 		</button>
 		
 		{% if not archived %}
-		<button type="submit" onclick="this.form.action='{% url 'postman:archive' %}?next={{ next_url|urlencode }}'" class="btn btn-emphasized">
+		<button type="submit" onclick="this.form.action='{% url 'postman:archive' %}?next={{ next_url|urlencode }}'" class="btn btn-emphasized pull-left">
 		    <ul class="media-list">
 		        <li class="media">
 		            <a class="pull-left" href="#">

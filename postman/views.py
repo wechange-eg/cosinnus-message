@@ -315,6 +315,10 @@ class ReplyView(ComposeMixin, FormView):
                 post['subject'] = self.initial['subject']
                 kwargs['data'] = post
             kwargs['recipient'] = self.parent.sender or self.parent.email
+            if self.parent.multi_conversation:
+                post = kwargs['data'].copy()  # self.request.POST is immutable
+                post.setlist('recipients', ['user:%d' % rec.id for rec in self.parent.multi_conversation.participants.all()])
+                kwargs['data'] = post
         return kwargs
 
     def get_context_data(self, **kwargs):

@@ -19,6 +19,7 @@ from django.conf import settings
 from cosinnus.forms.attached_object import FormAttachableMixin
 from copy import copy
 from postman.models import MultiConversation
+from annoying.functions import get_object_or_None
 try:
     from django.contrib.auth import get_user_model  # Django 1.5
 except ImportError:
@@ -122,40 +123,65 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
 
         """
         recipients = self.cleaned_data.get('recipients', [])
-        if parent and not parent.thread_id:  # at the very first reply, make it a conversation
-            parent.thread = parent
-            parent.save()
-            # but delay the setting of parent.replied_at to the moderation step
-        if parent:
-            self.instance.parent = parent
-            self.instance.thread_id = parent.thread_id
-        initial_moderation = self.instance.get_moderation()
-        initial_dates = self.instance.get_dates()
-        initial_status = self.instance.moderation_status
+        sender = self.instance.sender
         if recipient:
             if isinstance(recipient, get_user_model()) and recipient in recipients:
                 recipients.remove(recipient)
             recipients.insert(0, recipient)
+        recipients = list(set(recipients))
+        recipients = [_rec for _rec in recipients if not _rec == sender]
         is_successful = True
         
         
         multiconv = None
         level = 0
         is_master = True
-        if len(recipients) > 1 and all([isinstance(rec, get_user_model()) for rec in recipients]):
-            """ TODO: unterscheide zwischen first-create und reply-create!!! """
-            level = 0 # TODO change accordingly!
-            multiconv = MultiConversation.objects.create()
+        if all([isinstance(rec, get_user_model()) for rec in recipients]):
+            # is this a first message in a conversation or a reply?
+            if parent:
+                level = parent.level + 1 
+                multiconv = parent.multi_conversation
+            else:
+                level = 0
+                multiconv = MultiConversation.objects.create()
+                multiconv.participants.add(sender, *recipients)
             """ TODO: add groups if they were selected """
-            multiconv.participants.add(*recipients)
-            
+        
+        original_parent = parent
         
         # important to clear because forms are reused
         self.extra_instances = []
         for r in recipients:
+            
             # save away a copied message to another recipient so we can access them all later
             if self.instance.pk:
                 self.extra_instances.append(copy(self.instance))
+            
+            # in a multiconversation reply, find the actual parent for this recipient's message object of the conversation
+            # (each recipient has their own thread, connected my a MultiConversation)
+            if multiconv and original_parent:
+                # the parent is unambiguous, it is the message in the conversation's last level where either
+                # A) the recipient is the same (when this message goes to any participant but the last sender)
+                parent = get_object_or_None(Message, multi_conversation=multiconv, level=0, recipient=r)
+                if not parent:
+                    # B) or the message where the recipient was the current sender (when this message goes to the last sender)
+                    # we choose this one, because the last sender is sender of all messages on that level
+                    parent = get_object_or_None(Message, multi_conversation=multiconv, level=0, sender=r, recipient=sender)
+                if not parent:
+                    # todo: catch better
+                    raise Exception('Programming Error: No parent found for %s' % str({'sender': sender, 'recipient': r, 'multiconv': multiconv}))
+            
+            if parent and not parent.thread_id:  # at the very first reply, make it a conversation
+                parent.thread = parent
+                parent.save()
+                # but delay the setting of parent.replied_at to the moderation step
+            if parent:
+                self.instance.parent = parent
+                self.instance.thread_id = parent.thread_id
+                
+            initial_moderation = self.instance.get_moderation()
+            initial_dates = self.instance.get_dates()
+            initial_status = self.instance.moderation_status
                 
             if isinstance(r, get_user_model()):
                 self.instance.recipient = r
@@ -168,12 +194,13 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
             self.instance.clean_moderation(initial_status)
             self.instance.clean_for_visitor()
             
+            # set multi conversation. only the first message in this level is the master (used for disambiguating on
+            # which message to ask for sender_deleted_at etc)
             if multiconv:
                 self.instance.multi_conversation = multiconv
                 self.instance.level = level
                 self.instance.master_for_sender = is_master
                 is_master = False
-            
             
             m = super(BaseWriteForm, self).save()
             if self.instance.is_rejected():
@@ -186,6 +213,7 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
                 self.instance.email = ''
             self.instance.set_moderation(*initial_moderation)
             self.instance.set_dates(*initial_dates)
+            
         return is_successful
     # commit_on_success() is deprecated in Django 1.6 and will be removed in Django 1.8
     save = transaction.atomic(save) if hasattr(transaction, 'atomic') else transaction.commit_on_success(save)
