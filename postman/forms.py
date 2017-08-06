@@ -204,9 +204,10 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
                 self.instance.level = level
                 
                 if self.instance.thread_id:
-                    # in a multiconversation, for all messages but the first, the master_for_sender needs to be the same thread
-                    thread = Message.objects.get(id=self.instance.thread_id) # need to refetch, since we only change the id, the fk object is stale
-                    self.instance.master_for_sender = thread.master_for_sender
+                    # in a multiconversation, for all messages but the first, the master_for_sender flag must be
+                    # on the message object that is being sent to the person that was sender of the first (thread) message object
+                    thread = Message.objects.get(id=self.instance.thread_id) # need to refetch, since we only change the thread_id, the fk object is stale
+                    self.instance.master_for_sender = (r == thread.sender)
                 else:
                     # otherwise, the first message will be master
                     self.instance.master_for_sender = is_master
