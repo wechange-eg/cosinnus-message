@@ -164,3 +164,13 @@ def postman_unread(parser, token):
         return InboxCountNode(bits[2])
     else:
         return InboxCountNode()
+    
+@register.filter
+def get_other_participants(message, user):
+    """ For a given message and the current user, returns all other participants of this conversation,
+        or a list with one element, the other person that isn't our user if the message is not part of a multi conversation """
+    if not message.multi_conversation:
+        return [message.sender if message.recipient == user else message.recipient]
+    return [part for part in message.multi_conversation.participants.all() if not part == user]
+
+    

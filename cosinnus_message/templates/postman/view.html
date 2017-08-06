@@ -37,6 +37,20 @@
 
 <!-- a box with semi transparent background -->
 <div class="content-box">
+    <div class="white-content regular-space">
+        {% with participants=pm_messages.0|get_other_participants:request.user %}
+	        {% if participants|length > 1 %}
+                {% blocktrans with count=participants|length %}Conversation with {{count}} other participants{% endblocktrans %}:
+	        {% else %}
+		        {% trans "Conversation with" %}:
+		    {% endif %}
+	        <span>
+	            {% for participant in participants %}
+	                <span class="comma"><a href="{{ participant|profile_url }}" >{{ participant|full_name }}</a></span>
+	            {% endfor %}
+            </span>
+	    {% endwith %}
+    </div>
     
     {% for message in pm_messages %}
         
@@ -52,12 +66,6 @@
                                 <span class="annotation moment-data-date" data-date="{{ message.sent_at|date:"c" }}"></span>
                                 <strong>{% if message.sender == user %}<i>{% trans "Me" %}</i>{% else %}{{ message.sender|full_name }}{% endif %}</strong>
                             </a>
-                            {% if not message.recipient == user %}
-                                &gt;
-                                <a href="{{ message.recipient|profile_url }}">
-                                    <strong>{% if message.recipient == user %}<i>{% trans "Me" %}</i>{% else %}{{ message.recipient|full_name }}{% endif %}</strong>
-                                </a>
-                            {% endif %}
                         </div>
                     </li>
                 </ul>

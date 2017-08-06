@@ -374,6 +374,13 @@ class Message(AttachableObjectModel, MultiConversationModel):
     def is_replied(self):
         """Tell if the recipient has written a reply to the message."""
         return self.replied_at is not None
+    
+    @property
+    def better_count(self):
+        """ Expensive, but conversation-accurate message count for this thread. """
+        if not self.thread_id:
+            return 0
+        return self._meta.model.objects.filter(thread_id=self.thread_id).count()
 
     def _obfuscated_email(self):
         """
