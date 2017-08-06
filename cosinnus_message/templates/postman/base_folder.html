@@ -128,19 +128,24 @@
 		                            {% block pm_recipient_cell %}
 	                                {% endblock %}
 		                            
-	                                {% for participant in participants|slice:"2" %}
-	                                    <span class="comma">{{ participant|full_name }}</span>
-	                                {% endfor %}
-		                            {% with rest=participants|length|subtract:2 %}
-			                            {% if rest > 0 %}
-			                                <span class="comma">+{{ rest }}</span>
-			                            {% endif %}
-		                            {% endwith %}
+		                            {% if participants|length > 1 and message.multi_conversation and message.multi_conversation.targetted_groups.all %}
+	                                    <i class="fa fa-users"></i>
+                                        {{ message.multi_conversation.targetted_groups.all.0.name }}
+		                            {% else %}
+		                                {% for participant in participants|slice:"2" %}
+		                                    <span class="comma">{{ participant|full_name }}</span>
+		                                {% endfor %}
+			                            {% with rest=participants|length|subtract:2 %}
+				                            {% if rest > 0 %}
+				                                <span class="comma">+{{ rest }}</span>
+				                            {% endif %}
+			                            {% endwith %}
+			                        {% endif %}
                                 {% endwith %}
                                 
                             </strong>
                             {% block pm_subject %}
-                                &nbsp;&nbsp;{{ message.subject }}
+                                &nbsp;{{ message.subject }}
                             {% endblock %}
                             </a>
                         </div>

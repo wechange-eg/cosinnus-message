@@ -145,7 +145,10 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
                 level = 0
                 multiconv = MultiConversation.objects.create()
                 multiconv.participants.add(sender, *recipients)
-            """ TODO: add groups if they were selected """
+                # if the user sent a message to one or more groups, save them in the conversation
+                targetted_groups = getattr(self, 'targetted_groups', [])
+                if targetted_groups:
+                    multiconv.targetted_groups.add(*targetted_groups)
         
         original_parent = parent
         

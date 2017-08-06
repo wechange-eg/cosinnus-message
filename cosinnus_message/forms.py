@@ -54,6 +54,8 @@ class CustomWriteForm(BaseWriteForm):
             user_ids, group_ids = self.fields['recipients'].get_user_and_group_ids_for_value(kwargs['data'].getlist('recipients'))
             users = get_user_model().objects.filter(id__in=user_ids)
             groups = CosinnusGroup.objects.get_cached(pks=group_ids)
+            # save away for later
+            self.targetted_groups = groups
             
             preresults = get_user_select2_pills(users, text_only=True)
             preresults.extend(get_group_select2_pills(groups, text_only=True))
