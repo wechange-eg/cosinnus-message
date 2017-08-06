@@ -136,7 +136,7 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
         multiconv = None
         level = 0
         is_master = True
-        if all([isinstance(rec, get_user_model()) for rec in recipients]):
+        if len(recipients) > 1 and all([isinstance(rec, get_user_model()) for rec in recipients]):
             # is this a first message in a conversation or a reply?
             if parent:
                 level = parent.level + 1 
@@ -199,8 +199,15 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
             if multiconv:
                 self.instance.multi_conversation = multiconv
                 self.instance.level = level
-                self.instance.master_for_sender = is_master
-                is_master = False
+                
+                if self.instance.thread_id:
+                    # in a multiconversation, for all messages but the first, the master_for_sender needs to be the same thread
+                    thread = Message.objects.get(id=self.instance.thread_id) # need to refetch, since we only change the id, the fk object is stale
+                    self.instance.master_for_sender = thread.master_for_sender
+                else:
+                    # otherwise, the first message will be master
+                    self.instance.master_for_sender = is_master
+                    is_master = False
             
             m = super(BaseWriteForm, self).save()
             if self.instance.is_rejected():

@@ -155,7 +155,7 @@ class MultiConversationModel(models.Model):
 class MessageManager(models.Manager):
     """The manager for Message."""
 
-    def _folder(self, related, filters, option=None, order_by=None):
+    def _folder(self, related, filters, user, option=None, order_by=None):
         """Base code, in common to the folders."""
         qs = self.all() if option == OPTION_MESSAGES else QuerySet(self.model, PostmanQuery(self.model), using=self._db)
         if related:
@@ -184,8 +184,12 @@ class MessageManager(models.Manager):
                 self.filter(lookups, thread_id__isnull=False).values('thread').annotate(count=models.Count('pk')).annotate(id=models.Max('pk'))\
                     .values_list('id', 'count').order_by(),
             ))
-        qs_final = qs.order_by('multi_conversation_id').distinct('multi_conversation_id')
-        return qs_final
+        
+        # for conversations messages where the user is the first sender (initiator), we filter so that
+        # we only show him the master_for_sender messages (otherwise they would see duplicates)
+        qs = qs.filter(models.Q(thread__isnull=True) | ~models.Q(thread__sender=user) | (models.Q(thread__sender=user) & models.Q(master_for_sender=True)))
+        
+        return qs
 
     def inbox(self, user, related=True, **kwargs):
         """
@@ -198,7 +202,7 @@ class MessageManager(models.Manager):
             'recipient_deleted_at__isnull': True,
             'moderation_status': STATUS_ACCEPTED,
         }
-        return self._folder(related, filters, **kwargs)
+        return self._folder(related, filters, user, **kwargs)
 
     def inbox_unread_count(self, user):
         """
@@ -221,7 +225,7 @@ class MessageManager(models.Manager):
             'master_for_sender': True,
             # allow to see pending and rejected messages as well
         }
-        return self._folder(related, filters, **kwargs)
+        return self._folder(related, filters, user, **kwargs)
 
     def archives(self, user, **kwargs):
         """
@@ -239,7 +243,7 @@ class MessageManager(models.Manager):
             'sender_archived': True,
             'sender_deleted_at__isnull': True,
         })
-        return self._folder(related, filters, **kwargs)
+        return self._folder(related, filters, user, **kwargs)
 
     def trash(self, user, **kwargs):
         """
@@ -255,7 +259,7 @@ class MessageManager(models.Manager):
             'sender': user,
             'sender_deleted_at__isnull': False,
         })
-        return self._folder(related, filters, **kwargs)
+        return self._folder(related, filters, user, **kwargs)
 
     def thread(self, user, filter):
         """
@@ -263,8 +267,8 @@ class MessageManager(models.Manager):
         """
         return self.select_related('sender', 'recipient').filter(
             filter,
-            (models.Q(recipient=user) & models.Q(moderation_status=STATUS_ACCEPTED)) | models.Q(sender=user),
-        ).order_by('sent_at')
+            (models.Q(recipient=user) & models.Q(moderation_status=STATUS_ACCEPTED)) | models.Q(sender=user) | models.Q(multi_conversation__participants=user),
+        ).order_by('sent_at').distinct()
 
     def as_recipient(self, user, filter):
         """
