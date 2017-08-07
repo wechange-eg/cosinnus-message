@@ -153,7 +153,6 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
             new_root_message.recipient_deleted_at = None
             new_root_message.recipient = sender
             new_root_message.save()
-            print ">> new root is", new_root_message
             recipient = new_root_message.sender
             recipients = [recipient]
             parent = new_root_message

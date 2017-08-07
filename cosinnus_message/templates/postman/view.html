@@ -65,7 +65,7 @@
                     {% if participants|length > 10 %}
                         <span class="comma participants-hide">
                             <a onclick="$('.participants-show').show();$('.participants-hide').hide();" >
-                                {% blocktrans with count=participants|length %}Show all {{count}} participants{% endblocktrans %}... 
+                                <i>{% blocktrans with count=participants|length %}Show all {{count}} participants{% endblocktrans %}...</i> 
                             </a>
                         </span>
                         {% for participant in participants|slice:"10:" %}

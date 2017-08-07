@@ -184,6 +184,11 @@ def reply_to_postman_message(message, user, text):
         @param user: The replying user as User model 
         @param text: The text-only body text of the reply. 
         @param return: True if successful, else False """
+        
+    if message.multi_conversation:
+        recipients = ['user:%d' % rec.id for rec in message.multi_conversation.participants.all()]
+    else:
+        recipients = []
     kwargs = {
        'initial': {},
        'recipient': message.sender,
@@ -192,9 +197,19 @@ def reply_to_postman_message(message, user, text):
        'data': MultiValueDict({
            'body': [text],
            'subject': [message.quote(format_subject)['subject']],
+           'reply_all': '1',
+           'recipients': recipients,
        }),
-        
     }
+    
+    # TODO: fixme: really the default should be '0' for reply single on directreply. 
+    # like this it actually sucks because spam. what do?
+    # the email should explain this, as well!!!
+    # also, if we reply single, we need to change the reply_copy_mode code, so that
+    # we answer to message.parent and not message.thread, because in the email, the thread
+    
+    # or we could completely disable directreply in conversations, which would suck
+    
     form = CustomReplyForm(**kwargs)
     if form.is_valid():
         form.save(parent=message)
@@ -237,3 +252,11 @@ def send_direct_reply_error_mail(recipient_email, text, reason):
     template = 'cosinnus_message/email_direct_reply_failed.txt'
     logger.warning('Sending out a direct-reply error mail', extra={'recipient': recipient_email, 'reason': reason, 'text': text})
     send_mail_or_fail_threaded(recipient_email, subject, template, {'reason': reason, 'text': text})
+
+
+def _test_postman_reply(direct_reply_hash, user_email, test_text):
+    """ Internal purposes only """
+    msg = PostmanMessage.objects.get(direct_reply_hash=direct_reply_hash)
+    user = get_user_model().objects.get(email=user_email)
+    return reply_to_postman_message(msg, user, test_text)
+
