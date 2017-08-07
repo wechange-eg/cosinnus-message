@@ -17,7 +17,7 @@ from __future__ import unicode_literals
 from django import forms
 from django.conf import settings
 from cosinnus.forms.attached_object import FormAttachableMixin
-from copy import copy
+from copy import copy, deepcopy
 from postman.models import MultiConversation
 from annoying.functions import get_object_or_None
 try:
@@ -122,8 +122,9 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
         Return False if one of the messages is rejected.
 
         """
-        recipients = self.cleaned_data.get('recipients', [])
         sender = self.instance.sender
+        recipients = self.cleaned_data.get('recipients', [])
+        
         if recipient:
             if isinstance(recipient, get_user_model()) and recipient in recipients:
                 recipients.remove(recipient)
@@ -131,12 +132,37 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
         recipients = list(set(recipients))
         recipients = [_rec for _rec in recipients if not _rec == sender]
         is_successful = True
+
+        
+        is_multi_conversation = len(recipients) > 1 and all([isinstance(rec, get_user_model()) for rec in recipients])
+        do_reply_single_copy = parent and self.data.get('reply_all') == '0' and is_multi_conversation
+        
+        if do_reply_single_copy:
+            # if in a conversation, we want to reply only to the root sender, we copy the root message
+            new_root_message = parent if not parent.thread_id else parent.thread
+            new_root_message = deepcopy(new_root_message)
+            new_root_message.pk = None
+            new_root_message.thread = None
+            new_root_message.thread_id = None
+            new_root_message.multi_conversation = None
+            new_root_message.multi_conversation_id = None
+            new_root_message.level = 0
+            new_root_message.sender_archived = False
+            new_root_message.recipient_archived = False
+            new_root_message.sender_deleted_at = None
+            new_root_message.recipient_deleted_at = None
+            new_root_message.recipient = sender
+            new_root_message.save()
+            print ">> new root is", new_root_message
+            recipient = new_root_message.sender
+            recipients = [recipient]
+            parent = new_root_message
         
         
         multiconv = None
         level = 0
         is_master = True
-        if len(recipients) > 1 and all([isinstance(rec, get_user_model()) for rec in recipients]):
+        if is_multi_conversation and not do_reply_single_copy:
             # is this a first message in a conversation or a reply?
             if parent:
                 level = parent.level + 1 
@@ -162,7 +188,7 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
             
             # in a multiconversation reply, find the actual parent for this recipient's message object of the conversation
             # (each recipient has their own thread, connected my a MultiConversation)
-            if multiconv and original_parent:
+            if multiconv and original_parent and not do_reply_single_copy:
                 # the parent is unambiguous, it is the message in the conversation's last level where either
                 # A) the recipient is the same (when this message goes to any participant but the last sender)
                 parent = get_object_or_None(Message, multi_conversation=multiconv, level=0, recipient=r)
@@ -199,7 +225,7 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
             
             # set multi conversation. only the first message in this level is the master (used for disambiguating on
             # which message to ask for sender_deleted_at etc)
-            if multiconv:
+            if multiconv and not do_reply_single_copy:
                 self.instance.multi_conversation = multiconv
                 self.instance.level = level
                 

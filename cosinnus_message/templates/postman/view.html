@@ -35,47 +35,46 @@
 
 {% block postman_content %}
 
+{% with participants=pm_messages.0|get_other_participants:request.user %}
 <div class="btn btn-{% if message.sender == user %}extra-{% endif %}emphasized w100 ">
     <ul class="media-list">
         <li class="media">
-            {% with participants=pm_messages.0|get_other_participants:request.user %}
-                <a class="pull-left">
-                    <i class="fa {% if participants|length == 1 %}fa-user{% else %}fa-group{% endif %}"></i>
-                </a>
-                <div class="media-body">
-                    {% if participants|length > 1 %}
-	                    {% with groups=pm_messages.0.multi_conversation.targetted_groups.all %}
-	                        {% if groups %}
-	                            {% trans "Conversation with members from" %}:
-	                            <span>
-	                                {% for group in groups %}
-	                                    <span class="comma">{% include 'cosinnus/group/group_label.html' with group=group %}</span>
-	                                {% endfor %}
-	                            </span>
-	                            <br/>
-	                        {% endif %}
-	                    {% endwith %}
-	                {% else %}
-	                   {% trans "Conversation with" %}:
-		            {% endif %}
-		            <span>
-		                {% for participant in participants|slice:"10" %}
-                            <span class="comma"><a href="{{ participant|profile_url }}" >{{ participant|full_name }}</a></span>
-                        {% endfor %}
-                        {% if participants|length > 10 %}
-                            <span class="comma participants-hide">
-                                <a onclick="$('.participants-show').show();$('.participants-hide').hide();" >
-	                                {% blocktrans with count=participants|length %}Show all {{count}} participants{% endblocktrans %}... 
-	                            </a>
-	                        </span>
-                            {% for participant in participants|slice:"10:" %}
-	                            <span class="comma participants-show" style="display: none;"><a href="{{ participant|profile_url }}" >{{ participant|full_name }}</a></span>
-	                        {% endfor %}
+            <a class="pull-left">
+                <i class="fa {% if participants|length == 1 %}fa-user{% else %}fa-group{% endif %}"></i>
+            </a>
+            <div class="media-body">
+                {% if participants|length > 1 %}
+                    {% with groups=pm_messages.0.multi_conversation.targetted_groups.all %}
+                        {% if groups %}
+                            {% trans "Conversation with members from" %}:
+                            <span>
+                                {% for group in groups %}
+                                    <span class="comma">{% include 'cosinnus/group/group_label.html' with group=group %}</span>
+                                {% endfor %}
+                            </span>
+                            <br/>
                         {% endif %}
-		            </span>
-                </div>
+                    {% endwith %}
+                {% else %}
+                   {% trans "Conversation with" %}:
+	            {% endif %}
+	            <span>
+	                {% for participant in participants|slice:"10" %}
+                        <span class="comma"><a href="{{ participant|profile_url }}" >{{ participant|full_name }}</a></span>
+                    {% endfor %}
+                    {% if participants|length > 10 %}
+                        <span class="comma participants-hide">
+                            <a onclick="$('.participants-show').show();$('.participants-hide').hide();" >
+                                {% blocktrans with count=participants|length %}Show all {{count}} participants{% endblocktrans %}... 
+                            </a>
+                        </span>
+                        {% for participant in participants|slice:"10:" %}
+                            <span class="comma participants-show" style="display: none;"><a href="{{ participant|profile_url }}" >{{ participant|full_name }}</a></span>
+                        {% endfor %}
+                    {% endif %}
+	            </span>
+            </div>
             
-            {% endwith %}
         </li>
     </ul>
 </div>
@@ -141,22 +140,46 @@
         
         {% include 'cosinnus_message/attachments_form.html' with form=form %}
         
-	    <button type="submit" class="btn btn-emphasized">
-            <ul class="media-list">
-                <li class="media">
-                    <a class="pull-left" href="#">
-                        <i class="fa fa-pencil"></i>
-                    </a>
-                    <div class="media-body">
-                        {% trans "Reply" %}
-                    </div>
-                </li>
-            </ul>
-        </button>
+        <input type="hidden" name="reply_all" value="0">
+        
+        {% if participants|length < 2 or pm_messages.0.sender != request.user %}
+	        <button type="submit" class="btn btn-emphasized" style="width:200px;">
+	            <ul class="media-list">
+	                <li class="media">
+	                    <a class="pull-left" href="#">
+	                        <i class="fa fa-pencil"></i>
+	                    </a>
+	                    <div class="media-body">
+	                        {% if participants|length < 2 %}
+	                            {% trans "Reply" %}
+	                        {% else %}
+	                            {% blocktrans with sender_name=pm_messages.0.sender|full_name %}Reply to {{sender_name}}{% endblocktrans %}
+	                        {% endif %}
+	                    </div>
+	                </li>
+	            </ul>
+	        </button>
+        {% endif %}
+        
+        {% if participants|length > 1 %}
+		    <button type="submit" onclick="this.form.reply_all.value='1';" class="btn btn-emphasized" style="width:200px;">
+	            <ul class="media-list">
+	                <li class="media">
+	                    <a class="pull-left" href="#">
+	                        <i class="fa fa-group"></i>
+	                    </a>
+	                    <div class="media-body">
+	                        {% blocktrans with adressee_count=participants|length %}Reply to all {{adressee_count}}{% endblocktrans %}
+	                    </div>
+	                </li>
+	            </ul>
+	        </button>
+        {% endif %}
 	</form>
     {% endif %}
 
 </div><!-- content-box -->
+{% endwith %}
 
 {% with pm_messages.all|first as message %}
 
