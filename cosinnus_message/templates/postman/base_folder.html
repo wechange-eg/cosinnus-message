@@ -116,16 +116,36 @@
                         <div class="media-body">
                             <a href="{% block pm_link %}{% if by_conversation and message.thread_id %}{% url 'postman:view_conversation' message.thread_id %}{% else %}{{message.get_absolute_url }}{% endif %}?next={{ current_url|urlencode }}{% endblock %}">
                                 <span class="annotation moment-data-date" data-date="{{ message.sent_at|date:"c" }}"></span>
+                                <span class="annotation">
+                                {% if message.count %}
+                                    ({{ message.better_count }})&nbsp;
+                                {% endif %}
+                                </span>
                             <strong>
-	                            {% block pm_sender_cell %}{% if message.sender == user %}<i>{% trans "Me" %}</i>{% else %}{{ message.sender|full_name }}{% endif %}{% if message.count %} ({{ message.count }}){% endif %}{% endblock %}
-	                            {% block pm_recipient_cell %}{% if message.sender == user %}<i>{% trans "Me" %}</i>{% else %}{{ message.sender|full_name }}{% endif %}{% if message.count %} ({{ message.count }}){% endif %}{% endblock %}
-	                            {% if not message.recipient == user %}
-	                                &gt;
-		                            {% if message.recipient == user %}<i>{% trans "Me" %}</i>{% else %}{{ message.recipient|full_name }}{% endif %}
-	                            {% endif %}
+                                {% with participants=message|get_other_participants:request.user %}
+		                            {% block pm_sender_cell %}
+		                            {% endblock %}
+		                            {% block pm_recipient_cell %}
+	                                {% endblock %}
+		                            
+		                            {% if participants|length > 1 and message.multi_conversation and message.multi_conversation.targetted_groups.all %}
+	                                    <i class="fa fa-users"></i>
+                                        {{ message.multi_conversation.targetted_groups.all.0.name }}
+		                            {% else %}
+		                                {% for participant in participants|slice:"2" %}
+		                                    <span class="comma">{{ participant|full_name }}</span>
+		                                {% endfor %}
+			                            {% with rest=participants|length|subtract:2 %}
+				                            {% if rest > 0 %}
+				                                <span class="comma">+{{ rest }}</span>
+				                            {% endif %}
+			                            {% endwith %}
+			                        {% endif %}
+                                {% endwith %}
+                                
                             </strong>
                             {% block pm_subject %}
-                                {{ message.subject }}
+                                &nbsp;{{ message.subject }}
                             {% endblock %}
                             </a>
                         </div>

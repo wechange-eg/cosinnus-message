@@ -17,7 +17,9 @@ from __future__ import unicode_literals
 from django import forms
 from django.conf import settings
 from cosinnus.forms.attached_object import FormAttachableMixin
-from copy import copy
+from copy import copy, deepcopy
+from postman.models import MultiConversation
+from annoying.functions import get_object_or_None
 try:
     from django.contrib.auth import get_user_model  # Django 1.5
 except ImportError:
@@ -120,29 +122,94 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
         Return False if one of the messages is rejected.
 
         """
+        sender = self.instance.sender
         recipients = self.cleaned_data.get('recipients', [])
-        if parent and not parent.thread_id:  # at the very first reply, make it a conversation
-            parent.thread = parent
-            parent.save()
-            # but delay the setting of parent.replied_at to the moderation step
-        if parent:
-            self.instance.parent = parent
-            self.instance.thread_id = parent.thread_id
-        initial_moderation = self.instance.get_moderation()
-        initial_dates = self.instance.get_dates()
-        initial_status = self.instance.moderation_status
+        
         if recipient:
             if isinstance(recipient, get_user_model()) and recipient in recipients:
                 recipients.remove(recipient)
             recipients.insert(0, recipient)
+        recipients = list(set(recipients))
+        recipients = [_rec for _rec in recipients if not _rec == sender]
         is_successful = True
+
+        
+        is_multi_conversation = len(recipients) > 1 and all([isinstance(rec, get_user_model()) for rec in recipients])
+        do_reply_single_copy = parent and self.data.get('reply_all') == '0' and is_multi_conversation
+        
+        if do_reply_single_copy:
+            # if in a conversation, we want to reply only to the root sender, we copy the root message
+            new_root_message = parent if not parent.thread_id else parent.thread
+            new_root_message = deepcopy(new_root_message)
+            new_root_message.pk = None
+            new_root_message.thread = None
+            new_root_message.thread_id = None
+            new_root_message.multi_conversation = None
+            new_root_message.multi_conversation_id = None
+            new_root_message.level = 0
+            new_root_message.sender_archived = False
+            new_root_message.recipient_archived = False
+            new_root_message.sender_deleted_at = None
+            new_root_message.recipient_deleted_at = None
+            new_root_message.recipient = sender
+            new_root_message.save()
+            recipient = new_root_message.sender
+            recipients = [recipient]
+            parent = new_root_message
+        
+        
+        multiconv = None
+        level = 0
+        is_master = True
+        if is_multi_conversation and not do_reply_single_copy:
+            # is this a first message in a conversation or a reply?
+            if parent:
+                level = parent.level + 1 
+                multiconv = parent.multi_conversation
+            else:
+                level = 0
+                multiconv = MultiConversation.objects.create()
+                multiconv.participants.add(sender, *recipients)
+                # if the user sent a message to one or more groups, save them in the conversation
+                targetted_groups = getattr(self, 'targetted_groups', [])
+                if targetted_groups:
+                    multiconv.targetted_groups.add(*targetted_groups)
+        
+        original_parent = parent
         
         # important to clear because forms are reused
         self.extra_instances = []
         for r in recipients:
+            
             # save away a copied message to another recipient so we can access them all later
             if self.instance.pk:
                 self.extra_instances.append(copy(self.instance))
+            
+            # in a multiconversation reply, find the actual parent for this recipient's message object of the conversation
+            # (each recipient has their own thread, connected my a MultiConversation)
+            if multiconv and original_parent and not do_reply_single_copy:
+                # the parent is unambiguous, it is the message in the conversation's last level where either
+                # A) the recipient is the same (when this message goes to any participant but the last sender)
+                parent = get_object_or_None(Message, multi_conversation=multiconv, level=0, recipient=r)
+                if not parent:
+                    # B) or the message where the recipient was the current sender (when this message goes to the last sender)
+                    # we choose this one, because the last sender is sender of all messages on that level
+                    parent = get_object_or_None(Message, multi_conversation=multiconv, level=0, sender=r, recipient=sender)
+                if not parent:
+                    # todo: catch better
+                    raise Exception('Programming Error: No parent found for %s' % str({'sender': sender, 'recipient': r, 'multiconv': multiconv}))
+            
+            if parent and not parent.thread_id:  # at the very first reply, make it a conversation
+                parent.thread = parent
+                parent.save()
+                # but delay the setting of parent.replied_at to the moderation step
+            if parent:
+                self.instance.parent = parent
+                self.instance.thread_id = parent.thread_id
+                
+            initial_moderation = self.instance.get_moderation()
+            initial_dates = self.instance.get_dates()
+            initial_status = self.instance.moderation_status
                 
             if isinstance(r, get_user_model()):
                 self.instance.recipient = r
@@ -154,6 +221,23 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
             self.instance.auto_moderate(auto_moderators)
             self.instance.clean_moderation(initial_status)
             self.instance.clean_for_visitor()
+            
+            # set multi conversation. only the first message in this level is the master (used for disambiguating on
+            # which message to ask for sender_deleted_at etc)
+            if multiconv and not do_reply_single_copy:
+                self.instance.multi_conversation = multiconv
+                self.instance.level = level
+                
+                if self.instance.thread_id:
+                    # in a multiconversation, for all messages but the first, the master_for_sender flag must be
+                    # on the message object that is being sent to the person that was sender of the first (thread) message object
+                    thread = Message.objects.get(id=self.instance.thread_id) # need to refetch, since we only change the thread_id, the fk object is stale
+                    self.instance.master_for_sender = (r == thread.sender)
+                else:
+                    # otherwise, the first message will be master
+                    self.instance.master_for_sender = is_master
+                    is_master = False
+            
             m = super(BaseWriteForm, self).save()
             if self.instance.is_rejected():
                 is_successful = False
@@ -165,6 +249,7 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
                 self.instance.email = ''
             self.instance.set_moderation(*initial_moderation)
             self.instance.set_dates(*initial_dates)
+            
         return is_successful
     # commit_on_success() is deprecated in Django 1.6 and will be removed in Django 1.8
     save = transaction.atomic(save) if hasattr(transaction, 'atomic') else transaction.commit_on_success(save)

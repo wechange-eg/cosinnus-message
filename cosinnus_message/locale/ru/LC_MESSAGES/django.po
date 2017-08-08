@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wechange RU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-26 15:48+0200\n"
+"POT-Creation-Date: 2017-08-08 13:19+0200\n"
 "PO-Revision-Date: 2017-07-26 15:49+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -89,9 +89,6 @@ msgstr ""
 msgid "Deselect All"
 msgstr ""
 
-msgid "Me"
-msgstr "Я"
-
 msgid "No messages"
 msgstr "Сообщений нет"
 
@@ -118,18 +115,28 @@ msgstr ", по следующей причине:"
 msgid "'%(sender_first)s %(sender_last)s' has replied to your message from %(date)s:"
 msgstr "’%(sender_first)s %(sender_last)s' ответил(а) на Ваше сообщение от %(date)s:"
 
-#, python-format
-msgid "You have received a copy of a response from the user '%(sender_first)s %(sender_last)s'."
-msgstr "Вы получили копию ответа от пользователя '%(sender_first)s %(sender_last)s'"
+#, fuzzy, python-format
+#| msgid "'%(sender_first)s %(sender_last)s' has replied to your message from %(date)s:"
+msgid "'%(sender_first)s %(sender_last)s' has posted a message in one of your conversations."
+msgstr "’%(sender_first)s %(sender_last)s' ответил(а) на Ваше сообщение от %(date)s:"
 
 #, python-format
 msgid "You have received a message from the user '%(sender_first)s %(sender_last)s'."
 msgstr "Вы получили сообщение от пользователя '%(sender_first)s %(sender_last)s'"
 
+msgid "This message was sent in a conversation with: "
+msgstr ""
+
+msgid "Project/Group"
+msgstr ""
+
 msgid "Follow this link to view the message on the site"
 msgstr "Перейдите по этой ссылке для просмотра сообщения на сайте"
 
 msgid "You can also reply to this message directly by replying to this email. When you do, please leave the subject and addressee as it is. The email you reply from *must* be the one you are registered with on the site."
+msgstr ""
+
+msgid "WARNING: Your reply will be sent to all participants of this conversation!"
 msgstr ""
 
 #, python-format
@@ -183,11 +190,34 @@ msgstr "Адресат"
 msgid "Conversation"
 msgstr "Беседа"
 
+msgid "Conversation with members from"
+msgstr ""
+
+#, fuzzy
+#| msgid "Conversation"
+msgid "Conversation with"
+msgstr "Беседа"
+
+#, python-format
+msgid "Show all %(count)s participants"
+msgstr ""
+
+msgid "Me"
+msgstr "Я"
+
 msgid "Answer"
 msgstr "Ответ"
 
 msgid "Reply..."
 msgstr "Ответить..."
+
+#, python-format
+msgid "Reply to %(sender_name)s"
+msgstr ""
+
+#, python-format
+msgid "Reply to all %(adressee_count)s"
+msgstr ""
 
 msgid "Your reply could not be matched to an existing message."
 msgstr ""
@@ -218,3 +248,6 @@ msgstr ""
 
 msgid "Messages or conversations successfully recovered."
 msgstr "Сообщения или диалоги восстановлены"
+
+#~ msgid "You have received a copy of a response from the user '%(sender_first)s %(sender_last)s'."
+#~ msgstr "Вы получили копию ответа от пользователя '%(sender_first)s %(sender_last)s'"

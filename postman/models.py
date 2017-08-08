@@ -7,7 +7,7 @@ try:
 except ImportError:
     from django.utils.importlib import import_module  # Django 1.6 / py2.6
 
-from django.conf import settings
+from cosinnus.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -123,10 +123,39 @@ def get_user_name(user):
     return user.get_username()  # default
 
 
+class MultiConversation(models.Model):
+    """ A model to reference to keep track of which conversation between multiple users a message belongs to """
+    
+    participants = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=False,
+        related_name='postman_multiconversations')
+    targetted_groups = models.ManyToManyField(settings.COSINNUS_GROUP_OBJECT_MODEL, blank=True, null=True,
+        related_name='+', help_text='Groups that the message has been sent to. This is kept for purely '
+        'informative reasons, so we can show the user the involved groups, but will not be used for '
+        'something like keeping the participants list up to date')
+    
+    def __str__(self):
+        return 'MultiConv <%d>: %s' % (getattr(self, 'id', -1), ','.join([part.username for part in self.participants.all()]))
+    
+
+class MultiConversationModel(models.Model):
+    """ To be used by Message, models the functionality of many users sharing a messages through a thread,
+        even though each message has its own object for each of the participating users """
+    
+    class Meta:
+        abstract = True
+    
+    multi_conversation = models.ForeignKey('postman.MultiConversation', null=True, blank=True)
+    level = models.IntegerField(_(''), default=0, help_text='Used to identify the Message objects belonging '
+        'to a MultiConversation that belong to the same "physical" message. Unused for default 2-person conversations.')
+    master_for_sender = models.BooleanField(default=True, help_text='Since in a MultiConversation, for one message '
+        'there exist multiple Message objects with the same level and same sender, only one those exists with '
+        'master_for_sender==True. This is the one that is checked for info like `sender_archived` and `sender_deleted_at`')
+    
+
 class MessageManager(models.Manager):
     """The manager for Message."""
 
-    def _folder(self, related, filters, option=None, order_by=None):
+    def _folder(self, related, filters, user, option=None, order_by=None):
         """Base code, in common to the folders."""
         qs = self.all() if option == OPTION_MESSAGES else QuerySet(self.model, PostmanQuery(self.model), using=self._db)
         if related:
@@ -140,7 +169,7 @@ class MessageManager(models.Manager):
         else:
             lookups = models.Q(**filters)
         if option == OPTION_MESSAGES:
-            return qs.filter(lookups)
+            qs = qs.filter(lookups)
             # Adding a 'count' attribute, to be similar to the by-conversation case,
             # should not be necessary. Otherwise add:
             # .extra(select={'count': 'SELECT 1'})
@@ -155,7 +184,12 @@ class MessageManager(models.Manager):
                 self.filter(lookups, thread_id__isnull=False).values('thread').annotate(count=models.Count('pk')).annotate(id=models.Max('pk'))\
                     .values_list('id', 'count').order_by(),
             ))
-            return qs
+        
+        # for conversations messages where the user is the first sender (initiator), we filter so that
+        # we only show him the master_for_sender messages (otherwise they would see duplicates)
+        qs = qs.filter(models.Q(thread__isnull=True) | ~models.Q(thread__sender=user) | (models.Q(thread__sender=user) & models.Q(master_for_sender=True)))
+        
+        return qs
 
     def inbox(self, user, related=True, **kwargs):
         """
@@ -168,7 +202,7 @@ class MessageManager(models.Manager):
             'recipient_deleted_at__isnull': True,
             'moderation_status': STATUS_ACCEPTED,
         }
-        return self._folder(related, filters, **kwargs)
+        return self._folder(related, filters, user, **kwargs)
 
     def inbox_unread_count(self, user):
         """
@@ -188,9 +222,10 @@ class MessageManager(models.Manager):
             'sender': user,
             'sender_archived': False,
             'sender_deleted_at__isnull': True,
+            'master_for_sender': True,
             # allow to see pending and rejected messages as well
         }
-        return self._folder(related, filters, **kwargs)
+        return self._folder(related, filters, user, **kwargs)
 
     def archives(self, user, **kwargs):
         """
@@ -201,13 +236,14 @@ class MessageManager(models.Manager):
             'recipient': user,
             'recipient_archived': True,
             'recipient_deleted_at__isnull': True,
+            'master_for_sender': True,
             'moderation_status': STATUS_ACCEPTED,
         }, {
             'sender': user,
             'sender_archived': True,
             'sender_deleted_at__isnull': True,
         })
-        return self._folder(related, filters, **kwargs)
+        return self._folder(related, filters, user, **kwargs)
 
     def trash(self, user, **kwargs):
         """
@@ -217,12 +253,13 @@ class MessageManager(models.Manager):
         filters = ({
             'recipient': user,
             'recipient_deleted_at__isnull': False,
+            'master_for_sender': True,
             'moderation_status': STATUS_ACCEPTED,
         }, {
             'sender': user,
             'sender_deleted_at__isnull': False,
         })
-        return self._folder(related, filters, **kwargs)
+        return self._folder(related, filters, user, **kwargs)
 
     def thread(self, user, filter):
         """
@@ -230,8 +267,8 @@ class MessageManager(models.Manager):
         """
         return self.select_related('sender', 'recipient').filter(
             filter,
-            (models.Q(recipient=user) & models.Q(moderation_status=STATUS_ACCEPTED)) | models.Q(sender=user),
-        ).order_by('sent_at')
+            (models.Q(recipient=user) & models.Q(moderation_status=STATUS_ACCEPTED)) | models.Q(sender=user) | models.Q(multi_conversation__participants=user),
+        ).order_by('sent_at').distinct()
 
     def as_recipient(self, user, filter):
         """
@@ -243,7 +280,7 @@ class MessageManager(models.Manager):
         """
         Return messages matching a filter AND being visible to a user as the sender.
         """
-        return self.filter(filter, sender=user)  # any status is fine
+        return self.filter(filter, sender=user, master_for_sender=True)  # any status is fine
 
     def perms(self, user):
         """
@@ -267,7 +304,7 @@ class MessageManager(models.Manager):
 
 
 @python_2_unicode_compatible
-class Message(AttachableObjectModel):
+class Message(AttachableObjectModel, MultiConversationModel):
     """
     A message between a User and another User or an AnonymousUser.
     """
@@ -307,7 +344,7 @@ class Message(AttachableObjectModel):
         ordering = ['-sent_at', '-id']
 
     def __str__(self):
-        return "{0}>{1}:{2}".format(self.obfuscated_sender, self.obfuscated_recipient, Truncator(self.subject).words(5))
+        return "{0}:: {1}>{2}:{3}".format(self.id, self.obfuscated_sender, self.obfuscated_recipient, Truncator(self.subject).words(5))
     
     def save(self, *args, **kwargs):
         if not getattr(self, 'id', None):
@@ -337,6 +374,13 @@ class Message(AttachableObjectModel):
     def is_replied(self):
         """Tell if the recipient has written a reply to the message."""
         return self.replied_at is not None
+    
+    @property
+    def better_count(self):
+        """ Expensive, but conversation-accurate message count for this thread. """
+        if not self.thread_id:
+            return 0
+        return self._meta.model.objects.filter(thread_id=self.thread_id).count()
 
     def _obfuscated_email(self):
         """

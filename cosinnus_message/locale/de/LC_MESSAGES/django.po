@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-26 15:48+0200\n"
-"PO-Revision-Date: 2017-07-26 15:48+0200\n"
+"POT-Creation-Date: 2017-08-08 13:19+0200\n"
+"PO-Revision-Date: 2017-08-08 13:32+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -101,9 +101,6 @@ msgstr "Alle markieren"
 msgid "Deselect All"
 msgstr "Keine markieren"
 
-msgid "Me"
-msgstr "Ich"
-
 msgid "No messages"
 msgstr "Keine Nachrichten."
 
@@ -131,18 +128,27 @@ msgid "'%(sender_first)s %(sender_last)s' has replied to your message from %(dat
 msgstr "'%(sender_first)s %(sender_last)s' hat dir auf deine Nachricht vom %(date)s geantwortet:"
 
 #, python-format
-msgid "You have received a copy of a response from the user '%(sender_first)s %(sender_last)s'."
-msgstr ""
+msgid "'%(sender_first)s %(sender_last)s' has posted a message in one of your conversations."
+msgstr "'%(sender_first)s %(sender_last)s' hat eine Nachricht in einer Unterhaltung geschrieben."
 
 #, python-format
 msgid "You have received a message from the user '%(sender_first)s %(sender_last)s'."
 msgstr "du hast eine Nachricht von '%(sender_first)s %(sender_last)s' erhalten:"
+
+msgid "This message was sent in a conversation with: "
+msgstr "Diese Nachricht wurde in einer Unterhaltung gesendet mit:"
+
+msgid "Project/Group"
+msgstr "Projekt/Gruppe"
 
 msgid "Follow this link to view the message on the site"
 msgstr "Folge diesem Link, um die Nachricht auf der Seite anzusehen"
 
 msgid "You can also reply to this message directly by replying to this email. When you do, please leave the subject and addressee as it is. The email you reply from *must* be the one you are registered with on the site."
 msgstr "Du kannst auf diese Nachricht auch direkt antworten, indem du diese E-Mail beantwortest. Wenn du das tust, belasse bitte den Empfänger und den Betreff so wie sie sind. Die E-Mail *muss* von der selben Addresse geschickt werden mit der du auch auf der Webseite registriert bist."
+
+msgid "WARNING: Your reply will be sent to all participants of this conversation!"
+msgstr "ACHTUNG: Deine Antwort wird an alle Teilnehmer dieser Unterhaltung gesendet!"
 
 #, python-format
 msgid "Message \"%(subject)s\" on the site %(sitename)s"
@@ -195,11 +201,32 @@ msgstr "Empfänger"
 msgid "Conversation"
 msgstr "Unterhaltung"
 
+msgid "Conversation with members from"
+msgstr "Unterhaltung mit Mitgliedern von"
+
+msgid "Conversation with"
+msgstr "Unterhaltung mit"
+
+#, python-format
+msgid "Show all %(count)s participants"
+msgstr "Zeige alle %(count)s Teilnehmer"
+
+msgid "Me"
+msgstr "Ich"
+
 msgid "Answer"
 msgstr "Antworten"
 
 msgid "Reply..."
 msgstr "Antworten..."
+
+#, python-format
+msgid "Reply to %(sender_name)s"
+msgstr "%(sender_name)s antworten"
+
+#, python-format
+msgid "Reply to all %(adressee_count)s"
+msgstr "Allen %(adressee_count)s antworten"
 
 msgid "Your reply could not be matched to an existing message."
 msgstr "Für deine Antwort kontte die Urpsrungsnachricht nicht gefunden werden."

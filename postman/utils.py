@@ -56,17 +56,20 @@ def format_body(sender, body, indent=_("> "), width=WRAP_WIDTH):
     return ugettext("\n\n{sender} wrote:\n{body}\n").format(sender=sender, body=quote)
 
 
-def format_subject(subject):
+def format_subject(subject, old_style=False):
     """
     Prepend a pattern to the subject, unless already there.
 
     Matching is case-insensitive.
 
     """
-    str = ugettext("Re: {subject}")
-    pattern = '^' + str.replace('{subject}', '.*') + '$'
-    return subject if re.match(pattern, subject, re.IGNORECASE) else str.format(subject=subject)
-
+    
+    if old_style:
+        str = ugettext("Re: {subject}")
+        pattern = '^' + str.replace('{subject}', '.*') + '$'
+        return subject if re.match(pattern, subject, re.IGNORECASE) else str.format(subject=subject)
+    else:
+        return subject
 
 def email(subject_template, message_template, recipient_list, object, action, site):
     """Compose and send an email."""
