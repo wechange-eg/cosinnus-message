@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-26 15:48+0200\n"
+"POT-Creation-Date: 2017-08-08 13:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,9 +87,6 @@ msgstr ""
 msgid "Deselect All"
 msgstr ""
 
-msgid "Me"
-msgstr ""
-
 msgid "No messages"
 msgstr ""
 
@@ -117,17 +114,26 @@ msgid "'%(sender_first)s %(sender_last)s' has replied to your message from %(dat
 msgstr ""
 
 #, python-format
-msgid "You have received a copy of a response from the user '%(sender_first)s %(sender_last)s'."
+msgid "'%(sender_first)s %(sender_last)s' has posted a message in one of your conversations."
 msgstr ""
 
 #, python-format
 msgid "You have received a message from the user '%(sender_first)s %(sender_last)s'."
 msgstr ""
 
+msgid "This message was sent in a conversation with: "
+msgstr ""
+
+msgid "Project/Group"
+msgstr ""
+
 msgid "Follow this link to view the message on the site"
 msgstr ""
 
 msgid "You can also reply to this message directly by replying to this email. When you do, please leave the subject and addressee as it is. The email you reply from *must* be the one you are registered with on the site."
+msgstr ""
+
+msgid "WARNING: Your reply will be sent to all participants of this conversation!"
 msgstr ""
 
 #, python-format
@@ -181,10 +187,31 @@ msgstr ""
 msgid "Conversation"
 msgstr ""
 
+msgid "Conversation with members from"
+msgstr ""
+
+msgid "Conversation with"
+msgstr ""
+
+#, python-format
+msgid "Show all %(count)s participants"
+msgstr ""
+
+msgid "Me"
+msgstr ""
+
 msgid "Answer"
 msgstr ""
 
 msgid "Reply..."
+msgstr ""
+
+#, python-format
+msgid "Reply to %(sender_name)s"
+msgstr ""
+
+#, python-format
+msgid "Reply to all %(adressee_count)s"
 msgstr ""
 
 msgid "Your reply could not be matched to an existing message."
