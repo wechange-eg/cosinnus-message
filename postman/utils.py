@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from cosinnus.models.group import CosinnusPortal
+from cosinnus.utils.permissions import check_user_can_receive_emails
 try:
     from importlib import import_module
 except ImportError:
@@ -119,5 +120,5 @@ def notify_user(object, action, site):
         # the context key 'message' is already used in django-notification/models.py/send_now() (v0.2.0)
         notification.send(users=[user], label=label, extra_context={'pm_message': object, 'pm_action': action})
     else:
-        if not DISABLE_USER_EMAILING and user.email and user.is_active:
+        if not DISABLE_USER_EMAILING and user.email and user.is_active and check_user_can_receive_emails(user):
             email('postman/email_user_subject.txt', 'postman/email_user.txt', [user.email], object, action, site)
