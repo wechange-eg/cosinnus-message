@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-08 13:19+0200\n"
+"POT-Creation-Date: 2017-08-12 16:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -128,6 +128,9 @@ msgid "Project/Group"
 msgstr ""
 
 msgid "Follow this link to view the message on the site"
+msgstr ""
+
+msgid "If you do not wish to receive any more emails from us, click here to unsubscribe:"
 msgstr ""
 
 msgid "You can also reply to this message directly by replying to this email. When you do, please leave the subject and addressee as it is. The email you reply from *must* be the one you are registered with on the site."

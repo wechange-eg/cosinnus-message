@@ -18,7 +18,10 @@
 
 
 {% trans "Follow this link to view the message on the site" %}: http{% if request.is_secure %}s{% endif %}://{{ site.domain }}{% if object.thread_id %}{% url 'postman:view_conversation' object.thread_id %}{% else %}{{object.get_absolute_url }}{% endif %}
-{% endif %}{# 'acceptance' #}
+{% endif %}
+{% if unsubscribe_url %}
+{% trans "If you do not wish to receive any more emails from us, click here to unsubscribe:" %} {{ unsubscribe_url }} 
+{% endif %}
 {% if direct_reply_enabled %}
 {% blocktrans %}You can also reply to this message directly by replying to this email. When you do, please leave the subject and addressee as it is. The email you reply from *must* be the one you are registered with on the site.{% endblocktrans %}
 {% if object.multi_conversation %}

@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 from cosinnus.models.group import CosinnusPortal
+from cosinnus.utils.permissions import check_user_can_receive_emails
+from cosinnus.core.mail import send_mail_or_fail_threaded
 try:
     from importlib import import_module
 except ImportError:
@@ -94,9 +96,12 @@ def email(subject_template, message_template, recipient_list, object, action, si
     else:
         sender = settings.DEFAULT_FROM_EMAIL
         
-    message = render_to_string(message_template, ctx_dict)
+    #message = render_to_string(message_template, ctx_dict)
     # during the development phase, consider using the setting: EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    send_mail(subject, message, sender, recipient_list, fail_silently=True)
+    #send_mail(subject, message, sender, recipient_list, fail_silently=True)
+    
+    # now sending through our system
+    send_mail_or_fail_threaded(recipient_list[0], subject, message_template, ctx_dict, sender, is_html=False)
 
 
 def email_visitor(object, action, site):
@@ -119,5 +124,5 @@ def notify_user(object, action, site):
         # the context key 'message' is already used in django-notification/models.py/send_now() (v0.2.0)
         notification.send(users=[user], label=label, extra_context={'pm_message': object, 'pm_action': action})
     else:
-        if not DISABLE_USER_EMAILING and user.email and user.is_active:
+        if not DISABLE_USER_EMAILING and user.email and user.is_active and check_user_can_receive_emails(user):
             email('postman/email_user_subject.txt', 'postman/email_user.txt', [user.email], object, action, site)
