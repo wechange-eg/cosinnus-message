@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: wechange RU\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-12 16:20+0200\n"
-"PO-Revision-Date: 2017-07-26 15:49+0200\n"
+"PO-Revision-Date: 2017-08-15 17:40+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -34,13 +34,13 @@ msgid "Undefined recipient."
 msgstr "Неопределенный адресат"
 
 msgid "Portal"
-msgstr ""
+msgstr "Портал"
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
-msgstr ""
+msgstr "Вы можете прикладывать файлы и изображения к сообщениям, если вы член форума. Вы можете присоединиться здесь:"
 
 msgid "Forum"
-msgstr ""
+msgstr "Форум"
 
 msgid "Messages"
 msgstr "Сообщения"
@@ -60,6 +60,18 @@ msgid ""
 "\n"
 "If this keeps happening, consider logging in and sending the reply directly on the site.\n"
 msgstr ""
+"Ваш ответ напрямую не может быть доставлен!\n"
+"\n"
+"Причина: %(reason)s\n"
+"\n"
+"\n"
+"Текст вашого сообщения:\n"
+"--------------------------------\n"
+"%(text)s\n"
+"--------------------------------\n"
+"\n"
+"\n"
+"Если это продолжится, выйдите из аккаунта и отправьте ответ напрямую на сайт.\n"
 
 msgid ""
 "Note: This message is issued by an automated system.\n"
@@ -81,13 +93,13 @@ msgid "Undelete"
 msgstr "Восстановить"
 
 msgid "Mark as Read"
-msgstr ""
+msgstr "Отметить как прочитанные"
 
 msgid "Mark All"
-msgstr ""
+msgstr "отметить все"
 
 msgid "Deselect All"
-msgstr ""
+msgstr "Отменить все отметки"
 
 msgid "No messages"
 msgstr "Сообщений нет"
@@ -115,32 +127,31 @@ msgstr ", по следующей причине:"
 msgid "'%(sender_first)s %(sender_last)s' has replied to your message from %(date)s:"
 msgstr "’%(sender_first)s %(sender_last)s' ответил(а) на Ваше сообщение от %(date)s:"
 
-#, fuzzy, python-format
-#| msgid "'%(sender_first)s %(sender_last)s' has replied to your message from %(date)s:"
+#, python-format
 msgid "'%(sender_first)s %(sender_last)s' has posted a message in one of your conversations."
-msgstr "’%(sender_first)s %(sender_last)s' ответил(а) на Ваше сообщение от %(date)s:"
+msgstr "’%(sender_first)s %(sender_last)s' отправил(а) на сообщение в один из Ваших диалогов."
 
 #, python-format
 msgid "You have received a message from the user '%(sender_first)s %(sender_last)s'."
 msgstr "Вы получили сообщение от пользователя '%(sender_first)s %(sender_last)s'"
 
 msgid "This message was sent in a conversation with: "
-msgstr ""
+msgstr "Сообщение было отправлено в диалог с: "
 
 msgid "Project/Group"
-msgstr ""
+msgstr "Проект/Группа"
 
 msgid "Follow this link to view the message on the site"
 msgstr "Перейдите по этой ссылке для просмотра сообщения на сайте"
 
 msgid "If you do not wish to receive any more emails from us, click here to unsubscribe:"
-msgstr ""
+msgstr "Если Вы больше не хотите получать от нас электронных писем, кликните здесть, чтобы отписаться:"
 
 msgid "You can also reply to this message directly by replying to this email. When you do, please leave the subject and addressee as it is. The email you reply from *must* be the one you are registered with on the site."
-msgstr ""
+msgstr "Вы так же можете напрямую ответить на сообщение, ответив на это письмо. Если вы так делаете, пожалуйста, оставьте тему и адресатов в инходном виде. Почтовый ящик, с которого вы отвечаете, должен быть зарегистрирован на сайте."
 
 msgid "WARNING: Your reply will be sent to all participants of this conversation!"
-msgstr ""
+msgstr "ПРЕДУПРЕЖДЕНИЕ: Ваш ответ будет отправлен всем участникам этого диалога!"
 
 #, python-format
 msgid "Message \"%(subject)s\" on the site %(sitename)s"
@@ -191,19 +202,17 @@ msgid "Recipient"
 msgstr "Адресат"
 
 msgid "Conversation"
-msgstr "Беседа"
+msgstr "Диалог"
 
 msgid "Conversation with members from"
-msgstr ""
+msgstr "Диалог с членами из"
 
-#, fuzzy
-#| msgid "Conversation"
 msgid "Conversation with"
-msgstr "Беседа"
+msgstr "Диалог с"
 
 #, python-format
 msgid "Show all %(count)s participants"
-msgstr ""
+msgstr "Пказать всех %(count)s участников"
 
 msgid "Me"
 msgstr "Я"
@@ -216,26 +225,26 @@ msgstr "Ответить..."
 
 #, python-format
 msgid "Reply to %(sender_name)s"
-msgstr ""
+msgstr "Ответить %(sender_name)s"
 
 #, python-format
 msgid "Reply to all %(adressee_count)s"
-msgstr ""
+msgstr "Ответить всем %(adressee_count)s"
 
 msgid "Your reply could not be matched to an existing message."
-msgstr ""
+msgstr "Ваш ответ не может быть соотнесен с существующим сообщением."
 
 msgid "An internal error occured."
-msgstr ""
+msgstr "Случилась внутренняя ошибка"
 
 msgid "The email adress you sent the reply from is not the one associated with your user account. Please send direct replies only from the email adress you are registered with on the site!"
-msgstr ""
+msgstr "Электронный адрес, с которого Вы отправляете ответ, не связан с Вашим аккаунтом. Пожалуйста, отправляйте ответы только с тех электронных адресов, которые Вы зарегистрировали на сайте!"
 
 msgid "There was an error when processing your message text!"
-msgstr ""
+msgstr "Случилась ошибка при обработке текста Вашего сообщения!"
 
 msgid "Your direct reply failed!"
-msgstr ""
+msgstr "Ваш прямой ответ не доставлен!"
 
 msgid "Select at least one object."
 msgstr "Выберите хотя бы один объект"
@@ -247,7 +256,7 @@ msgid "Messages or conversations successfully deleted."
 msgstr "Сообщения или диалоги удалены"
 
 msgid "Messages were marked as read."
-msgstr ""
+msgstr "Сообщения отмечены как прочитанные."
 
 msgid "Messages or conversations successfully recovered."
 msgstr "Сообщения или диалоги восстановлены"
