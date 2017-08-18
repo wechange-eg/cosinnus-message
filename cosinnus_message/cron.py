@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import logging
+
 from django_cron import CronJobBase, Schedule
 
 from cosinnus.cron import CosinnusCronJobBase
 from cosinnus_message.utils.utils import update_mailboxes,\
     process_direct_reply_messages
+from django.utils.encoding import force_text
 
+logger = logging.getLogger('cosinnus')
 
 class ProcessDirectReplyMails(CosinnusCronJobBase):
     """ Downloads all mail for mailboxes in this portal, then processes direct replies as answers. """
@@ -18,5 +22,8 @@ class ProcessDirectReplyMails(CosinnusCronJobBase):
     
     def do(self):
         update_mailboxes()
-        process_direct_reply_messages()
-    
+        try:
+            process_direct_reply_messages()
+        except Exception, e:
+            logger.error('Process_direct_reply_messages() threw an exception! (in extra)', extra={'exception': force_text(e)})
+            

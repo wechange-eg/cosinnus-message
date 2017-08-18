@@ -45,15 +45,16 @@ def update_mailboxes():
             mailbox.name
         )
         messages = mailbox.get_new_mail()
+        """
         for message in messages:
             logger.info(
                 'Received %s (from %s)',
                 message.subject,
                 message.from_address
             )
+        """
 
-
-def process_direct_reply_messages():
+def process_direct_reply_messages(messages=None, no_delete=False):
     """ Will check all existing django_mail Messages:
         - drop all mail not containing this Pattern in the body text: directreply+<portal-id>+<hash>@<mailbox-domain> 
         - take all mail for this portal. 
@@ -61,10 +62,14 @@ def process_direct_reply_messages():
             - delete the mail, no matter if a match was found or not
         - retain the rest (other portals might be using the same mailbox)
         """
-    USER_MODEL = get_user_model()
-    # order by date incoming, ascending to not confuse order for consecutive messages
-    all_messages = Message.objects.all().order_by('read') 
     messages_to_delete = []
+    USER_MODEL = get_user_model()
+    
+    if messages is not None:
+        all_messages = messages
+    else:
+        # order by date incoming, ascending to not confuse order for consecutive messages
+        all_messages = Message.objects.all().order_by('read') 
     
     for message in all_messages:
         match = DIRECT_REPLY_ADDRESSEE.search(message.text)
@@ -134,7 +139,7 @@ def process_direct_reply_messages():
             continue
         logger.info('Direct reply successfully processed.')
         
-    if not getattr(settings, 'DEBUG_LOCAL', False):
+    if not no_delete and not getattr(settings, 'DEBUG_LOCAL', False):
         Message.objects.filter(id__in=[m.id for m in messages_to_delete]).delete()
    
 
