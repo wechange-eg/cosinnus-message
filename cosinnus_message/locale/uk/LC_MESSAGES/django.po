@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-12 16:20+0200\n"
-"PO-Revision-Date: 2015-11-11 10:42+0200\n"
+"PO-Revision-Date: 2017-09-05 16:05+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "Language: uk\n"
-"X-Generator: Poedit 1.8.6\n"
+"X-Generator: Poedit 2.0.3\n"
 
 msgid "Message"
 msgstr "Повідомлення"
@@ -26,22 +26,22 @@ msgid "message"
 msgstr "Повідомлення"
 
 msgid "Recipients"
-msgstr "Отримувачі"
+msgstr "Адресати"
 
 msgid "Additional Recipients"
-msgstr "Додаткові отримувачі"
+msgstr "Додаткові адресати"
 
 msgid "Undefined recipient."
-msgstr "Не вказано отримувача."
+msgstr "Не вказано адресата."
 
 msgid "Portal"
-msgstr ""
+msgstr "Портал"
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
-msgstr ""
+msgstr "Ви можете додавати файли та зображення до повідомлень, якщо Ви член форуму. Ви можете приєднатися тут:"
 
 msgid "Forum"
-msgstr ""
+msgstr "Форум"
 
 msgid "Messages"
 msgstr "Повідомлення"
@@ -61,12 +61,24 @@ msgid ""
 "\n"
 "If this keeps happening, consider logging in and sending the reply directly on the site.\n"
 msgstr ""
+"Ваша пряма відповідь не може бути доставленою!\n"
+"\n"
+"Причина: %(reason)s\n"
+"\n"
+"\n"
+"Текст Вашого повідомлення:\n"
+"--------------------------------\n"
+"%(text)s\n"
+"--------------------------------\n"
+"\n"
+"\n"
+"Якщо це продовжиться, вийдіть із акаунта і відправте відповідь прямо на сайт.\n"
 
 msgid ""
 "Note: This message is issued by an automated system.\n"
 "Do not reply, this would not be taken into account."
 msgstr ""
-"Зауважте: це повідомлення надсилається системою автоматично.\n"
+"Примітка: це повідомлення надсилається системою автоматично.\n"
 "Будь ласка, не відповідайте на нього."
 
 msgid "Archived Messages"
@@ -82,16 +94,16 @@ msgid "Undelete"
 msgstr "Скасувати видалення"
 
 msgid "Mark as Read"
-msgstr ""
+msgstr "Позначити як прочитані"
 
 msgid "Mark All"
-msgstr ""
+msgstr "Позначити всі"
 
 msgid "Deselect All"
-msgstr ""
+msgstr "Прибрати всі позначення"
 
 msgid "No messages"
-msgstr "Жодних повідомлень"
+msgstr "Повідомлень немає"
 
 msgid "Please enter message..."
 msgstr "Уведіть, будь ласка, повідомлення..."
@@ -114,34 +126,33 @@ msgstr ", з наступної причини:"
 
 #, python-format
 msgid "'%(sender_first)s %(sender_last)s' has replied to your message from %(date)s:"
-msgstr "'%(sender_first)s %(sender_last)s' відповів/-ла на ваше повідомлення від %(date)s:"
+msgstr "'%(sender_first)s %(sender_last)s' відповів(ла) на ваше повідомлення від %(date)s:"
 
-#, fuzzy, python-format
-#| msgid "'%(sender_first)s %(sender_last)s' has replied to your message from %(date)s:"
+#, python-format
 msgid "'%(sender_first)s %(sender_last)s' has posted a message in one of your conversations."
-msgstr "'%(sender_first)s %(sender_last)s' відповів/-ла на ваше повідомлення від %(date)s:"
+msgstr "’%(sender_first)s %(sender_last)s' надіслав(ла) повідомлення в один із Ваших діалогів."
 
 #, python-format
 msgid "You have received a message from the user '%(sender_first)s %(sender_last)s'."
 msgstr "Ви отримали повідомлення від користувача/-ки '%(sender_first)s %(sender_last)s'."
 
 msgid "This message was sent in a conversation with: "
-msgstr ""
+msgstr "Повідомлення було надіслано в діалог з: "
 
 msgid "Project/Group"
-msgstr ""
+msgstr "Проект/Група"
 
 msgid "Follow this link to view the message on the site"
 msgstr "Перейдіть за цим посиланням, щоб переглянути повідомлення на веб-сайті"
 
 msgid "If you do not wish to receive any more emails from us, click here to unsubscribe:"
-msgstr ""
+msgstr "Якщо Ви більше не бажаєте отримувати від нас електронні листи, натисніть тут, щоб відписатися:"
 
 msgid "You can also reply to this message directly by replying to this email. When you do, please leave the subject and addressee as it is. The email you reply from *must* be the one you are registered with on the site."
-msgstr ""
+msgstr "Ви також можете напряму відповісти на повідомлення, відповівши на цей лист. Якщо Ви так робитимете, будь ласка, залиште тему та адресатів у вихідному вигляді. Поштова скринька, з якої Ви відповідаєте, повинна бути зареєстрована на сайті."
 
 msgid "WARNING: Your reply will be sent to all participants of this conversation!"
-msgstr ""
+msgstr "ПОПЕРЕДЖЕННЯ: Ваша відповідь буде надіслана усім учасникам цього діалогу!"
 
 #, python-format
 msgid "Message \"%(subject)s\" on the site %(sitename)s"
@@ -175,8 +186,6 @@ msgstr "Вхідні"
 msgid "Sent"
 msgstr "Надіслані"
 
-#, fuzzy
-#| msgid "Archive"
 msgctxt "the noun for an Archive"
 msgid "Archive"
 msgstr "Архів"
@@ -197,16 +206,14 @@ msgid "Conversation"
 msgstr "Розмова"
 
 msgid "Conversation with members from"
-msgstr ""
+msgstr "Діалог з членами із"
 
-#, fuzzy
-#| msgid "Conversation"
 msgid "Conversation with"
-msgstr "Розмова"
+msgstr "Розмова з"
 
 #, python-format
 msgid "Show all %(count)s participants"
-msgstr ""
+msgstr "Показати всіх %(count)s участників"
 
 msgid "Me"
 msgstr "Я"
@@ -219,26 +226,26 @@ msgstr "Відповісти..."
 
 #, python-format
 msgid "Reply to %(sender_name)s"
-msgstr ""
+msgstr "Відповісти %(sender_name)s"
 
 #, python-format
 msgid "Reply to all %(adressee_count)s"
-msgstr ""
+msgstr "Відповісти всім %(adressee_count)s"
 
 msgid "Your reply could not be matched to an existing message."
-msgstr ""
+msgstr "Ваша відповідь не може бути поєднана з існуючим повідомленням."
 
 msgid "An internal error occured."
-msgstr ""
+msgstr "Сталася внутрішня помилка."
 
 msgid "The email adress you sent the reply from is not the one associated with your user account. Please send direct replies only from the email adress you are registered with on the site!"
-msgstr ""
+msgstr "Електронна адреса, з якої Ви надіслали відповідь, не зв’язана з Вашим акаунтом. Будь ласка, надсилайте відповіді тільки з тих електронних адрес, які Ви зареєстрували на сайті!"
 
 msgid "There was an error when processing your message text!"
-msgstr ""
+msgstr "Сталася помилка при обробці тексту Вашого повідомлення!"
 
 msgid "Your direct reply failed!"
-msgstr ""
+msgstr "Ваша пряма відповідь не доставлена!"
 
 msgid "Select at least one object."
 msgstr "Виберіть щонайменше одного отримувача."
@@ -250,7 +257,7 @@ msgid "Messages or conversations successfully deleted."
 msgstr "Повідомлення успішно видалені."
 
 msgid "Messages were marked as read."
-msgstr ""
+msgstr "Повідомлення позначені як прочитані."
 
 msgid "Messages or conversations successfully recovered."
 msgstr "Повідомлення успішно відновлені."
