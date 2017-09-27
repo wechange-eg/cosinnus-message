@@ -232,6 +232,8 @@ def write_postman_message(user, sender, subject, text):
         @param subject: The text-only subject text of the message.
         @param text: The text-only body text of the message. 
         @param return: True if successful, else False """
+    if len(subject) > PostmanMessage.SUBJECT_MAX_LENGTH:
+        subject = subject[:PostmanMessage.SUBJECT_MAX_LENGTH]
     kwargs = {
        'initial': {},
        'sender': sender,
