@@ -9,7 +9,7 @@
 {% block postman_content %}
 <!-- a box with semi transparent background -->
 <div class="content-box">
-    <form action="{% if next_url %}?next={{ next_url|urlencode }}{% endif %}" method="post">
+    <form action="{% if next_url %}?next={{ next_url|urlencode }}{% endif %}" class="form-horizontal" method="post">
     {% csrf_token %}
     {{ form.non_field_errors }}
     
