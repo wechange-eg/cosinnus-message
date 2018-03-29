@@ -1,10 +1,12 @@
 from __future__ import unicode_literals
 
 from django import VERSION
-from django.conf import settings
+from cosinnus.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from cosinnus.views.attached_object import AttachableViewMixin
+from cosinnus.utils.permissions import check_user_superuser
+from django.core.exceptions import PermissionDenied
 try:
     from django.contrib.auth import get_user_model  # Django 1.5
 except ImportError:
@@ -158,6 +160,16 @@ class TrashView(FolderMixin, TemplateView):
     template_name = 'postman/trash.html'
 
 
+class RestrictRecipientMixin(object):
+    
+    def check_restricted_recipient(self, message):
+        if message.multi_conversation:
+            recipient_group_slugs = message.multi_conversation.targetted_groups.all().values_list('slug', flat=True)
+            if getattr(settings, 'NEWW_FORUM_GROUP_SLUG') in recipient_group_slugs and not check_user_superuser(self.request.user):
+                return True
+        return False
+    
+
 class ComposeMixin(AttachableViewMixin, NamespaceMixin, object):
     """
     Code common to the write and reply views.
@@ -276,7 +288,7 @@ class WriteView(ComposeMixin, FormView):
         return kwargs
 
 
-class ReplyView(ComposeMixin, FormView):
+class ReplyView(ComposeMixin, RestrictRecipientMixin, FormView):
     """
     Display a form to compose a reply.
 
@@ -316,6 +328,10 @@ class ReplyView(ComposeMixin, FormView):
                 kwargs['data'] = post
             kwargs['recipient'] = self.parent.sender or self.parent.email
             if self.parent.multi_conversation:
+                # limit answering to forum:
+                if self.check_restricted_recipient(self.parent):
+                    raise PermissionDenied(_('Only Administrators may send a message to this project/group!'))
+                
                 post = kwargs['data'].copy()  # self.request.POST is immutable
                 post.setlist('recipients', ['user:%d' % rec.id for rec in self.parent.multi_conversation.participants.all()])
                 kwargs['data'] = post
@@ -327,7 +343,7 @@ class ReplyView(ComposeMixin, FormView):
         return context
 
 
-class DisplayMixin(NamespaceMixin, object):
+class DisplayMixin(NamespaceMixin, RestrictRecipientMixin, object):
     """
     Code common to the by-message and by-conversation views.
 
@@ -371,12 +387,14 @@ class DisplayMixin(NamespaceMixin, object):
                 break
         else:
             received = None
+            
         context.update({
             'pm_messages': self.msgs,
             'archived': archived,
             'reply_to_pk': received.pk if received else None,
             'form': self.form_class(initial=received.quote(*self.formatters)) if received else None,
             'next_url': self.request.GET.get('next') or reverse('postman:inbox', current_app=self.request.resolver_match.namespace),
+            'disable_reply_all': self.check_restricted_recipient(self.msgs[0]),
         })
         return context
 

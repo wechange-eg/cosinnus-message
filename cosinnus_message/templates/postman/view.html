@@ -161,7 +161,7 @@
 	        </button>
         {% endif %}
         
-        {% if participants|length > 1 %}
+        {% if participants|length > 1 and not disable_reply_all %}
 		    <button type="submit" onclick="this.form.reply_all.value='1';" class="btn btn-emphasized" style="width:200px;">
 	            <ul class="media-list">
 	                <li class="media">

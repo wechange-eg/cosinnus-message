@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-05 13:07+0100\n"
+"POT-Creation-Date: 2018-03-29 18:40+0200\n"
 "PO-Revision-Date: 2017-09-05 16:05+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -27,6 +27,9 @@ msgstr "Повідомлення"
 
 msgid "Recipients"
 msgstr "Адресати"
+
+msgid "Only Administrators may send a message to this project/group!"
+msgstr ""
 
 msgid "Additional Recipients"
 msgstr "Додаткові адресати"
