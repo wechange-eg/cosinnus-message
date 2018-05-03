@@ -20,6 +20,7 @@ from cosinnus.models.group import CosinnusPortal
 
 from cosinnus_message.models import CosinnusMailbox
 from django.core.exceptions import MultipleObjectsReturned
+from postman.views import RestrictRecipientMixin
 
 logger = logging.getLogger('cosinnus')
 
@@ -126,6 +127,12 @@ def process_direct_reply_messages(messages=None, no_delete=False):
         # if this doesn't match, likely a valid user just replied from the wrong email account, so we send them an error message back
         if sender_email_bad or not user == postman_message.recipient:
             send_direct_reply_error_mail(replier_email, text, _('The email adress you sent the reply from is not the one associated with your user account. Please send direct replies only from the email adress you are registered with on the site!'))
+            continue
+        
+        # Forum group messages can only be replied to by superusers
+        checkMixin = RestrictRecipientMixin()
+        if checkMixin.check_restricted_recipient(postman_message, user):
+            send_direct_reply_error_mail(replier_email, text, _('Only Administrators may send a message to this project/group!'))
             continue
         
         # error out on empty texts
@@ -267,3 +274,15 @@ def _test_postman_reply(direct_reply_hash, user_email, test_text):
     user = get_user_model().objects.get(email=user_email)
     return reply_to_postman_message(msg, user, test_text)
 
+
+def _test_direct_reply_mail(sender_email=None, body_text=None):
+    """ Internal purposes only """
+    class Msg():
+        from_header = sender_email or 'testuser83@nowhere.com'
+        text = body_text or """
+            > --------------------------------------------------------------------
+            > DIRECT-REPLY CODE: 
+            > directreply+1+VYEVjxComiYWZ95a7Vj3FJ3VadWzQ58C@wachstumswende.de 
+            -------------------------------------------------------------------------------
+        """
+    process_direct_reply_messages([Msg()], True)
