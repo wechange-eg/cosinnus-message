@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wechange RU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-29 18:40+0200\n"
-"PO-Revision-Date: 2017-08-15 17:40+0200\n"
+"POT-Creation-Date: 2018-06-19 14:36+0200\n"
+"PO-Revision-Date: 2018-06-17 23:40+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "Language: ru\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 2.0.6\n"
 
 msgid "Message"
 msgstr "Сообщение"
@@ -111,7 +111,7 @@ msgid "Please enter message..."
 msgstr "Пожалуйста, введите сообщение..."
 
 msgid "Send"
-msgstr "Отправить "
+msgstr "Отправить"
 
 msgid "Dear user,"
 msgstr "Уважаемый пользователь,"
@@ -136,7 +136,7 @@ msgstr "’%(sender_first)s %(sender_last)s' отправил(а) на сооб�
 
 #, python-format
 msgid "You have received a message from the user '%(sender_first)s %(sender_last)s'."
-msgstr "Вы получили сообщение от пользователя '%(sender_first)s %(sender_last)s'"
+msgstr "Вы получили сообщение от пользователя '%(sender_first)s %(sender_last)s‘."
 
 msgid "This message was sent in a conversation with: "
 msgstr "Сообщение было отправлено в диалог с: "
@@ -238,7 +238,7 @@ msgid "Your reply could not be matched to an existing message."
 msgstr "Ваш ответ не может быть соотнесен с существующим сообщением."
 
 msgid "An internal error occured."
-msgstr "Случилась внутренняя ошибка"
+msgstr "Случилась внутренняя ошибка."
 
 msgid "The email adress you sent the reply from is not the one associated with your user account. Please send direct replies only from the email adress you are registered with on the site!"
 msgstr "Электронный адрес, с которого Вы отправляете ответ, не связан с Вашим аккаунтом. Пожалуйста, отправляйте ответы только с тех электронных адресов, которые Вы зарегистрировали на сайте!"
@@ -250,19 +250,19 @@ msgid "Your direct reply failed!"
 msgstr "Ваш прямой ответ не доставлен!"
 
 msgid "Select at least one object."
-msgstr "Выберите хотя бы один объект"
+msgstr "Выберите хотя бы один объект."
 
 msgid "Messages or conversations successfully archived."
-msgstr "Сообщения или диалоги архивированы"
+msgstr "Сообщения или диалоги архивированы."
 
 msgid "Messages or conversations successfully deleted."
-msgstr "Сообщения или диалоги удалены"
+msgstr "Сообщения или диалоги удалены."
 
 msgid "Messages were marked as read."
 msgstr "Сообщения отмечены как прочитанные."
 
 msgid "Messages or conversations successfully recovered."
-msgstr "Сообщения или диалоги восстановлены"
+msgstr "Сообщения или диалоги восстановлены."
 
 #~ msgid "You have received a copy of a response from the user '%(sender_first)s %(sender_last)s'."
 #~ msgstr "Вы получили копию ответа от пользователя '%(sender_first)s %(sender_last)s'"
