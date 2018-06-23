@@ -8,47 +8,45 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-23 16:59+0200\n"
-"PO-Revision-Date: 2018-03-29 18:41+0200\n"
+"PO-Revision-Date: 2018-06-23 16:53+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: de\n"
+"Language: pl\n"
 "X-Generator: Poedit 1.8.4\n"
 
 msgid "Message"
-msgstr "Nachricht"
+msgstr "Wiadomość"
 
-# The Cosinnus App Name
 msgctxt "the_app"
 msgid "message"
-msgstr "Nachrichten"
+msgstr "wiadomość"
 
 msgid "Recipients"
-msgstr "Empfänger"
+msgstr "Odbiorcy"
 
 msgid "Only Administrators may send a message to this project/group!"
-msgstr "Nur Administratoren dürfen Nachrichten an dieses Projekt/Gruppe schicken!"
+msgstr "Tylko Administratorzy mogą wysyłać wiadomości do tego projektu/grupy!"
 
 msgid "Additional Recipients"
-msgstr "Zusätzliche Empfänger"
+msgstr "Dodatkowi Odbiorcy"
 
 msgid "Undefined recipient."
-msgstr "Kein Empfänger angegeben"
+msgstr "Odbiorca nieokreślony."
 
 msgid "Portal"
-msgstr ""
+msgstr "Portal"
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
-msgstr "Du kannst Dateien und Bilder nur anhängen, wenn du Mitglied im Forum bist. Du kannst hier beitreten:"
+msgstr "Możesz załączać pliki i zdjęcia do wiadomości tylko, jeżeli jesteś członkiem forum. Możesz dołączyć tutaj:"
 
 msgid "Forum"
-msgstr ""
+msgstr "Forum"
 
 msgid "Messages"
-msgstr "Nachrichten"
+msgstr "Wiadomości"
 
 #, python-format
 msgid ""
@@ -65,237 +63,203 @@ msgid ""
 "\n"
 "If this keeps happening, consider logging in and sending the reply directly on the site.\n"
 msgstr ""
-"Deine direkte Antwort konnte nicht erstellt werden!\n"
+"Twoja odpowiedź nie mogła zostać przetworzona!\n"
 "\n"
-"Der Grund war: %(reason)s\n"
+"Powodem było: %(reason)s\n"
 "\n"
 "\n"
-"Dein Antworttext war: \n"
+"Twoja wiadomość to:\n"
 "--------------------------------\n"
 "%(text)s\n"
 "--------------------------------\n"
 "\n"
 "\n"
-"Wenn dies weiterhin passiert kannst du dich auch auf der Webseite einloggen und die Nachricht direkt dort beantworten.\n"
+"Jeśli ta sytuacja się powtarza, spróbuj zalogować się i wysłać odpowiedź bezpośrednio na stronie.\n"
 
 msgid ""
 "Note: This message is issued by an automated system.\n"
 "Do not reply, this would not be taken into account."
-msgstr "Diese Nachricht wurde von einem automatisierten System erstellt - bitte antworte nicht darauf. "
+msgstr ""
+"Uwaga: Ta wiadomość została wygenerowana przez automatyczny system.\n"
+"Nie odpowiadaj na tę wiadomość, nie zostanie ona odczytana."
 
 msgid "Archived Messages"
-msgstr "Archivierte Nachricht"
+msgstr "Wiadomości Zarchiwizowane"
 
 msgid "Delete"
-msgstr "Löschen"
+msgstr "Usuń"
 
 msgid "Archive"
-msgstr "Archivieren"
+msgstr "Archiwum"
 
 msgid "Undelete"
-msgstr "Löschen rückgängig machen"
+msgstr "Cofnij usunięcie"
 
 msgid "Mark as Read"
-msgstr "Gelesen"
+msgstr "Oznacz jako Przeczytane"
 
 msgid "Mark All"
-msgstr "Alle markieren"
+msgstr "Zaznacz wszystkie"
 
 msgid "Deselect All"
-msgstr "Keine markieren"
+msgstr "Odznacz wszystkie"
 
 msgid "No messages"
-msgstr "Keine Nachrichten."
+msgstr "Brak wiadomości"
 
 msgid "Please enter message..."
-msgstr "Bitte Nachricht eingeben..."
+msgstr "Wpisz wiadomość..."
 
 msgid "Send"
-msgstr "Absenden"
+msgstr "Wyślij"
 
 msgid "Dear user,"
-msgstr "Hallo,"
+msgstr "Drogi użytkowniku,"
 
 #, python-format
 msgid "On %(date)s, you asked to send a message to the user '%(recipient)s'."
-msgstr ""
+msgstr "W dniu %(date)s chciałeś wysłać wiadomość do użytkownika ‘%(recipient)s’."
 
 msgid "Your message has been rejected by the moderator"
-msgstr ""
+msgstr "Twoja wiadomość została odrzucona przez moderatora"
 
 msgid ", for the following reason:"
-msgstr ""
+msgstr "z następującego powodu:"
 
 #, python-format
 msgid "'%(sender_first)s %(sender_last)s' has replied to your message from %(date)s:"
-msgstr "'%(sender_first)s %(sender_last)s' hat dir auf deine Nachricht vom %(date)s geantwortet:"
+msgstr "'%(sender_first)s %(sender_last)s' odpowiedział/a na Twoją wiadomość z dnia %(date)s:"
 
 #, python-format
 msgid "'%(sender_first)s %(sender_last)s' has posted a message in one of your conversations."
-msgstr "'%(sender_first)s %(sender_last)s' hat eine Nachricht in einer Unterhaltung geschrieben."
+msgstr "‘%(sender_first)s %(sender_last)s' dodał wiadomość w jednej z Twoich konwersacji."
 
 #, python-format
 msgid "You have received a message from the user '%(sender_first)s %(sender_last)s'."
-msgstr "du hast eine Nachricht von '%(sender_first)s %(sender_last)s' erhalten:"
+msgstr "Otrzymałeś/aś wiadomość od użytkownika '%(sender_first)s %(sender_last)s'."
 
 msgid "This message was sent in a conversation with: "
-msgstr "Diese Nachricht wurde in einer Unterhaltung gesendet mit:"
+msgstr "Ta wiadomość została wysłana w konwersacji z:"
 
 msgid "Project/Group"
-msgstr "Projekt/Gruppe"
+msgstr "Projekt/Grupa"
 
 msgid "Follow this link to view the message on the site"
-msgstr "Folge diesem Link, um die Nachricht auf der Seite anzusehen"
+msgstr "Kliknij w ten link, aby wyświetlić wiadomość na stronie"
 
 msgid "If you do not wish to receive any more emails from us, click here to unsubscribe:"
-msgstr "Wenn du überhaupt keine Emails mehr von uns erhalten möchtest, klicke hier um sie abzubestellen:"
+msgstr "Jeśli nie chcesz od nas otrzymywać wiadomości, kliknij tu, aby wycofać subskrypcję:"
 
 msgid "You can also reply to this message directly by replying to this email. When you do, please leave the subject and addressee as it is. The email you reply from *must* be the one you are registered with on the site."
-msgstr "Du kannst auf diese Nachricht auch direkt antworten, indem du diese E-Mail beantwortest. Wenn du das tust, belasse bitte den Empfänger und den Betreff so wie sie sind. Die E-Mail *muss* von der selben Addresse geschickt werden mit der du auch auf der Webseite registriert bist."
+msgstr "Możesz również odpowiedzieć na tę wiadomość poprzez odpowiedź na tego e-maila. W takim przypadku nie zmieniaj tematu ani adresata. E-mail, z którego odpowiadasz *musi* być tym, który przypisany jest do konta na stronie."
 
 msgid "WARNING: Your reply will be sent to all participants of this conversation!"
-msgstr "ACHTUNG: Deine Antwort wird an alle Teilnehmer dieser Unterhaltung gesendet!"
+msgstr "UWAGA: Twoja odpowiedź zostanie wysłana do wszystkich uczestników konwersacji!"
 
 #, python-format
 msgid "Message \"%(subject)s\" on the site %(sitename)s"
-msgstr "Nachricht \"%(subject)s\" auf %(sitename)s"
+msgstr "Wiadomość \"%(subject)s\" na stronie %(sitename)s"
 
 msgid "Dear visitor,"
-msgstr ""
+msgstr "Drogi gościu,"
 
 msgid "As a reminder, please find below the content of your message."
-msgstr ""
+msgstr "Jako przypomnienie poniżej możesz przeczytać treść Twojej wiadomości."
 
 #, python-format
 msgid "On %(date)s, you sent a message to the user '%(sender_first)s %(sender_last)s'."
-msgstr "Am %(date)s, hast du eine Nachricht an Benutzer_in '%(sender_first)s %(sender_last)s' geschrieben."
+msgstr "W dniu %(date)s wysłałeś wiadomość do użytkownika '%(sender_first)s %(sender_last)s'."
 
 msgid "Please find below the answer from your correspondent."
-msgstr ""
+msgstr "Poniżej możesz przeczytać odpowiedź od Twojego rozmówcy."
 
 msgid "Thank you again for your interest in our services."
-msgstr ""
+msgstr "Dziękujemy za zainteresowanie naszymi usługami."
 
 msgid "For more comfort, we encourage you to open an account on the site."
-msgstr ""
+msgstr "W celu zwiększenia wygody zalecamy założenie konta na stronie"
 
 msgid "The site administrator"
-msgstr ""
+msgstr "Administrator strony"
 
 msgid "Inbox"
-msgstr "Posteingang"
+msgstr "Skrzynka odbiorcza"
 
 msgid "Sent"
-msgstr "Gesendet"
+msgstr "Wysłane"
 
 msgctxt "the noun for an Archive"
 msgid "Archive"
-msgstr "Archiv"
+msgstr "Archiwum"
 
 msgid "Trash"
-msgstr "Papierkorb"
+msgstr "Kosz"
 
 msgid "Write"
-msgstr "Verfassen"
+msgstr "Napisz"
 
 msgid "Reply"
-msgstr "Antworten"
+msgstr "Odpowiedz"
 
 msgid "Recipient"
-msgstr "Empfänger"
+msgstr "Odbiorca"
 
 msgid "Conversation"
-msgstr "Unterhaltung"
+msgstr "Rozmowa"
 
 msgid "Conversation with members from"
-msgstr "Unterhaltung mit Mitgliedern von"
+msgstr "Rozmowa z członkami z"
 
 msgid "Conversation with"
-msgstr "Unterhaltung mit"
+msgstr "Rozmowa z"
 
 #, python-format
 msgid "Show all %(count)s participants"
-msgstr "Zeige alle %(count)s Teilnehmer"
+msgstr "Pokaż wszystkich %(count)s członków"
 
 msgid "Me"
-msgstr "Ich"
+msgstr "Ja"
 
 msgid "Answer"
-msgstr "Antworten"
+msgstr "Odpowiedź"
 
 msgid "Reply..."
-msgstr "Antworten..."
+msgstr "Odpowiedz..."
 
 #, python-format
 msgid "Reply to %(sender_name)s"
-msgstr "%(sender_name)s antworten"
+msgstr "Opowiedz %(sender_name)s"
 
 #, python-format
 msgid "Reply to all %(adressee_count)s"
-msgstr "Allen %(adressee_count)s antworten"
+msgstr "Odpowiedz wszystkim %(adressee_count)s"
 
 msgid "Your reply could not be matched to an existing message."
-msgstr "Für deine Antwort kontte die Urpsrungsnachricht nicht gefunden werden."
+msgstr "Twoja odpowiedź nie mogła zostać połączona z istniejącą wiadomością."
 
 msgid "An internal error occured."
-msgstr "Ein interner Fehler ist aufgetreten."
+msgstr "Wystąpił błąd wewnętrzny."
 
 msgid "The email adress you sent the reply from is not the one associated with your user account. Please send direct replies only from the email adress you are registered with on the site!"
-msgstr "Die Email-Addresse von der die Antwort gesendet hast, ist nicht die, mit der dein Benutzerkonto assoziiert ist. Bitte schicke direkte Antworten nur von der Email-Addresse mit der du auf der Webseite registriert bist!"
+msgstr "Adres e-mail, z którego wysłałeś odpowiedź, nie jest połączony z Twoim kontem użytkownika. Bezpośrednie odpowiedzi należy wysyłać tylko z adresu e-mail połączonego z kontem na stronie!"
 
 msgid "There was an error when processing your message text!"
-msgstr "Es gab einen Fehler beim verarbeiten deines Nachrichtentextes!"
+msgstr "Wystąpił błąd podczas przetwarzania tekstu wiadomości!"
 
 msgid "Your direct reply failed!"
-msgstr "Deine direkte Antwort ist fehlgeschlagen!"
+msgstr "Odpowiedź bezpośrednia nie powiodła się!"
 
 msgid "Select at least one object."
-msgstr "Wählen sie mindestens einen Empfänger aus!"
+msgstr "Wybierz przynajmniej jeden obiekt."
 
 msgid "Messages or conversations successfully archived."
-msgstr "Nachrichten wurden erfolgreich archiviert."
+msgstr "Wiadomości lub rozmowy zarchiwizowane pomyślnie."
 
 msgid "Messages or conversations successfully deleted."
-msgstr "Nachrichten wurden erfolgreich gelöscht."
+msgstr "Wiadomości lub rozmowy usunięte pomyślnie."
 
 msgid "Messages were marked as read."
-msgstr "Nachrichten als Gelesen markiert."
+msgstr "Wiadomości oznaczono jako przeczytane."
 
 msgid "Messages or conversations successfully recovered."
-msgstr "Nachrichten wurden erfolgreich wiederhergestellt."
-
-#~ msgid "Please select a recipient for the message!"
-#~ msgstr "Bitte wählen sie mindestens einen Empfänger aus!"
-
-#~ msgid "Text"
-#~ msgstr "Nachrichtentext"
-
-#~ msgid "Broadcast"
-#~ msgstr "Rundmail (Alle ProjektMitglieder)"
-
-#~ msgid "Author"
-#~ msgstr "Autor"
-
-#~ msgid "%(sender)s via %(group)s: \"%(title)s\""
-#~ msgstr "%(sender)s via %(group)s: \"%(title)s\""
-
-#~ msgid "Error sending mail! - %(reason)s"
-#~ msgstr "Fehler beim Versenden der e-Mail-Nachricht! - %(reason)s"
-
-#~ msgid "Send message"
-#~ msgstr "Nachricht versenden"
-
-#~ msgid "No tags available."
-#~ msgstr "Es gibt keine Tags."
-
-#~ msgid "Title"
-#~ msgstr "Titel"
-
-#~ msgid "Created"
-#~ msgstr "Erstellt"
-
-#~ msgid "Actions"
-#~ msgstr "Aktionen"
-
-#~ msgid "Cancel"
-#~ msgstr "Abbrechen"
+msgstr "Wiadomości lub rozmowy przywrócone pomyślnie."
