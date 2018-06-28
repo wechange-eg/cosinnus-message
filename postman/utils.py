@@ -81,13 +81,16 @@ def email(subject_template, message_template, recipient_list, object, action, si
     subject = ''.join(subject.splitlines())
     # check if we have a connected mailbox for direct replies, and if so, set the sender to a specified email, so that users
     # can directly reply to them
-    if CosinnusPortal.get_current().mailboxes.all().count() > 0:
-        hash_vars = {
+    hash_vars = {
+        'portal_name': force_text(_(settings.COSINNUS_BASE_PAGE_TITLE_TRANS)),
+        'default_from': settings.DEFAULT_FROM_EMAIL,
+    }
+    if CosinnusPortal.get_current().mailboxes.filter(active=True).count() > 0:
+        hash_vars.update({
+            'domain': settings.DEFAULT_FROM_EMAIL.split('@')[1],
             'portal_id': CosinnusPortal.get_current().id,
             'hash': object.direct_reply_hash,
-            'domain': settings.DEFAULT_FROM_EMAIL.split('@')[1],
-            'portal_name': force_text(_(settings.COSINNUS_BASE_PAGE_TITLE_TRANS)),
-        }
+        })
         sender = '%(portal_name)s <directreply@%(domain)s>' % hash_vars
         hash_code = 'directreply+%(portal_id)d+%(hash)s@%(domain)s' % hash_vars
         ctx_dict.update({
@@ -95,7 +98,7 @@ def email(subject_template, message_template, recipient_list, object, action, si
             'hash_code': hash_code,
         })
     else:
-        sender = settings.DEFAULT_FROM_EMAIL
+        sender = '%(portal_name)s <%(default_from)s>' % hash_vars
         
     #message = render_to_string(message_template, ctx_dict)
     # during the development phase, consider using the setting: EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
