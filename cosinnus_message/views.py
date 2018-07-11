@@ -27,6 +27,7 @@ from cosinnus.models.tagged import BaseTagObject
 from cosinnus.utils.user import filter_active_users,\
     get_user_query_filter_for_search_terms, get_group_select2_pills,\
     get_user_select2_pills
+from cosinnus.templatetags.cosinnus_tags import full_name
 
 try:
     from django.utils.timezone import now  # Django 1.4 aware datetimes
@@ -180,13 +181,15 @@ class UserSelect2View(Select2View):
         groups = [group for group in groups if all([term.lower() in group.name.lower() for term in terms])]
 
         # these result sets are what select2 uses to build the choice list
-        
-        
-        
         #results = [("user:" + six.text_type(user.id), render_to_string('cosinnus/common/user_select_pill.html', {'type':'user','text':escape(user.first_name) + " " + escape(user.last_name), 'user': user}),)
         #           for user in users]
         #results.extend([("group:" + six.text_type(group.id), render_to_string('cosinnus/common/user_select_pill.html', {'type':'group','text':escape(group.name)}),)
         #               for group in groups])
+        
+        # sort results
+        
+        users = sorted(users, key=lambda useritem: full_name(useritem).lower())
+        groups = sorted(groups, key=lambda groupitem: groupitem.name.lower())
         
         results = get_user_select2_pills(users)
         results.extend(get_group_select2_pills(groups))
