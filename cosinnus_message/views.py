@@ -22,7 +22,8 @@ from django.utils.html import escape
 from django.template.loader import render_to_string
 from cosinnus.utils.urls import safe_redirect
 from django.contrib.auth import get_user_model
-from cosinnus.utils.permissions import check_user_can_see_user
+from cosinnus.utils.permissions import check_user_can_see_user,\
+    check_user_superuser
 from cosinnus.models.tagged import BaseTagObject
 from cosinnus.utils.user import filter_active_users,\
     get_user_query_filter_for_search_terms, get_group_select2_pills,\
@@ -35,6 +36,7 @@ except ImportError:
     from datetime import datetime
     now = datetime.now
 from django.utils.translation import ugettext_lazy as _
+from cosinnus.conf import settings
 
 User = get_user_model()
 
@@ -178,7 +180,9 @@ class UserSelect2View(Select2View):
         # instead
         groups = set(CosinnusGroup.objects.get_for_user(request.user)).union(
             CosinnusGroup.objects.public())
-        groups = [group for group in groups if all([term.lower() in group.name.lower() for term in terms])]
+        
+        forum_slug = getattr(settings, 'NEWW_FORUM_GROUP_SLUG', None)
+        groups = [group for group in groups if all([term.lower() in group.name.lower() for term in terms]) and (check_user_superuser(request.user) or group.slug != forum_slug)]
 
         # these result sets are what select2 uses to build the choice list
         #results = [("user:" + six.text_type(user.id), render_to_string('cosinnus/common/user_select_pill.html', {'type':'user','text':escape(user.first_name) + " " + escape(user.last_name), 'user': user}),)
