@@ -45,37 +45,47 @@ class CustomWriteForm(BaseWriteForm):
         users = []
         initial_users = kwargs['initial'].get('recipients', None)
         preresults = []
+        use_ids = False
+        recipient_list = []
+        
         if initial_users:
-            usernames = initial_users.split(', ')
-            users = get_user_model().objects.filter(username__in=usernames)
-            preresults = get_user_select2_pills(users, text_only=True)
+            recipient_list = initial_users.split(', ')
             # delete the initial data or our select2 field initials will be overwritten by django
             if 'recipients' in kwargs['initial']:
                 del kwargs['initial']['recipients']
             if 'recipients' in self.initial:
                 del self.initial['recipients']
-            
         elif 'data' in kwargs and kwargs['data'].getlist('recipients'):
-            user_ids, group_ids = self.fields['recipients'].get_user_and_group_ids_for_value(kwargs['data'].getlist('recipients'))
+            recipient_list = kwargs['data'].getlist('recipients')
+            use_ids = True
             
-            # restrict writing to the forum group
-            try:
-                forum_group_id = CosinnusGroup.objects.get_cached(slugs=getattr(settings, 'NEWW_FORUM_GROUP_SLUG')).id
-                if forum_group_id in group_ids and not check_user_superuser(kwargs['sender']):
+        if recipient_list:
+            user_tokens, group_tokens = self.fields['recipients'].get_user_and_group_ids_for_value(recipient_list, intify=use_ids)
+                
+            if use_ids:
+                # restrict writing to the forum group
+                try:
+                    forum_group_id = CosinnusGroup.objects.get_cached(slugs=getattr(settings, 'NEWW_FORUM_GROUP_SLUG')).id
+                    if forum_group_id in group_tokens and not check_user_superuser(kwargs['sender']):
+                        self.restricted_recipient_flag = True
+                except CosinnusGroup.DoesNotExist:
+                    pass
+                users = get_user_model().objects.filter(id__in=user_tokens)
+                groups = CosinnusGroup.objects.get_cached(pks=group_tokens)
+            else:
+                # restrict writing to the forum group
+                if getattr(settings, 'NEWW_FORUM_GROUP_SLUG') in group_tokens:
                     self.restricted_recipient_flag = True
-            except CosinnusGroup.DoesNotExist:
-                pass
-            
-            users = get_user_model().objects.filter(id__in=user_ids)
-            groups = CosinnusGroup.objects.get_cached(pks=group_ids)
+                users = get_user_model().objects.filter(username__in=user_tokens)
+                groups = CosinnusGroup.objects.get_cached(slugs=group_tokens)
             # save away for later
             self.targetted_groups = groups
             
+            # TODO: sascha: returning unescaped html here breaks the javascript of django-select2
+            # we need to cheat our way around select2's annoying way of clearing initial data fields
             preresults = get_user_select2_pills(users, text_only=True)
             preresults.extend(get_group_select2_pills(groups, text_only=True))
                 
-        # TODO: sascha: returning unescaped html here breaks the javascript of django-select2
-        # we need to cheat our way around select2's annoying way of clearing initial data fields
         self.fields['recipients'].choices = preresults
         self.fields['recipients'].initial = [key for key,val in preresults]
         self.initial['recipients'] = self.fields['recipients'].initial

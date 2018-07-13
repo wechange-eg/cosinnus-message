@@ -120,4 +120,5 @@ urlpatterns = patterns('',
     url(r'^papierkorb/(?:(?P<option>'+OPTIONS+')/)?$', TrashView.as_view(), name='trash'),
     url(r'^antworten/(?P<message_id>[\d:]+)/$', ReplyView.as_view(form_class=CustomReplyForm), name='reply'),
     url(r'^neu/(?:(?P<recipients>[^/]+)/)?$', WriteView.as_view(form_classes=(CustomWriteForm, CustomWriteForm)), name='write'),
+    url(r'^g/neu/(?:(?P<group_recipients>[^/]+)/)?$', WriteView.as_view(form_classes=(CustomWriteForm, CustomWriteForm)), name='write-group'),
 )

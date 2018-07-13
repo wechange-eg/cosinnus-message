@@ -5,7 +5,8 @@ from cosinnus.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from cosinnus.views.attached_object import AttachableViewMixin
-from cosinnus.utils.permissions import check_user_superuser
+from cosinnus.utils.permissions import check_user_superuser,\
+    check_user_can_see_user
 from django.core.exceptions import PermissionDenied
 try:
     from django.contrib.auth import get_user_model  # Django 1.5
@@ -264,18 +265,29 @@ class WriteView(ComposeMixin, FormView):
         initial = super(WriteView, self).get_initial()
         if self.request.method == 'GET':
             initial.update(self.request.GET.items())  # allow optional initializations by query string
-            recipients = self.kwargs.get('recipients')
-            if recipients:
+            
+            recipients = []
+            user_recipients = self.kwargs.get('recipients')
+            if user_recipients:
                 # order_by() is not mandatory, but: a) it doesn't hurt; b) it eases the test suite
                 # and anyway the original ordering cannot be respected.
                 user_model = get_user_model()
                 name_user_as = getattr(settings, 'POSTMAN_NAME_USER_AS', user_model.USERNAME_FIELD)
-                usernames = list(user_model.objects.values_list(name_user_as, flat=True).filter(
+                users = user_model.objects.filter(
                     is_active=True,
-                    **{'{0}__in'.format(name_user_as): [r.strip() for r in recipients.split(':') if r and not r.isspace()]}
-                ).order_by(name_user_as))
+                    **{'{0}__in'.format(name_user_as): [r.strip() for r in user_recipients.split(':') if r and not r.isspace()]}
+                ).order_by(name_user_as)
+                usernames = ['user:%s' % getattr(user, name_user_as) for user in users if check_user_can_see_user(self.request.user, user)]
                 if usernames:
-                    initial['recipients'] = ', '.join(usernames)
+                    recipients.extend(usernames)
+            group_recipients = self.kwargs.get('group_recipients')
+            if group_recipients:
+                groups = ['group:%s' % group_slug for group_slug in group_recipients.split(':')]
+                if groups:
+                    recipients.extend(groups)
+            
+            initial['recipients'] = ', '.join(recipients)
+            
         return initial
 
     def get_form_kwargs(self):
