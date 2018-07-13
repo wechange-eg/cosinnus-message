@@ -81,11 +81,10 @@ class CustomWriteForm(BaseWriteForm):
             # save away for later
             self.targetted_groups = groups
             
-            # TODO: sascha: returning unescaped html here breaks the javascript of django-select2
-            # we need to cheat our way around select2's annoying way of clearing initial data fields
-            preresults = get_user_select2_pills(users, text_only=True)
-            preresults.extend(get_group_select2_pills(groups, text_only=True))
+            preresults = get_user_select2_pills(users, text_only=False)
+            preresults.extend(get_group_select2_pills(groups, text_only=False))
                 
+        # we need to cheat our way around select2's annoying way of clearing initial data fields
         self.fields['recipients'].choices = preresults
         self.fields['recipients'].initial = [key for key,val in preresults]
         self.initial['recipients'] = self.fields['recipients'].initial
