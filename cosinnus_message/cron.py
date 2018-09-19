@@ -24,6 +24,6 @@ class ProcessDirectReplyMails(CosinnusCronJobBase):
         update_mailboxes()
         try:
             process_direct_reply_messages()
-        except Exception, e:
+        except Exception as e:
             logger.error('Process_direct_reply_messages() threw an exception! (in extra)', extra={'exception': force_text(e)})
             

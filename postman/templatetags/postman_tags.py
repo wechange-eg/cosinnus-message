@@ -137,7 +137,7 @@ def postman_order_by(parser, token):
     except KeyError:
         raise TemplateSyntaxError(
             "'{0}' is not a valid argument to '{1}' tag."
-            " Must be one of: {2}".format(field_name, tag_name, ORDER_BY_MAPPER.keys()))
+            " Must be one of: {2}".format(field_name, tag_name, list(ORDER_BY_MAPPER.keys())))
     return OrderByNode(field_code)
 
 

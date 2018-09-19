@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from builtins import range
+from builtins import object
 import logging
 import re
 
@@ -170,7 +172,7 @@ def clean_reply_message_quotation(text):
     # remove empty beginning and trailing lines
     def _remove_empty_trailing_lines_till_text(_lines):
         if not _lines: return _lines
-        for index in reversed(xrange(len(_lines))):
+        for index in reversed(range(len(_lines))):
             if len(_lines[index].strip()) == 0:
                 del _lines[index]
             else:
@@ -277,7 +279,7 @@ def _test_postman_reply(direct_reply_hash, user_email, test_text):
 
 def _test_direct_reply_mail(sender_email=None, body_text=None):
     """ Internal purposes only """
-    class Msg():
+    class Msg(object):
         from_header = sender_email or 'testuser83@nowhere.com'
         text = body_text or """
             > --------------------------------------------------------------------

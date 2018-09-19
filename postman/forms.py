@@ -14,6 +14,8 @@ Examples of customization:
 """
 from __future__ import unicode_literals
 
+from builtins import str
+from builtins import object
 from django import forms
 from django.conf import settings
 from cosinnus.forms.attached_object import FormAttachableMixin
@@ -35,7 +37,7 @@ from .utils import WRAP_WIDTH
 
 class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
     """The base class for other forms."""
-    class Meta:
+    class Meta(object):
         model = Message
         fields = ('body',)
         widgets = {

@@ -32,6 +32,7 @@ INSTALLED_APPS = (
 
 """
 from __future__ import unicode_literals
+from builtins import str
 import copy
 from datetime import datetime, timedelta
 import re
@@ -393,7 +394,7 @@ class ViewTest(BaseTest):
         self.assertRedirects(response, url)
         self.check_message(Message.objects.get(pk=pk+3), is_anonymous)
 
-        for f in data.keys():
+        for f in list(data.keys()):
             if f in ('body',): continue
             d = data.copy()
             del d[f]
@@ -1690,7 +1691,7 @@ class TagsTest(BaseTest):
 
     def test_order_by(self):
         "Test 'postman_order_by'."
-        for k, v in ORDER_BY_MAPPER.items():
+        for k, v in list(ORDER_BY_MAPPER.items()):
             self.check_order_by(k, [(ORDER_BY_KEY, v)])
         self.check_order_by('subject', [(ORDER_BY_KEY, 's')], ORDER_BY_KEY+'=foo')
         self.check_order_by('subject', [(ORDER_BY_KEY, 'S')], ORDER_BY_KEY+'=s')

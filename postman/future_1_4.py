@@ -7,6 +7,7 @@ Implements some features of Django 1.4 when the application is run with a lower 
 
 from __future__ import unicode_literals
 
+from builtins import object
 from django.utils.functional import allow_lazy
 from django.utils.text import truncate_words
 

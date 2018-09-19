@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from builtins import object
 from django.conf import settings  # noqa
 
 from appconf import AppConf
@@ -15,7 +16,7 @@ class CosinnusMessageDefaultSettings(AppConf):
         These are settings used by default in cosinnus apps, such as avatar dimensions, etc.
     """
     
-    class Meta:
+    class Meta(object):
         prefix = ''
         
     POSTMAN_DISALLOW_ANONYMOUS = True  # No anonymous messaging

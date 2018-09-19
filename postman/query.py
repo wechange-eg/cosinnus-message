@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from builtins import object
 from types import MethodType
 
 from django import VERSION

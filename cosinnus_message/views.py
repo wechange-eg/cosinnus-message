@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from builtins import object
 import six
 
 from django.core.urlresolvers import reverse
@@ -92,11 +93,11 @@ class UpdateMessageMixin(object):
         """ This is all we wanted to do that we needed to override the postman views for """
         pks = request.POST.get('pks', None)
         if pks is None:
-            pks = [k.split('__')[1] for k,v in request.POST.items() if 'delete_pk' in k and v=='true']
+            pks = [k.split('__')[1] for k,v in list(request.POST.items()) if 'delete_pk' in k and v=='true']
 
         tpks = request.POST.get('tpks', None)
         if tpks is None:
-            tpks = [k.split('__')[1] for k,v in request.POST.items() if 'delete_tpk' in k and v=='true']
+            tpks = [k.split('__')[1] for k,v in list(request.POST.items()) if 'delete_tpk' in k and v=='true']
         
         if pks or tpks:
             user = request.user

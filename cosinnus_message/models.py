@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from builtins import object
 from cosinnus_message.conf import settings # we need this import here!
 
 from django_mailbox.models import Mailbox
@@ -14,7 +15,7 @@ class CosinnusMailbox(Mailbox):
     portal = models.ForeignKey(CosinnusPortal, verbose_name=_('Portal'), related_name='mailboxes', 
         null=False, blank=False, default=1) # port_id 1 is created in a datamigration!
     
-    class Meta:
+    class Meta(object):
         verbose_name = "Cosinnus Mailbox"
         verbose_name_plural = "Cosinnus Mailboxes"
 

@@ -1,4 +1,7 @@
 from __future__ import unicode_literals
+from __future__ import division
+from builtins import str
+from builtins import object
 import hashlib
 from django.utils.crypto import get_random_string
 from cosinnus.models.tagged import AttachableObjectModel
@@ -141,7 +144,7 @@ class MultiConversationModel(models.Model):
     """ To be used by Message, models the functionality of many users sharing a messages through a thread,
         even though each message has its own object for each of the participating users """
     
-    class Meta:
+    class Meta(object):
         abstract = True
     
     multi_conversation = models.ForeignKey('postman.MultiConversation', null=True, blank=True)
@@ -338,7 +341,7 @@ class Message(AttachableObjectModel, MultiConversationModel):
 
     objects = MessageManager()
 
-    class Meta:
+    class Meta(object):
         verbose_name = _("message")
         verbose_name_plural = _("messages")
         ordering = ['-sent_at', '-id']
@@ -611,7 +614,7 @@ class PendingMessage(Message):
 
     objects = PendingMessageManager()
 
-    class Meta:
+    class Meta(object):
         verbose_name = _("pending message")
         verbose_name_plural = _("pending messages")
         proxy = True

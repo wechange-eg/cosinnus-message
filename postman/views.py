@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from builtins import object
 from django import VERSION
 from cosinnus.conf import settings
 from django.contrib import messages
@@ -24,7 +25,7 @@ from django.utils.decorators import method_decorator
 try:
     from django.utils.six.moves.urllib.parse import urlsplit, urlunsplit  # Django 1.4.11, 1.5.5
 except ImportError:
-    from urlparse import urlsplit, urlunsplit
+    from urllib.parse import urlsplit, urlunsplit
 try:
     from django.utils.timezone import now  # Django 1.4 aware datetimes
 except ImportError:
@@ -264,7 +265,7 @@ class WriteView(ComposeMixin, FormView):
     def get_initial(self):
         initial = super(WriteView, self).get_initial()
         if self.request.method == 'GET':
-            initial.update(self.request.GET.items())  # allow optional initializations by query string
+            initial.update(list(self.request.GET.items()))  # allow optional initializations by query string
             
             recipients = []
             user_recipients = self.kwargs.get('recipients')
@@ -327,7 +328,7 @@ class ReplyView(ComposeMixin, RestrictRecipientMixin, FormView):
     def get_initial(self):
         self.initial = self.parent.quote(*self.formatters)  # will also be partially used in get_form_kwargs()
         if self.request.method == 'GET':
-            self.initial.update(self.request.GET.items())  # allow overwriting of the defaults by query string
+            self.initial.update(list(self.request.GET.items()))  # allow overwriting of the defaults by query string
         return self.initial
 
     def get_form_kwargs(self):

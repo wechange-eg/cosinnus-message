@@ -1,3 +1,5 @@
+from __future__ import print_function
+from builtins import object
 import logging
 
 from django.core.management.base import BaseCommand
@@ -27,7 +29,7 @@ class Command(BaseCommand):
                 super(FakeMessage, self).__init__(*args, **kwargs)
                 
         msg = FakeMessage(options['hash'], options['email'])
-        print ">>> now processing a fake message"
+        print(">>> now processing a fake message")
         process_direct_reply_messages(messages=[msg], no_delete=True)
-        print ">> done processing a fake message!"
+        print(">> done processing a fake message!")
         

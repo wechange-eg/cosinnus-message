@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from builtins import object
 from django import forms
 from django.contrib import admin
 try:
@@ -16,7 +17,7 @@ class MessageAdminForm(forms.ModelForm):
         # model = Message
         # Django 1.6: "... must also define the Meta.fields attribute (or the Meta.exclude attribute) ..."
         # any version: "..., the easiest solution is to omit the Meta.model attribute, ..."
-    class Media:
+    class Media(object):
         css = { "all": ("postman/css/admin.css",) }
 
     def clean(self):
@@ -149,7 +150,7 @@ class MessageAdmin(admin.ModelAdmin):
 class PendingMessageAdminForm(forms.ModelForm):
     # class Meta:  # see MessageAdminForm comments
         # model = PendingMessage
-    class Media:
+    class Media(object):
         css = { "all": ("postman/css/admin.css",) }
 
     def clean(self):
