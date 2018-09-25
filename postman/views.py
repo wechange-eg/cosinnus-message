@@ -9,28 +9,15 @@ from cosinnus.views.attached_object import AttachableViewMixin
 from cosinnus.utils.permissions import check_user_superuser,\
     check_user_can_see_user
 from django.core.exceptions import PermissionDenied
-try:
-    from django.contrib.auth import get_user_model  # Django 1.5
-except ImportError:
-    from postman.future_1_5 import get_user_model
-try:
-    from django.contrib.sites.shortcuts import get_current_site  # Django 1.7
-except ImportError:
-    from django.contrib.sites.models import get_current_site
+from django.contrib.auth import get_user_model
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
-try:
-    from django.utils.six.moves.urllib.parse import urlsplit, urlunsplit  # Django 1.4.11, 1.5.5
-except ImportError:
-    from urllib.parse import urlsplit, urlunsplit
-try:
-    from django.utils.timezone import now  # Django 1.4 aware datetimes
-except ImportError:
-    from datetime import datetime
-    now = datetime.now
+from django.utils.six.moves.urllib.parse import urlsplit, urlunsplit  
+from django.utils.timezone import now  
 from django.utils.translation import ugettext as _, ugettext_lazy
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import FormView, TemplateView, View
