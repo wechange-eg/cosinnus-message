@@ -131,7 +131,7 @@ class MultiConversation(models.Model):
     
     participants = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=False,
         related_name='postman_multiconversations')
-    targetted_groups = models.ManyToManyField(settings.COSINNUS_GROUP_OBJECT_MODEL, blank=True, null=True,
+    targetted_groups = models.ManyToManyField(settings.COSINNUS_GROUP_OBJECT_MODEL, blank=True,
         related_name='+', help_text='Groups that the message has been sent to. This is kept for purely '
         'informative reasons, so we can show the user the involved groups, but will not be used for '
         'something like keeping the participants list up to date')
