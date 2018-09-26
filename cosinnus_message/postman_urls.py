@@ -92,10 +92,7 @@ from cosinnus_message.views import UserSelect2View, CosinnusMessageView,\
     CosinnusConversationView, ArchiveView, DeleteView, UndeleteView,\
     MarkAsReadView
 
-try:
-    from django.conf.urls import patterns, url  # django 1.4
-except ImportError:
-    from django.conf.urls.defaults import patterns, url  # django 1.3
+from django.conf.urls import url
 from django.views.generic.base import RedirectView
 
 from postman import OPTIONS
@@ -103,7 +100,7 @@ from postman.views import (InboxView, SentView, ArchivesView, TrashView,
         WriteView, ReplyView)
 
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', RedirectView.as_view(url='posteingang/'), name='index'),
     url(r'^ajax/userselect/$', UserSelect2View.as_view(), name='user_select2_view'),
 
@@ -121,4 +118,4 @@ urlpatterns = patterns('',
     url(r'^antworten/(?P<message_id>[\d:]+)/$', ReplyView.as_view(form_class=CustomReplyForm), name='reply'),
     url(r'^neu/(?:(?P<recipients>[^/]+)/)?$', WriteView.as_view(form_classes=(CustomWriteForm, CustomWriteForm)), name='write'),
     url(r'^g/neu/(?:(?P<group_recipients>[^/]+)/)?$', WriteView.as_view(form_classes=(CustomWriteForm, CustomWriteForm)), name='write-group'),
-)
+]

@@ -5,10 +5,7 @@ URLconf for tests.py usage.
 from __future__ import unicode_literals
 
 from django.conf import settings
-try:
-    from django.conf.urls import patterns, include, url  # django 1.4
-except ImportError:
-    from django.conf.urls.defaults import *  # "patterns, include, url" is enough for django 1.3, "*" for django 1.2
+from django.conf.urls import include, url
 from django.forms import ValidationError
 from django.views.generic.base import RedirectView
 
@@ -59,7 +56,7 @@ def format_subject(subject):
 def format_body(sender, body):
     return "{0} _ {1}".format(sender, body)
 
-postman_patterns = patterns('',
+postman_patterns = [
     # Basic set
     url(r'^inbox/(?:(?P<option>'+OPTIONS+')/)?$', InboxView.as_view(), name='inbox'),
     url(r'^sent/(?:(?P<option>'+OPTIONS+')/)?$', SentView.as_view(), name='sent'),
@@ -122,21 +119,21 @@ postman_patterns = patterns('',
     url(r'^reply_template/(?P<message_id>[\d]+)/$', ReplyView.as_view(template_name='postman/fake.html'), name='reply_template'),
     url(r'^view_template/(?P<message_id>[\d]+)/$', MessageView.as_view(template_name='postman/fake.html'), name='view_template'),
     url(r'^view_template/t/(?P<thread_id>[\d]+)/$', ConversationView.as_view(template_name='postman/fake.html'), name='view_conversation_template'),
-)
+]
 
-urlpatterns = patterns('',
+urlpatterns = [
     (r'^accounts/login/$', 'django.contrib.auth.views.login'),  # because of the login_required decorator
     (r'^messages/', include((postman_patterns, 'postman', 'postman'))),  # (<patterns object>, <application namespace>, <instance namespace>)
-)
+]
 
 # because of fields.py/AutoCompleteWidget/render()/reverse()
 if 'ajax_select' in settings.INSTALLED_APPS:
-    urlpatterns += patterns('',
+    urlpatterns += [
         (r'^ajax_select/', include('ajax_select.urls')),  # django-ajax-selects
-    )
+    ]
 
 # optional
 if 'notification' in settings.INSTALLED_APPS:
-    urlpatterns += patterns('',
+    urlpatterns += [
         (r'^notification/', include('notification.urls')),  # django-notification
-    )
+    ]

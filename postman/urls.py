@@ -100,7 +100,7 @@ from .views import (InboxView, SentView, ArchivesView, TrashView,
         ArchiveView, DeleteView, UndeleteView)
 
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^inbox/(?:(?P<option>'+OPTIONS+')/)?$', InboxView.as_view(), name='inbox'),
     url(r'^sent/(?:(?P<option>'+OPTIONS+')/)?$', SentView.as_view(), name='sent'),
     url(r'^archives/(?:(?P<option>'+OPTIONS+')/)?$', ArchivesView.as_view(), name='archives'),
@@ -113,4 +113,4 @@ urlpatterns = patterns('',
     url(r'^delete/$', DeleteView.as_view(), name='delete'),
     url(r'^undelete/$', UndeleteView.as_view(), name='undelete'),
     (r'^$', RedirectView.as_view(url='inbox/', permanent=True)),
-)
+]
