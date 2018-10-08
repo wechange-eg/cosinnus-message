@@ -165,7 +165,7 @@ def clean_reply_message_quotation(text):
             break
         clean_lines.append(line)
     
-    if len(clean_lines) < lines:
+    if len(clean_lines) < len(lines):
         # we have removed a reply, mark this!
         had_reply = True
         
