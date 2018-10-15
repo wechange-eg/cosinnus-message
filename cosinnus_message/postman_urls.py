@@ -101,7 +101,7 @@ from postman.views import (InboxView, SentView, ArchivesView, TrashView,
 
 
 urlpatterns = [
-    url(r'^$', RedirectView.as_view(url='posteingang/'), name='index'),
+    url(r'^$', RedirectView.as_view(url='posteingang/', permanent=False), name='index'),
     url(r'^ajax/userselect/$', UserSelect2View.as_view(), name='user_select2_view'),
 
     url(r'^nachricht/(?P<message_id>[\d]+)/$', CosinnusMessageView.as_view(), name='view'),
