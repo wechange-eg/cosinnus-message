@@ -5,10 +5,7 @@ from builtins import object
 import hashlib
 from django.utils.crypto import get_random_string
 from cosinnus.models.tagged import AttachableObjectModel
-try:
-    from importlib import import_module
-except ImportError:
-    from django.utils.importlib import import_module  # Django 1.6 / py2.6
+from importlib import import_module
 
 from cosinnus.conf import settings
 from django.core.exceptions import ValidationError

@@ -2,10 +2,7 @@ from __future__ import unicode_literals
 from cosinnus.models.group import CosinnusPortal
 from cosinnus.utils.permissions import check_user_can_receive_emails
 from cosinnus.core.mail import send_mail_or_fail
-try:
-    from importlib import import_module
-except ImportError:
-    from django.utils.importlib import import_module  # Django 1.6 / py2.6
+from importlib import import_module
 import re
 import sys
 from textwrap import TextWrapper

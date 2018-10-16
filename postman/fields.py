@@ -2,16 +2,10 @@
 Custom fields.
 """
 from __future__ import unicode_literals
-try:
-    from importlib import import_module
-except ImportError:
-    from django.utils.importlib import import_module  # Django 1.6 / py2.6
+from importlib import import_module
 
 from django.conf import settings
-try:
-    from django.contrib.auth import get_user_model  # Django 1.5
-except ImportError:
-    from postman.future_1_5 import get_user_model
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import EMPTY_VALUES
 from django.forms.fields import CharField
