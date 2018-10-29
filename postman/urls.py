@@ -88,10 +88,7 @@ Refer to documentation.
 """
 from __future__ import unicode_literals
 
-try:
-    from django.conf.urls import patterns, url  # django 1.4
-except ImportError:
-    from django.conf.urls.defaults import patterns, url  # django 1.3
+from django.conf.urls import url  # django 1.4
 from django.views.generic.base import RedirectView
 
 from . import OPTIONS
