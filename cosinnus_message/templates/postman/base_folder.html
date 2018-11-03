@@ -103,7 +103,7 @@
     {% if pm_messages %}
         
         {% for message in pm_messages %}
-            <div class="message_row btn btn{% if message.is_new %}-extra{% endif %}-emphasized w100 {% if not forloop.last %}regular-space{% endif %}">
+            <div class="message_row btn btn{% if message.is_new %}-extra{% endif %}-emphasized w100 {% if not forloop.last %}regular-space{% endif %}" href="{% if by_conversation and message.thread_id %}{% url 'postman:view_conversation' message.thread_id %}{% else %}{{message.get_absolute_url }}{% endif %}?next={{ current_url|urlencode }}">
 		        <ul class="media-list">
 		            <li class="media">
 		                <a class="pull-left" href="#">
