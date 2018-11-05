@@ -1605,7 +1605,7 @@ class FiltersTest(BaseTest):
     """
     def check_sub(self, x, y, value):
         t = Template("{% load postman_tags %}{% with "+x+"|sub:"+y+" as var %}{{ var }}{% endwith %}")
-        self.assertEqual(t.render(Context({})), value)
+        self.assertEqual(t.render({}), value)
 
     def test_sub(self):
         "Test '|sub'."
@@ -1615,7 +1615,7 @@ class FiltersTest(BaseTest):
 
     def check_or_me(self, x, value, user=None, m=None):
         t = Template("{% load postman_tags %}{{ "+x+"|or_me:user }}")  # do not load i18n to be able to check the untranslated pattern
-        self.assertEqual(t.render(Context({'user': user or AnonymousUser(), 'message': m})), value)
+        self.assertEqual(t.render({'user': user or AnonymousUser(), 'message': m}), value)
 
     def test_or_me(self):
         "Test '|or_me'."
@@ -1633,7 +1633,7 @@ class FiltersTest(BaseTest):
     def check_compact_date(self, date, value, format='H:i,d b,d/m/y'):
         # use 'H', 'd', 'm' instead of 'G', 'j', 'n' because no strftime equivalents
         t = Template('{% load postman_tags %}{{ date|compact_date:"'+format+'" }}')
-        self.assertEqual(t.render(Context({'date': date})), value)
+        self.assertEqual(t.render({'date': date}), value)
 
     def test_compact_date(self):
         "Test '|compact_date'."
@@ -1665,7 +1665,7 @@ class TagsTest(BaseTest):
     """
     def check_postman_unread(self, value, user=None, asvar=''):
         t = Template("{% load postman_tags %}{% postman_unread " + asvar +" %}")
-        ctx = Context({'user': user} if user else {})
+        ctx = {'user': user} if user else {}
         self.assertEqual(t.render(ctx), value)
         return ctx
 
@@ -1685,7 +1685,7 @@ class TagsTest(BaseTest):
 
     def check_order_by(self, keyword, value_list, context=None):
         t = Template("{% load postman_tags %}{% postman_order_by " + keyword +" %}")
-        r = t.render(Context({'gets': QueryDict(context)} if context else {}))
+        r = t.render({'gets': QueryDict(context)} if context else {})
         self.assertEqual(r[0], '?')
         self.assertEqual(set(r[1:].split('&')), set([k+'='+v for k, v in value_list]))
 

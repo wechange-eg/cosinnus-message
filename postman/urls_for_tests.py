@@ -13,6 +13,7 @@ from . import OPTIONS
 from .views import (InboxView, SentView, ArchivesView, TrashView,
         WriteView, ReplyView, MessageView, ConversationView,
         ArchiveView, DeleteView, UndeleteView)
+from django.contrib.auth.views import LoginView
 
 
 # user_filter function set
@@ -122,7 +123,7 @@ postman_patterns = [
 ]
 
 urlpatterns = [
-    (r'^accounts/login/$', 'django.contrib.auth.views.login'),  # because of the login_required decorator
+    (r'^accounts/login/$', LoginView.as_view()),  # because of the login_required decorator
     (r'^messages/', include((postman_patterns, 'postman', 'postman'))),  # (<patterns object>, <application namespace>, <instance namespace>)
 ]
 
