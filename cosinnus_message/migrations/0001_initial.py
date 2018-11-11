@@ -15,8 +15,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='CosinnusMailbox',
             fields=[
-                ('mailbox_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='django_mailbox.Mailbox')),
-                ('portal', models.ForeignKey(related_name='mailboxes', default=1, verbose_name='Portal', to='cosinnus.CosinnusPortal')),
+                ('mailbox_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='django_mailbox.Mailbox', on_delete=models.CASCADE)),
+                ('portal', models.ForeignKey(related_name='mailboxes', default=1, verbose_name='Portal', to='cosinnus.CosinnusPortal', on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'Cosinnus Mailbox',

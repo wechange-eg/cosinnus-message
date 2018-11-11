@@ -13,7 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 class CosinnusMailbox(Mailbox):
     
     portal = models.ForeignKey(CosinnusPortal, verbose_name=_('Portal'), related_name='mailboxes', 
-        null=False, blank=False, default=1) # port_id 1 is created in a datamigration!
+        null=False, blank=False, default=1, on_delete=models.CASCADE) # port_id 1 is created in a datamigration!
     
     class Meta(object):
         verbose_name = "Cosinnus Mailbox"

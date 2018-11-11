@@ -35,6 +35,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='message',
             name='multi_conversation',
-            field=models.ForeignKey(blank=True, to='postman.MultiConversation', null=True),
+            field=models.ForeignKey(blank=True, to='postman.MultiConversation', null=True, on_delete=models.CASCADE),
         ),
     ]
