@@ -53,7 +53,7 @@ setup(
     data_files=data_files,
     install_requires=[
         'cosinnus>=0.4.2.dev0',
-        'django-mailbox==4.5.4',
+        'django-mailbox==4.7.1',
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',

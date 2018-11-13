@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 from django.conf.urls import url
 from cosinnus_message import views
 
+app_name = 'message'
+
 cosinnus_root_patterns = []
 
 cosinnus_group_patterns = [
