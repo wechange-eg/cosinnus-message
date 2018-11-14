@@ -9,7 +9,7 @@ from importlib import import_module
 
 from cosinnus.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.db.models.query import QuerySet
 from django.utils import six

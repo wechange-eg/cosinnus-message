@@ -48,7 +48,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.contrib.sites.models import Site
 from django.core import mail
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse, clear_url_caches, get_resolver, get_urlconf
+from django.urls import reverse, clear_url_caches, get_resolver, get_urlconf
 from django.db.models import Q
 from django.http import QueryDict
 from django.template import Template, Context, TemplateSyntaxError, TemplateDoesNotExist

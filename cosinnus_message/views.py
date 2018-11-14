@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from builtins import object
 import six
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.http import HttpResponseRedirect
@@ -161,7 +161,7 @@ class UserSelect2View(Select2View):
 
     def check_all_permissions(self, request, *args, **kwargs):
         user = request.user
-        if not user.is_authenticated():
+        if not user.is_authenticated:
             raise PermissionDenied
 
     def get_results(self, request, term, page, context):

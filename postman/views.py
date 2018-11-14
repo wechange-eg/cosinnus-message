@@ -11,7 +11,7 @@ from cosinnus.utils.permissions import check_user_superuser,\
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
@@ -247,7 +247,7 @@ class WriteView(ComposeMixin, FormView):
         return super(WriteView, self).dispatch(*args, **kwargs)
 
     def get_form_class(self):
-        return self.form_classes[0] if self.request.user.is_authenticated() else self.form_classes[1]
+        return self.form_classes[0] if self.request.user.is_authenticated else self.form_classes[1]
 
     def get_initial(self):
         initial = super(WriteView, self).get_initial()
@@ -281,7 +281,7 @@ class WriteView(ComposeMixin, FormView):
     def get_form_kwargs(self):
         kwargs = super(WriteView, self).get_form_kwargs()
         if isinstance(self.autocomplete_channels, tuple) and len(self.autocomplete_channels) == 2:
-            channel = self.autocomplete_channels[self.request.user.is_anonymous()]
+            channel = self.autocomplete_channels[self.request.user.is_anonymous]
         else:
             channel = self.autocomplete_channels
         kwargs['channel'] = channel

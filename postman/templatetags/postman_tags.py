@@ -107,7 +107,7 @@ class InboxCountNode(Node):
         """
         try:
             user = context['user']
-            if user.is_anonymous():
+            if user.is_anonymous:
                 count = ''
             else:
                 count = Message.objects.inbox_unread_count(user)
