@@ -51,7 +51,7 @@ class CompilerProxy(Proxy):
         # mimics compiler.py/SQLCompiler/get_from_clause() and as_sql()
         qn = self.quote_name_unless_alias
         qn2 = self.connection.ops.quote_name
-        alias = self.query.tables[0]
+        alias = self.query.base_table
         if VERSION >= (1, 8):
             from_clause = self.query.alias_map[alias]
             alias = from_clause.table_alias
