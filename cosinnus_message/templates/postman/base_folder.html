@@ -12,60 +12,24 @@
 
 
 {% block pm_delete_button %}
-<button type="submit" class="btn btn-emphasized item_checkbox_action_button" onclick="this.form.action='{% url 'postman:delete' %}'">
-    <ul class="media-list">
-        <li class="media">
-            <a class="pull-left" href="#">
-                <i class="fa fa-eraser"></i>
-            </a>
-            <div class="media-body">
-                {% trans "Delete" %}
-            </div>
-        </li>
-    </ul>
-</button>
+    {% trans "Delete" as btn_label %}
+    {% captureas btn_action %}this.form.action='{% url 'postman:delete' %}'{% endcaptureas %}
+    {% include 'cosinnus/common/checkbox/checkbox_action_button.html' with label=btn_label icon="fa-eraser" action=btn_action %}
 {% endblock %}
 {% block pm_archive_button %}
-<button type="submit" class="btn btn-emphasized item_checkbox_action_button" onclick="this.form.action='{% url 'postman:archive' %}'">
-    <ul class="media-list">
-        <li class="media">
-            <a class="pull-left" href="#">
-                <i class="fa fa-eraser"></i>
-            </a>
-            <div class="media-body">
-                {% trans "Archive" %}
-            </div>
-        </li>
-    </ul>
-</button>
+    {% trans "Archive" as btn_label %}
+    {% captureas btn_action %}this.form.action='{% url 'postman:archive' %}'{% endcaptureas %}
+    {% include 'cosinnus/common/checkbox/checkbox_action_button.html' with label=btn_label icon="fa-book" action=btn_action %}
 {% endblock %}
 {% block pm_undelete_button %}
-<button type="submit" class="btn btn-emphasized item_checkbox_action_button" onclick="this.form.action='{% url 'postman:undelete' %}'">
-    <ul class="media-list">
-        <li class="media">
-            <a class="pull-left" href="#">
-                <i class="fa fa-eraser"></i>
-            </a>
-            <div class="media-body">
-                {% trans "Undelete" %}
-            </div>
-        </li>
-    </ul>
-</button>
+    {% trans "Undelete" as btn_label %}
+    {% captureas btn_action %}this.form.action='{% url 'postman:undelete' %}'{% endcaptureas %}
+    {% include 'cosinnus/common/checkbox/checkbox_action_button.html' with label=btn_label icon="fa-eraser" action=btn_action %}
 {% endblock %}
 {% block pm_markasread_button %}
-<button type="submit" class="btn btn-emphasized item_checkbox_action_button" onclick="this.form.action='{% url 'postman:markasread' %}'">
-    <ul class="media-list">
-        <li class="media">
-            <a class="pull-left" href="#">
-                <i class="fa fa-book"></i>
-            </a>
-            <div class="media-body">
-                {% trans "Mark as Read" %}
-            </div>
-        </li>
-    </ul>
-</button>
+    {% trans "Mark as Read" as btn_label %}
+    {% captureas btn_action %}this.form.action='{% url 'postman:markasread' %}'{% endcaptureas %}
+    {% include 'cosinnus/common/checkbox/checkbox_action_button.html' with label=btn_label icon="fa-eye" action=btn_action %}
 {% endblock %}
 {% block pm_mark_messages_buttons %}
     {% include 'cosinnus/common/checkbox/checkbox_mark_all_buttons.html' %}
@@ -83,7 +47,6 @@
 		        <ul class="media-list">
 		            <li class="media">
 		                {% captureas input_name %}{% if by_conversation and message.thread_id %}delete_tpk__{{message.thread_id}}{% else %}delete_pk__{{ message.pk }}{% endif %}{% endcaptureas %}
-		                {% captureas box_content %}{% include "cosinnus/user/user_avatar_image.html" with user=message.sender %}{% endcaptureas %}
 		                {% include 'cosinnus/common/checkbox/checkbox_overlay_box.html' with input_name=input_name %}
 		                <a class="pull-left">
 		                    {% include "cosinnus/user/user_avatar_image.html" with user=message.sender %}
