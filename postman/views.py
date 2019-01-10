@@ -276,14 +276,14 @@ class WriteView(ComposeMixin, FormView):
                 name_user_as = getattr(settings, 'POSTMAN_NAME_USER_AS', user_model.USERNAME_FIELD)
                 users = user_model.objects.filter(
                     is_active=True,
-                    **{'{0}__in'.format(name_user_as): [r.strip() for r in user_recipients.split(':') if r and not r.isspace()]}
+                    **{'{0}__in'.format(name_user_as): [r.strip() for r in user_recipients.split(',') if r and not r.isspace()]}
                 ).order_by(name_user_as)
                 usernames = ['user:%s' % getattr(user, name_user_as) for user in users if check_user_can_see_user(self.request.user, user)]
                 if usernames:
                     recipients.extend(usernames)
             group_recipients = self.kwargs.get('group_recipients')
             if group_recipients:
-                groups = ['group:%s' % group_slug for group_slug in group_recipients.split(':')]
+                groups = ['group:%s' % group_slug for group_slug in group_recipients.split(',')]
                 if groups:
                     recipients.extend(groups)
             
