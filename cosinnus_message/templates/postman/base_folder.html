@@ -12,87 +12,27 @@
 
 
 {% block pm_delete_button %}
-<button type="submit" class="btn btn-emphasized messages-delete-button" onclick="this.form.action='{% url 'postman:delete' %}'">
-    <ul class="media-list">
-        <li class="media">
-            <a class="pull-left" href="#">
-                <i class="fa fa-eraser"></i>
-            </a>
-            <div class="media-body">
-                {% trans "Delete" %}
-            </div>
-        </li>
-    </ul>
-</button>
+    {% trans "Delete" as btn_label %}
+    {% captureas btn_action %}this.form.action='{% url 'postman:delete' %}'{% endcaptureas %}
+    {% include 'cosinnus/common/checkbox/checkbox_action_button.html' with label=btn_label icon="fa-eraser" action=btn_action %}
 {% endblock %}
 {% block pm_archive_button %}
-<button type="submit" class="btn btn-emphasized messages-delete-button" onclick="this.form.action='{% url 'postman:archive' %}'">
-    <ul class="media-list">
-        <li class="media">
-            <a class="pull-left" href="#">
-                <i class="fa fa-eraser"></i>
-            </a>
-            <div class="media-body">
-                {% trans "Archive" %}
-            </div>
-        </li>
-    </ul>
-</button>
+    {% trans "Archive" as btn_label %}
+    {% captureas btn_action %}this.form.action='{% url 'postman:archive' %}'{% endcaptureas %}
+    {% include 'cosinnus/common/checkbox/checkbox_action_button.html' with label=btn_label icon="fa-book" action=btn_action %}
 {% endblock %}
 {% block pm_undelete_button %}
-<button type="submit" class="btn btn-emphasized messages-delete-button" onclick="this.form.action='{% url 'postman:undelete' %}'">
-    <ul class="media-list">
-        <li class="media">
-            <a class="pull-left" href="#">
-                <i class="fa fa-eraser"></i>
-            </a>
-            <div class="media-body">
-                {% trans "Undelete" %}
-            </div>
-        </li>
-    </ul>
-</button>
+    {% trans "Undelete" as btn_label %}
+    {% captureas btn_action %}this.form.action='{% url 'postman:undelete' %}'{% endcaptureas %}
+    {% include 'cosinnus/common/checkbox/checkbox_action_button.html' with label=btn_label icon="fa-eraser" action=btn_action %}
 {% endblock %}
 {% block pm_markasread_button %}
-<button type="submit" class="btn btn-emphasized messages-delete-button" onclick="this.form.action='{% url 'postman:markasread' %}'">
-    <ul class="media-list">
-        <li class="media">
-            <a class="pull-left" href="#">
-                <i class="fa fa-book"></i>
-            </a>
-            <div class="media-body">
-                {% trans "Mark as Read" %}
-            </div>
-        </li>
-    </ul>
-</button>
+    {% trans "Mark as Read" as btn_label %}
+    {% captureas btn_action %}this.form.action='{% url 'postman:markasread' %}'{% endcaptureas %}
+    {% include 'cosinnus/common/checkbox/checkbox_action_button.html' with label=btn_label icon="fa-eye" action=btn_action %}
 {% endblock %}
 {% block pm_mark_messages_buttons %}
-<button type="submit" class="btn btn-emphasized btn-icon-only pull-left mark_messages mark_messages_true">
-    <ul class="media-list">
-        <li class="media">
-            <a class="pull-left" href="#" disabled="true">
-                <i class="fa fa-check-square-o"></i>
-            </a>
-            <div class="media-body">
-                {% trans "Mark All" %}
-            </div>
-        </li>
-    </ul>
-</button>
-
-<button type="submit" class="btn btn-emphasized btn-icon-only pull-left mark_messages mark_messages_false">
-    <ul class="media-list">
-        <li class="media">
-            <a class="pull-left" href="#" disabled="true">
-                <i class="fa fa-close"></i>
-            </a>
-            <div class="media-body">
-                {% trans "Deselect All" %}
-            </div>
-        </li>
-    </ul>
-</button>
+    {% include 'cosinnus/common/checkbox/checkbox_mark_all_buttons.html' %}
 {% endblock %}
 
 <div class="clearfix"></div>
@@ -103,16 +43,14 @@
     {% if pm_messages %}
         
         {% for message in pm_messages %}
-            <div class="message_row btn btn{% if message.is_new %}-extra{% endif %}-emphasized w100 {% if not forloop.last %}regular-space{% endif %}" href="{% if by_conversation and message.thread_id %}{% url 'postman:view_conversation' message.thread_id %}{% else %}{{message.get_absolute_url }}{% endif %}?next={{ current_url|urlencode }}">
+            <div class="item_checkbox_element btn btn{% if message.is_new %}-extra{% endif %}-emphasized w100 {% if not forloop.last %}regular-space{% endif %}" href="{% if by_conversation and message.thread_id %}{% url 'postman:view_conversation' message.thread_id %}{% else %}{{message.get_absolute_url }}{% endif %}?next={{ current_url|urlencode }}">
 		        <ul class="media-list">
 		            <li class="media">
-		                <a class="pull-left" href="#">
-		                    <i class="fa fa-square-o"></i>
-		                    <input type="hidden" {% if by_conversation and message.thread_id %}name="delete_tpk__{{message.thread_id}}"{% else %}name="delete_pk__{{ message.pk }}"{% endif %}>
+		                {% captureas input_name %}{% if by_conversation and message.thread_id %}delete_tpk__{{message.thread_id}}{% else %}delete_pk__{{ message.pk }}{% endif %}{% endcaptureas %}
+		                {% include 'cosinnus/common/checkbox/checkbox_overlay_box.html' with input_name=input_name %}
+		                <a class="pull-left">
+		                    {% include "cosinnus/user/user_avatar_image.html" with user=message.sender %}
 		                </a>
-	                    <a class="pull-left" href="{{ message.sender|profile_url }}">
-	                        {% include "cosinnus/user/user_avatar_image.html" with user=message.sender %}
-	                    </a>
                         <div class="media-body">
                             <a href="{% block pm_link %}{% if by_conversation and message.thread_id %}{% url 'postman:view_conversation' message.thread_id %}{% else %}{{message.get_absolute_url }}{% endif %}?next={{ current_url|urlencode }}{% endblock %}">
                                 <span class="annotation moment-data-date" data-date="{{ message.sent_at|date:"c" }}"></span>
