@@ -265,7 +265,7 @@ class WriteView(ComposeMixin, FormView):
                     is_active=True,
                     **{'{0}__in'.format(name_user_as): [r.strip() for r in user_recipients.split(',') if r and not r.isspace()]}
                 ).order_by(name_user_as)
-                usernames = ['user:%s' % getattr(user, name_user_as) for user in users if check_user_can_see_user(self.request.user, user)]
+                usernames = ['user:%s' % getattr(user, name_user_as) for user in users if check_user_can_see_user(self.request.user, user) and not user.id == self.request.user.id]
                 if usernames:
                     recipients.extend(usernames)
             group_recipients = self.kwargs.get('group_recipients')
