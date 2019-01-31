@@ -22,7 +22,6 @@ from cosinnus.forms.attached_object import FormAttachableMixin
 from copy import copy, deepcopy
 from postman.models import MultiConversation
 from annoying.functions import get_object_or_None
-from threading import Thread
 try:
     from django.contrib.auth import get_user_model  # Django 1.5
 except ImportError:
@@ -182,13 +181,7 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
         
         # important to clear because forms are reused
         self.extra_instances = []
-        notify_instances = []
         for r in recipients:
-            
-            # save away a copied message to another recipient so we can access them all later
-            if self.instance.pk:
-                self.extra_instances.append(copy(self.instance))
-            
             # in a multiconversation reply, find the actual parent for this recipient's message object of the conversation
             # (each recipient has their own thread, connected my a MultiConversation)
             if multiconv and original_parent and not do_reply_single_copy:
@@ -243,12 +236,15 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
                     is_master = False
             
             m = super(BaseWriteForm, self).save()
+                        
+            # save away a copied message to another recipient so we can access them all later (for adding attachable objects)
+            self.extra_instances.append(copy(self.instance))
+
             if self.instance.is_rejected():
                 is_successful = False
             self.instance.update_parent(initial_status)
             if not self.do_not_notify_users:
-                instance_copy = copy(self.instance)
-                notify_instances.append((instance_copy, initial_status, self.site))
+                self.instance.notify_users(initial_status, self.site)
                 
             # some resets for next reuse
             if not isinstance(r, get_user_model()):
@@ -256,24 +252,9 @@ class BaseWriteForm(FormAttachableMixin, forms.ModelForm):
             self.instance.set_moderation(*initial_moderation)
             self.instance.set_dates(*initial_dates)
         
-        # notify all recipients in a single thread
-        thread = UserNotificationThread(instances=notify_instances)
-        thread.start()
-        
         return is_successful
     # commit_on_success() is deprecated in Django 1.6 and will be removed in Django 1.8
     save = transaction.atomic(save) if hasattr(transaction, 'atomic') else transaction.commit_on_success(save)
-
-
-class UserNotificationThread(Thread):
-    
-    def __init__(self, *args, **kwargs):
-        self.instances = kwargs.pop('instances')
-        super(UserNotificationThread, self).__init__(*args, **kwargs)
-        
-    def run(self):
-        for instance, status, site in self.instances:
-            instance.notify_users(status, site)
 
 
 class WriteForm(BaseWriteForm):

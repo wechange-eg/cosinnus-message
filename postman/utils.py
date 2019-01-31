@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from cosinnus.models.group import CosinnusPortal
 from cosinnus.utils.permissions import check_user_can_receive_emails
-from cosinnus.core.mail import send_mail_or_fail
+from cosinnus.core.mail import send_mail_or_fail_threaded
 from importlib import import_module
 import re
 import sys
@@ -102,7 +102,7 @@ def email(subject_template, message_template, recipient_list, object, action, si
     #send_mail(subject, message, sender, recipient_list, fail_silently=True)
     
     # now sending through our system
-    send_mail_or_fail(recipient_list[0], subject, message_template, ctx_dict, sender, is_html=False)
+    send_mail_or_fail_threaded(recipient_list[0], subject, message_template, ctx_dict, sender, is_html=False)
 
 def email_visitor(object, action, site):
     """Email a visitor."""

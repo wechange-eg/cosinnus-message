@@ -204,6 +204,7 @@ class ComposeMixin(AttachableViewMixin, NamespaceMixin, object):
         # we tag the recipient in that file so they can see it (or recipients if the form copied many)
         all_recipients = [form.instance.recipient]
         all_recipients.extend([msg.recipient for msg in getattr(form, 'extra_instances', [])])
+        all_recipients = list(set(all_recipients))
         for attached_object in form.instance.attached_objects.all():
             for recipient in all_recipients:
                 attached_object.target_object.media_tag.persons.add(recipient)

@@ -10,7 +10,7 @@
 {% else %}{% blocktrans with object.sender.first_name as sender_first and object.sender.last_name as sender_last %}'{{ sender_first }} {{ sender_last }}' has posted a message in one of your conversations.{% endblocktrans %}
 {% endif %}{% else %}{% blocktrans with object.sender.first_name as sender_first and object.sender.last_name as sender_last %}You have received a message from the user '{{ sender_first }} {{ sender_last }}'.{% endblocktrans %}
 {% endif %}
-{% if object.multi_conversation %}{% with participants=object|get_other_participants:object.recipient %}{% trans "This message was sent in a conversation with: " %}{% if object.multi_conversation.targetted_groups.all %}{% trans "Project/Group" %} "{{ object.multi_conversation.targetted_groups.all.0.name}}"{% else %}{% for p in participants|slice:"5" %}{{p|full_name}}{% if not forloop.last %}, {% endif %}{% endfor %}{% with rest=participants|length|subtract:5 %}{% if rest > 0 %}, +{{ rest }}{% endif %}{% endwith %}{% endif %}
+{% if object.multi_conversation %}{% with participants=object|get_other_participants:object.recipient %}{% trans "This message was sent in a conversation with: " %} {% if object.multi_conversation.targetted_groups.all %}{% trans "Project/Group" %} "{{ object.multi_conversation.targetted_groups.all.0.name}}"{% else %}{% for p in participants|slice:"5" %}{{p|full_name}}{% if not forloop.last %}, {% endif %}{% endfor %}{% with rest=participants|length|subtract:5 %}{% if rest > 0 %}, +{{ rest }}{% endif %}{% endwith %}{% endif %}
 
 {% endwith %}{% endif %}
 {{ object.body }}
