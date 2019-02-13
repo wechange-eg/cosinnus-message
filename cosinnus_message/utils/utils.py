@@ -37,17 +37,20 @@ EMAIL_RE = re.compile(
 def update_mailboxes():
     """ Downloads all mail from the SMTP/IMAP accounts from Mailboxes assigned to this portal """
     
-    mailboxes = CosinnusMailbox.active_mailboxes.filter(cosinnusmailbox__portal=CosinnusPortal.get_current())
-        
+    mailboxes = CosinnusMailbox.active_mailboxes.filter(portal=CosinnusPortal.get_current())
     if len(mailboxes) == 0:
         return
     
     for mailbox in mailboxes:
-        logger.info(
-            'Gathering messages for %s',
-            mailbox.name
-        )
-        messages = mailbox.get_new_mail()
+        try:
+            messages = mailbox.get_new_mail()
+        except Exception as e:
+            logger.error('Error trying to collect directreply mails for portal %s' % CosinnusPortal.get_current().slug,
+                         extra={'exception': force_text(e)})
+            
+        logger.info('Successfully gathered directreply messages for portal %s' % CosinnusPortal.get_current().slug,
+                    extra={'number_messages': len(messages)})
+        
         """
         for message in messages:
             logger.info(
