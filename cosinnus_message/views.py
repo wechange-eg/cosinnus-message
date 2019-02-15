@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.core.exceptions import PermissionDenied
-
-from django_select2 import Select2View, NO_ERR_RESP
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.exceptions import PermissionDenied
+from django_select2 import Select2View, NO_ERR_RESP
 from django.views.generic import TemplateView
 
 from cosinnus.conf import settings
@@ -30,6 +30,11 @@ class MessageIndexView(TemplateView):
     """
 
     template_name = 'cosinnus_message/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['url'] = settings.COSINNUS_CHAT_BASE_URL
+        return context
 
 
 class UserSelect2View(Select2View):
