@@ -24,7 +24,7 @@ except ImportError:
 User = get_user_model()
 
 
-class IndexView(TemplateView):
+class MessageIndexView(TemplateView):
     """
     View for embedded Rocket.Chat
     """
