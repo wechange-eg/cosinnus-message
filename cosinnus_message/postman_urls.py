@@ -96,8 +96,7 @@ from django.conf.urls import url
 from django.views.generic.base import RedirectView
 
 from postman import OPTIONS
-from postman.views import (InboxView, SentView, ArchivesView, TrashView,
-        WriteView, ReplyView)
+from postman.views import (InboxView, SentView, ArchivesView, TrashView, WriteView, ReplyView)
 
 
 urlpatterns = [
