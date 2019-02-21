@@ -24,7 +24,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         class FakeMessage(object):
             def __init__(self, hash, email, *args, **kwargs):
-                self.text = 'woweee reply from direct fake\n> DIRECT-REPLY CODE: \n> directreply+1+%s@wachstumswende.de ' % hash[0]
+                self.text = 'woweee reply from direct fake\n> DIRECT-REPLY CODE: \n> directreply+1+%s+wachstumswende.de ' % hash[0]
                 self.from_header = email[0]
                 super(FakeMessage, self).__init__(*args, **kwargs)
                 
