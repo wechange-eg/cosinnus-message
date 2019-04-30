@@ -450,6 +450,13 @@ class Message(AttachableObjectModel, MultiConversationModel):
         else:
             return self._obfuscated_email()
 
+    def other_participants(self, user):
+        """ For a given message and the current user, returns all other participants of this conversation,
+        or a list with one element, the other person that isn't our user if the message is not part of a multi conversation """
+        if not self.multi_conversation:
+            return [self.sender if self.recipient == user else self.recipient]
+        return [part for part in self.multi_conversation.participants.all() if not part == user]
+
     def get_replies_count(self):
         """Return the number of accepted responses."""
         return self.next_messages.filter(moderation_status=STATUS_ACCEPTED).count()
