@@ -4,7 +4,7 @@ from builtins import str
 from builtins import object
 import hashlib
 from django.utils.crypto import get_random_string
-from cosinnus.models.tagged import AttachableObjectModel
+from cosinnus.models.tagged import AttachableObjectModel, LastVisitedMixin
 from importlib import import_module
 
 from cosinnus.conf import settings
@@ -304,7 +304,7 @@ class MessageManager(models.Manager):
 
 
 @python_2_unicode_compatible
-class Message(AttachableObjectModel, MultiConversationModel):
+class Message(AttachableObjectModel, LastVisitedMixin, MultiConversationModel):
     """
     A message between a User and another User or an AnonymousUser.
     """
