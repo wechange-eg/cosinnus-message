@@ -1,3 +1,17 @@
 {% extends "cosinnus/base.html" %}
 {% load i18n %}
 {% load static from staticfiles %}
+
+{% block breadcrumb %}
+        <li><a href="{% url 'postman:inbox' %}">{% trans "Messages" %}</a></li>
+{% endblock %}
+
+
+{% block leftnav %}
+    {% block postman_menu %}{% endblock %}
+{% endblock %}
+
+
+{% block content %}
+    {% block postman_content %}{% endblock %}
+{% endblock %}
