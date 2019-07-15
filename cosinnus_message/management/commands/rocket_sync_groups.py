@@ -11,9 +11,9 @@ logging.basicConfig(level=logging.INFO)
 
 class Command(BaseCommand):
     """
-    Sync users with Rocket.Chat
+    Sync groups with Rocket.Chat
     """
 
     def handle(self, *args, **options):
         rocket = RocketChatConnection(stdout=self.stdout, stderr=self.stderr)
-        rocket.users_sync()
+        rocket.groups_sync()

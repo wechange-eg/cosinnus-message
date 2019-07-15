@@ -10,3 +10,4 @@ class CosinnusMessageAppConfig(AppConfig):
     def ready(self):
         from cosinnus_message import cosinnus_app
         cosinnus_app.register()
+        import cosinnus_message.hooks  # noqa

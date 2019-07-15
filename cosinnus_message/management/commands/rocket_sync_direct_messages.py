@@ -16,4 +16,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         rocket = RocketChatConnection(stdout=self.stdout, stderr=self.stderr)
-        rocket.sync_direct_messages()
+        rocket.direct_messages_sync()
