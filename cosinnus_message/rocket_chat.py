@@ -71,7 +71,9 @@ class RocketChatConnection:
             # User with different username but same email address exists?
             if not rocket_user and user.email in rocket_emails_usernames.keys():
                 # Change username
-                rocket_user = rocket_users.get(rocket_emails_usernames.get(user.email))
+                old_username = rocket_emails_usernames.get(user.email)
+                self.users_update_username(old_username, user)
+                rocket_user = rocket_users.get(old_username)
 
             # Username exists?
             if rocket_user:
@@ -210,6 +212,33 @@ class RocketChatConnection:
         # Update profile settings without triggering signals to prevent cycles
         type(profile).objects.filter(pk=profile.pk).update(settings=profile.settings)
 
+    def users_update_username(self, rocket_username, user):
+        """
+        Updates username
+        :return:
+        """
+        # Get user ID
+        profile = user.cosinnus_profile
+        if not profile.settings.get('rocket_chat_id'):
+            response = self.rocket.users_info(username=rocket_username).json()
+            if not response.get('success'):
+                logger.error('get_user_id', response)
+                return
+            user_data = response.get('user')
+            user_id = user_data.get('_id')
+            profile.settings['rocket_chat_id'] = user_id
+            # Update profile settings without triggering signals to prevent cycles
+            type(profile).objects.filter(pk=profile.pk).update(settings=profile.settings)
+        user_id = profile.settings['rocket_chat_id']
+        if not user_id:
+            return
+
+        # Update username
+        response = self.rocket.users_update(user_id=user_id, username=str(user.id)).json()
+        if not response.get('success'):
+            logger.error('users_update', response)
+
+
     def users_update(self, user, request=None):
         """
         Updates user name, email address and avatar
@@ -222,7 +251,7 @@ class RocketChatConnection:
         # Get user information and ID
         response = self.rocket.users_info(user_id=user_id).json()
         if not response.get('success'):
-            logger.error('users_update', response)
+            logger.error('users_info', response)
             return
         user_data = response.get('user')
 
