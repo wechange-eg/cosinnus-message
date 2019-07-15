@@ -52,8 +52,9 @@ class RocketChatConnection:
             if response['count'] == 0:
                 break
 
-            rocket_users.update(dict((u['username'], u) for u in response['users']))
-            rocket_emails.update(dict((u['email'], u['username']) for u in response['users']))
+            for u in response['users']:
+                rocket_users[u['username']] = u
+                rocket_emails.update(dict((e['address'], u['username']) for e in u['emails']))
             offset += response['count']
 
         users = get_user_model().objects.filter(is_active=True)
