@@ -32,7 +32,7 @@ class RocketChatConnection:
         for setting, value in settings.COSINNUS_CHAT_SETTINGS.items():
             response = self.rocket.settings_update(setting, value).json()
             if not response.get('success'):
-                return
+                self.stderr.write(response)
 
     def users_sync(self):
         """
