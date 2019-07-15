@@ -32,7 +32,7 @@ class RocketChatConnection:
         for setting, value in settings.COSINNUS_CHAT_SETTINGS.items():
             response = self.rocket.settings_update(setting, value).json()
             if not response.get('success'):
-                self.stderr.write(response)
+                self.stderr.write(str(response))
 
     def users_sync(self):
         """
@@ -400,7 +400,7 @@ class RocketChatConnection:
                 type(group).objects.filter(pk=group.pk).update(settings=group.settings)
 
                 # Set description
-                response = self.rocket.groups_set_description(room_id=room_id, description=group_name).json()
+                response = self.rocket.groups_set_description(room_id=room_id, description=group.name).json()
                 if not response.get('success'):
                     logger.error('groups_create', 'groups_set_description', response)
 
@@ -434,7 +434,7 @@ class RocketChatConnection:
                 type(group).objects.filter(pk=group.pk).update(settings=group.settings)
 
                 # Set description
-                response = self.rocket.groups_set_description(room_id=room_id, description=group_name).json()
+                response = self.rocket.groups_set_description(room_id=room_id, description=group.name).json()
                 if not response.get('success'):
                     logger.error('groups_create', 'groups_set_description', response)
 
