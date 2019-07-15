@@ -238,7 +238,6 @@ class RocketChatConnection:
         if not response.get('success'):
             logger.error('users_update', response)
 
-
     def users_update(self, user, request=None):
         """
         Updates user name, email address and avatar
@@ -256,13 +255,12 @@ class RocketChatConnection:
         user_data = response.get('user')
 
         # Update name and email address
-        if user_data.get('name') != user.get_full_name() or user_data.get('email') != user.email or \
-                user_data.get('active') != user.is_active:
+        if user_data.get('name') != user.get_full_name() or user_data.get('email') != user.email:
             data = {
-                "username": str(user.id),
+                #"username": str(user.id),
                 "name": user.get_full_name(),
                 "email": user.email,
-                "active": user.is_active,
+                #"active": user.is_active,
                 "password": user.password,
             }
             response = self.rocket.users_update(user_id=user_id, **data).json()
