@@ -41,7 +41,7 @@ class RocketChatConnection:
         """
         # Get existing rocket users
         rocket_users = {}
-        rocket_emails = {}
+        rocket_emails_usernames = {}
         size = 100
         offset = 0
         while True:
@@ -57,7 +57,7 @@ class RocketChatConnection:
                 for email in rocket_user.get('emails', []):
                     if not email.get('address'):
                         continue
-                    rocket_emails[email['address']] = rocket_user['username']
+                    rocket_emails_usernames[email['address']] = rocket_user['username']
             offset += response['count']
 
         users = get_user_model().objects.filter(is_active=True)
@@ -69,9 +69,9 @@ class RocketChatConnection:
             rocket_user = rocket_users.get(str(user.id))
 
             # User with different username but same email address exists?
-            if not rocket_user and user.email in rocket_emails.keys():
+            if not rocket_user and user.email in rocket_emails_usernames.keys():
                 # Change username
-                rocket_user = rocket_users.get(rocket_emails.get(user.email))
+                rocket_user = rocket_users.get(rocket_emails_usernames.get(user.email))
 
             # Username exists?
             if rocket_user:
