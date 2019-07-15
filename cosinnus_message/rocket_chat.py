@@ -41,6 +41,7 @@ class RocketChatConnection:
         """
         # Get existing rocket users
         rocket_users = {}
+        rocket_emails = {}
         size = 100
         offset = 0
         while True:
@@ -52,6 +53,7 @@ class RocketChatConnection:
                 break
 
             rocket_users.update(dict((u['username'], u) for u in response['users']))
+            rocket_emails.update(dict((u['email'], u['username']) for u in response['users']))
             offset += response['count']
 
         users = get_user_model().objects.filter(is_active=True)
@@ -59,8 +61,15 @@ class RocketChatConnection:
         for i, user in enumerate(users):
             self.stdout.write('User %i/%i' % (i, count), ending='\r')
             self.stdout.flush()
-            rocket_user = rocket_users.get(str(user.id), None)
 
+            rocket_user = rocket_users.get(str(user.id))
+
+            # User with different username but same email address exists?
+            if not rocket_user and user.email in rocket_emails.keys():
+                # Change username
+                rocket_user = rocket_users.get(rocket_emails.get(user.email))
+
+            # Username exists?
             if rocket_user:
                 changed = False
                 # TODO: Introducing User.updated_at would improve performance here
@@ -70,6 +79,8 @@ class RocketChatConnection:
                     changed = True
                 # Name changed?
                 elif user.get_full_name() != rocket_user['name']:
+                    changed = True
+                elif user.username != rocket_user['username']:
                     changed = True
                 # Avatar changed?
                 else:
@@ -213,8 +224,9 @@ class RocketChatConnection:
 
         # Update name and email address
         if user_data.get('name') != user.get_full_name() or user_data.get('email') != user.email or \
-                user_data.get('password') != user.password or user_data.get('active') != user.is_active:
+                user_data.get('active') != user.is_active:
             data = {
+                "username": str(user.id),
                 "name": user.get_full_name(),
                 "email": user.email,
                 "active": user.is_active,
