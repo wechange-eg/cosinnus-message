@@ -18,7 +18,3 @@ class CosinnusMessageDefaultSettings(AppConf):
     
     class Meta(object):
         prefix = ''
-        
-    POSTMAN_DISALLOW_ANONYMOUS = True  # No anonymous messaging
-    POSTMAN_AUTO_MODERATE_AS = True  # Auto accept all messages
-    POSTMAN_SHOW_USER_AS = 'username'

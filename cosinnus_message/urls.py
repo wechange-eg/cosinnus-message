@@ -3,14 +3,14 @@ from __future__ import unicode_literals
 
 from django.conf.urls import url
 
-from cosinnus_message.api.views import MessageExportView
-from cosinnus_message.views import MessageIndexView
+from cosinnus_message.views import *
 
 app_name = 'message'
 
 cosinnus_root_patterns = [
-    url(r'^messages/$', MessageIndexView.as_view(), name='message-global'),
-    url(r'^messages/export/', MessageExportView.as_view(), name='message-export'),
+    url(r'^messages/$', RocketChatIndexView.as_view(), name='message-global'),
+    url(r'^messages/write/(?P<username>\d+)/$', RocketChatWriteView.as_view(), name='message-write'),
+    url(r'^messages/write/group/(?P<slug>[^/]+)/$', RocketChatWriteGroupView.as_view(), name='message-write-group'),
 ]
 
 cosinnus_group_patterns = [

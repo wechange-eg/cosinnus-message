@@ -5,11 +5,10 @@ from oauth2_provider.signals import app_authorized
 
 from cosinnus_message.rocket_chat import RocketChatConnection
 from cosinnus.models import UserProfile, CosinnusGroupMembership
-from cosinnus.models.group import MEMBERSHIP_MEMBER, MEMBERSHIP_ADMIN, MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING
+from cosinnus.models.group import MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING
 from cosinnus.models.group_extra import CosinnusSociety, CosinnusProject
 from cosinnus_note.models import Note
 
-# FIXME: Make async using celery
 
 def handle_app_authorized(sender, request, token, **kwargs):
     rocket = RocketChatConnection()
