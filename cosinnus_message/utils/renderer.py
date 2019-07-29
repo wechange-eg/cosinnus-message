@@ -16,5 +16,5 @@ class MessageRenderer(BaseRenderer):
     template_list = None
     
     @classmethod
-    def render(cls, context, myobjs):
+    def render(cls, context, myobjs, **kwargs):
         return '' 

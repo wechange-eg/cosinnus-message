@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-18 22:51+0200\n"
+"POT-Creation-Date: 2019-07-03 17:47+0200\n"
 "PO-Revision-Date: 2018-07-22 13:30+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: de\n"
 "X-Generator: Poedit 1.8.4\n"
 
 msgid "Message"
@@ -97,12 +97,6 @@ msgstr "Löschen rückgängig machen"
 
 msgid "Mark as Read"
 msgstr "Gelesen"
-
-msgid "Mark All"
-msgstr "Alle markieren"
-
-msgid "Deselect All"
-msgstr "Keine markieren"
 
 msgid "No messages"
 msgstr "Keine Nachrichten."
@@ -263,6 +257,12 @@ msgstr "Nachrichten als Gelesen markiert."
 
 msgid "Messages or conversations successfully recovered."
 msgstr "Nachrichten wurden erfolgreich wiederhergestellt."
+
+#~ msgid "Mark All"
+#~ msgstr "Alle markieren"
+
+#~ msgid "Deselect All"
+#~ msgstr "Keine markieren"
 
 #~ msgid "Please select a recipient for the message!"
 #~ msgstr "Bitte wählen sie mindestens einen Empfänger aus!"

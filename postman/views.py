@@ -369,6 +369,8 @@ class DisplayMixin(NamespaceMixin, RestrictRecipientMixin, object):
         if not self.msgs:
             raise Http404
         Message.objects.set_read(user, self.filter)
+        # Mark root message as LastVisited
+        self.msgs[0].mark_visited(user)
         return super(DisplayMixin, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):

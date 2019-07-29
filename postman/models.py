@@ -4,7 +4,7 @@ from builtins import str
 from builtins import object
 import hashlib
 from django.utils.crypto import get_random_string
-from cosinnus.models.tagged import AttachableObjectModel
+from cosinnus.models.tagged import AttachableObjectModel, LastVisitedMixin
 from importlib import import_module
 
 from cosinnus.conf import settings
@@ -304,7 +304,7 @@ class MessageManager(models.Manager):
 
 
 @python_2_unicode_compatible
-class Message(AttachableObjectModel, MultiConversationModel):
+class Message(AttachableObjectModel, LastVisitedMixin, MultiConversationModel):
     """
     A message between a User and another User or an AnonymousUser.
     """
@@ -449,6 +449,13 @@ class Message(AttachableObjectModel, MultiConversationModel):
             return get_user_representation(self.recipient)
         else:
             return self._obfuscated_email()
+
+    def other_participants(self, user):
+        """ For a given message and the current user, returns all other participants of this conversation,
+        or a list with one element, the other person that isn't our user if the message is not part of a multi conversation """
+        if not self.multi_conversation:
+            return [self.sender if self.recipient == user else self.recipient]
+        return [part for part in self.multi_conversation.participants.all() if not part == user]
 
     def get_replies_count(self):
         """Return the number of accepted responses."""

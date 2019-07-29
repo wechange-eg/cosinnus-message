@@ -15,6 +15,7 @@ from cosinnus.utils.permissions import check_user_can_see_user, check_user_super
 from cosinnus.utils.user import filter_active_users, get_user_query_filter_for_search_terms, \
     get_group_select2_pills, get_user_select2_pills
 from cosinnus.templatetags.cosinnus_tags import full_name
+from cosinnus.views.mixins.tagged import RecordLastVisitedMixin
 
 try:
     from django.utils.timezone import now  # Django 1.4 aware datetimes
