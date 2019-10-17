@@ -18,10 +18,9 @@ def register():
         cosinnus_root_patterns)
 
     app_registry.register('cosinnus_message', 'message', _('Message'))
-    attached_object_registry.register('postman.Message',
-                             'cosinnus_message.utils.renderer.MessageRenderer')
-    url_registry.register('cosinnus_message', cosinnus_root_patterns,
-        cosinnus_group_patterns)
+    if not settings.COSINNUS_ROCKET_ENABLED:
+        attached_object_registry.register('postman.Message', 'cosinnus_message.utils.renderer.MessageRenderer')
+    url_registry.register('cosinnus_message', cosinnus_root_patterns, cosinnus_group_patterns)
 
     # makemessages replacement protection
     name = pgettext_lazy("the_app", "message")
