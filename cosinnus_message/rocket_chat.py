@@ -587,8 +587,14 @@ class RocketChatConnection:
         :param text:
         :return:
         """
-        text = re.sub(r'(^|[^\*])\*($|[^\*])', r'\1_\2', text)
+        # Unordered lists: _ to - / * to -
+        text = re.sub(r'\n_ ', '\n- ', text)
+        text = re.sub(r'\n* ', '\n- ', text)
+        # Italic: * to _
+        text = re.sub(r'(^|\n|[^\*])\*($|\n|[^\*])', r'\1_\2', text)
+        # Bold: ** to *
         text = re.sub(r'\*\*', '*', text)
+        # Strike: ~~ to ~
         text = re.sub(r'~~', '~', text)
         return text
 
