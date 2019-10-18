@@ -12,8 +12,10 @@ from django.http import HttpResponseRedirect
 from django_select2 import Select2View, NO_ERR_RESP
 
 from cosinnus.models.group import CosinnusGroup
+from cosinnus_message.rocket_chat import RocketChatConnection
 from postman.views import ConversationView, MessageView, csrf_protect_m,\
     login_required_m, _get_referer
+from django.views.generic import TemplateView
 from django.views.generic.base import View
 from postman.models import Message
 from django.http.response import Http404
@@ -40,6 +42,7 @@ except ImportError:
 from django.utils.translation import ugettext_lazy as _
 from cosinnus.conf import settings
 
+
 User = get_user_model()
 
 
@@ -53,6 +56,7 @@ class CosinnusMessageView(MessageView):
             context['form'].initial['body'] = None
         return context
 
+
 class CosinnusConversationView(ConversationView):
     """Display a conversation."""
     
@@ -62,7 +66,6 @@ class CosinnusConversationView(ConversationView):
         if context['form']:
             context['form'].initial['body'] = None
         return context
-
 
 
 class UpdateMessageMixin(object):
@@ -131,7 +134,8 @@ class DeleteView(UpdateMessageMixin, View):
     field_bit = 'deleted_at'
     success_msg = _("Messages or conversations successfully deleted.")
     field_value = now()
-    
+
+
 class MarkAsReadView(UpdateMessageMixin, View):
     """Mark messages/conversations as read."""
     recipient_only_field_bit = 'read_at'
@@ -143,12 +147,6 @@ class UndeleteView(UpdateMessageMixin, View):
     """Revert messages/conversations from marked as deleted."""
     field_bit = 'deleted_at'
     success_msg = _("Messages or conversations successfully recovered.")
-
-
-
-
-
-
 
 
 def index(request, *args, **kwargs):
@@ -205,3 +203,64 @@ class UserSelect2View(Select2View):
 
 
 
+class BaseRocketChatView(TemplateView):
+
+    template_name = 'cosinnus_message/rocket_chat.html'
+    base_url = settings.COSINNUS_CHAT_BASE_URL
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['url'] = self.get_rocket_chat_url()
+        return context
+
+    def get_rocket_chat_url(self):
+        return self.base_url
+
+
+class RocketChatIndexView(BaseRocketChatView):
+
+    pass
+
+
+class RocketChatWriteView(BaseRocketChatView):
+
+    def get_rocket_chat_url(self):
+        user = None
+        username = self.kwargs.get('username')
+        if username:
+            user = get_user_model().objects.filter(username=username).first()
+        if user:
+            return f'{self.base_url}/direct/{user.id}/'
+        else:
+            return self.base_url
+
+
+class RocketChatWriteGroupView(BaseRocketChatView):
+
+    queryset = CosinnusGroup.objects.filter(is_active=True)
+
+    def get_object(self):
+        slug = self.kwargs.get('slug')
+        if slug:
+            return self.queryset.get(slug=slug)
+        return
+
+    def get_rocket_chat_url(self):
+        """
+        Returns Rocket.Chat group URL with user is member of group,
+        creates a new private group with group admins if not
+        :return:
+        """
+        group_name = ''
+        group = self.get_object()
+        if not group:
+            return self.base_url
+        user = self.request.user
+        group_name = ''
+        if user and user.is_authenticated:
+            rocket = RocketChatConnection()
+            group_name = rocket.groups_request(group, user)
+
+        if group_name:
+            return f'{self.base_url}/group/{group_name}/'
+        return self.base_url

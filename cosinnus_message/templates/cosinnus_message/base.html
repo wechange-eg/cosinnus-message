@@ -3,7 +3,7 @@
 {% load static from staticfiles %}
 
 {% block breadcrumb %}
-        <li><a href="{% url 'postman:inbox' %}">{% trans "Messages" %}</a></li>
+        <li><a href="{% if SETTINGS.COSINNUS_ROCKET_ENABLED %}{% url 'cosinnus:message-global' %}{% else %}{% url 'postman:inbox' %}{% endif %}">{% trans "Messages" %}</a></li>
 {% endblock %}
 
 
