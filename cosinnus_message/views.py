@@ -202,7 +202,6 @@ class UserSelect2View(Select2View):
         return (NO_ERR_RESP, False, results)
 
 
-
 class BaseRocketChatView(TemplateView):
 
     template_name = 'cosinnus_message/rocket_chat.html'
@@ -214,7 +213,10 @@ class BaseRocketChatView(TemplateView):
         return context
 
     def get_rocket_chat_url(self):
-        return self.base_url
+        path = self.request.GET.get('path')
+        if path == '/':
+            path = None
+        return f'{self.base_url}/{path}' if path else self.base_url
 
 
 class RocketChatIndexView(BaseRocketChatView):
