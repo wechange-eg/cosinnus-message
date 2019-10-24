@@ -1,6 +1,6 @@
 {% extends "cosinnus_message/base.html" %}
 
-{% block container_classes %}{% endblock %}
+{% block container_classes %}rocket_chat{% endblock %}
 
 {% block main_page %}
 <iframe src="{{ url }}"
@@ -8,3 +8,5 @@
         style="border: none; position: absolute; top: 0; left: 0; height: 100%; padding-top: {% if SETTINGS.COSINNUS_USE_V2_NAVBAR %}50{% else %}55{% endif %}px;">
 </iframe>
 {% endblock %}
+
+{% block footer %}{% endblock %}

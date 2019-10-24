@@ -30,18 +30,19 @@ class CosinnusMessageDefaultSettings(AppConf):
     COSINNUS_CHAT_SETTINGS = {
         # General
         'UTF8_Names_Validation': '[0-9a-zA-Z-_.äÄöÖüÜß]+',
+        'Favorite_Rooms': True,
 
         # Accounts
         # 'Accounts_AllowAnonymousRead': False,
         # 'Accounts_AllowAnonymousWrite': False,
         # 'Accounts_AllowDeleteOwnAccount': False,
-        'Accounts_AllowEmailChange': True,
-        'Accounts_AllowPasswordChange': False,
-        'Accounts_AllowRealNameChange': True,
-        'Accounts_AllowUserAvatarChange': True,
         'Accounts_AllowUserProfileChange': False,
+        'Accounts_AllowUserAvatarChange': True,
+        'Accounts_AllowRealNameChange': True,
+        'Accounts_AllowEmailChange': True,
+        'Accounts_AllowPasswordChange': True,
         # 'Accounts_AllowUserStatusMessageChange': True,
-        'Accounts_AllowUsernameChange': False,
+        'Accounts_AllowUsernameChange': True,
         'Accounts_ShowFormLogin': True,
         # 'Accounts_Default_User_Preferences_sidebarGroupByType': False,
         # 'Accounts_Default_User_Preferences_hideUsernames': True,
@@ -60,6 +61,9 @@ class CosinnusMessageDefaultSettings(AppConf):
 
         # Rate Limiter
         'API_Enable_Rate_Limiter_Limit_Calls_Default': 100,
+
+        # Nachrichten
+        'API_Embed': False,
     }
     COSINNUS_CHAT_USER = None
     COSINNUS_CHAT_PASSWORD = None
