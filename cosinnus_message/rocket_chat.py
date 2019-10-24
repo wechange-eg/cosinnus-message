@@ -266,8 +266,16 @@ class RocketChatConnection:
             return
         user_data = response.get('user')
 
+        # Check name changes affecting username
+        profile = user.cosinnus_profile
+        rocket_username = profile.get_new_rocket_username()
+        if rocket_username != profile.rocket_username:
+            profile.rocket_username = rocket_username
+            profile.save(update_fields=['settings'])
+
         # Update name and email address
-        if user_data.get('name') != user.get_full_name() or user_data.get('email') != user.email:
+        if user_data.get('name') != user.get_full_name() or \
+                user_data.get('email') != user.email:
             profile = user.cosinnus_profile
             data = {
                 "username": profile.rocket_username,
