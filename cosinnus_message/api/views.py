@@ -1,4 +1,5 @@
 import csv
+from datetime import datetime
 import errno
 import os
 import re
@@ -17,27 +18,32 @@ from postman.models import Message, STATUS_ACCEPTED
 
 class MessageExportView(APIView):
 
+    format = 'old'
+
     def _get_users(self, user_ids=None):
         """
         Return users
         :return:
         """
         users = []
-        qs = get_user_model().objects.filter(is_active=True)
+        qs = get_user_model().objects.filter(is_active=True, email__isnull=False)
         if user_ids:
             qs = qs.filter(id__in=user_ids)
 
         for user in qs:
-            users.append([user.id, user.email, user.get_full_name()])
+            profile = user.cosinnus_profile
+            if not profile:
+                continue
+            users.append([user.id, profile.rocket_username, user.email, user.get_full_name()])
         return users
 
-    def _get_channels(self, user_ids):
+    def _get_channels(self, user_ids, format='old'):
         """
-        Return channels
+        Return channels (conversations and direct messages)
         :param user_ids:
         :return:
         """
-        channels = []
+        channels, direct_messages = [], []
         qs = Message.objects.filter(
             sender__in=user_ids,
             #sender_archived=False,
@@ -51,18 +57,29 @@ class MessageExportView(APIView):
                        Q(multi_conversation__isnull=False, master_for_sender=True, thread__isnull=True) |
                        Q(multi_conversation__isnull=False, master_for_sender=True, thread_id=F('id')))
         for message in qs:
-            participants, level = None, None
             if message.multi_conversation:
-                participants = ';'.join(str(u.id)
-                                        for u in message.multi_conversation.participants.all() if u.id in user_ids)
+                sender_profile = message.sender.cosinnus_profile
+                if not sender_profile:
+                    continue
+                participants = ';'.join(str(u.cosinnus_profile.rocket_username)
+                                        for u in message.multi_conversation.participants.all()
+                                        if u.id in user_ids and u.cosinnus_profile)
                 if participants:
                     channel_name = f'{slugify(message.subject)}-{message.id}'
-                    channels.append([message.id, channel_name, message.sender_id, 'private', participants])
+                    channels.append([message.id, channel_name, sender_profile.rocket_username, 'private', participants])
             elif message.sender_id in user_ids and message.recipient_id in user_ids:
+                sender_profile, recipient_profile = message.sender.cosinnus_profile, message.recipient.cosinnus_profile
+                if not sender_profile or not recipient_profile:
+                    continue
+                if format == 'old':
+                    channel_name = slugify(f'{sender_profile.rocket_username} x {recipient_profile.rocket_username}')
+                    channels.append([message.id, channel_name, sender_profile.rocket_username, 'direct',
+                                     recipient_profile.rocket_username])
+                else:
+                    direct_messages.append([message.id, sender_profile.rocket_username,
+                                            recipient_profile.rocket_username])
 
-                channel_name = slugify(f'{message.sender_id} x {message.recipient_id}')
-                channels.append([message.id, channel_name, str(message.sender_id), 'direct', str(message.recipient_id)])
-        return channels
+        return channels, direct_messages
 
     def format_message(self, text):
         """
@@ -79,7 +96,7 @@ class MessageExportView(APIView):
         """
         # Unordered lists: _ to - / * to -
         text = re.sub(r'\n_ ', '\n- ', text)
-        text = re.sub(r'\n* ', '\n- ', text)
+        text = re.sub(r'\n\* ', '\n- ', text)
         # Italic: * to _
         text = re.sub(r'(^|\n|[^\*])\*($|\n|[^\*])', r'\1_\2', text)
         # Bold: ** to *
@@ -88,7 +105,7 @@ class MessageExportView(APIView):
         text = re.sub(r'~~', '~', text)
         return text
 
-    def _get_messages(self, channel, user_ids):
+    def _get_messages(self, channel, user_ids, since=None, format='old'):
         """
         Return messages in channel
         :return:
@@ -103,6 +120,8 @@ class MessageExportView(APIView):
         qs = qs.exclude(sender_deleted_at__isnull=False, recipient_deleted_at__isnull=False)
         qs = qs.filter(Q(id=channel[0]) |
                        Q(thread_id=channel[0]))
+        if since:
+            qs = qs.filter(sent_at__gte=since)
         qs = qs.order_by('sent_at')
         for message in qs:
             text = self.format_message(message.body)
@@ -110,15 +129,29 @@ class MessageExportView(APIView):
             if message.subject:
                 text = f"*{message.subject}*\n{text}"
             timestamp = int(message.sent_at.timestamp() * 1000)
-            messages.append([message.sender_id, timestamp, text])
+            sender_profile = message.sender.cosinnus_profile
+            if not sender_profile:
+                continue
+            if format == 'old':
+                messages.append([sender_profile.rocket_username, timestamp, text])
+            else:
+                recipient_profile = message.recipient.cosinnus_profile
+                if not recipient_profile:
+                    continue
+                messages.append([sender_profile.rocket_username, recipient_profile.rocket_username, timestamp, text])
 
             for att in message.attached_objects.all():
                 fileentry = att.target_object
+                if not fileentry:
+                    continue
+                url = group_aware_reverse('cosinnus:file:rocket-download',
+                                          kwargs={'group': fileentry.group, 'slug': att.target_object.slug})
+                if not fileentry:
+                    continue
                 attachments.append([
-                    message.sender_id,
+                    sender_profile.rocket_username,
                     timestamp,
-                    group_aware_reverse('cosinnus:file:rocket-download', kwargs={'group': fileentry.group,
-                                                                                 'slug': att.target_object.slug})
+                    url
                 ])
         return messages, attachments
 
@@ -143,9 +176,13 @@ class MessageExportView(APIView):
         :return:
         """
         # Limit to given users, if specified
-        users = request.GET.get('users')
-        if users:
-            users = users.split(',')
+        user_ids = request.GET.get('users')
+        if user_ids:
+            user_ids = set([int(u) for u in user_ids.split(',')])
+
+        since = request.GET.get('since')
+        if since:
+            since = datetime.strptime(since, '%Y-%m-%d-%H-%M')
 
         # Recreate folder
         path = 'export'
@@ -159,37 +196,52 @@ class MessageExportView(APIView):
                     raise
 
         # Create ZIP contents
-        users = self._get_users(users)
+        users = self._get_users(user_ids)
         with open(f'{path}/users.csv', 'w') as csv_file:
             writer = csv.writer(csv_file, delimiter=',', quoting=csv.QUOTE_ALL)
-            writer.writerows(users)
+            for user in users:
+                writer.writerow(user[1:])
         user_ids = set(u[0] for u in users)
 
-        channels = self._get_channels(user_ids)
+        channels, direct_messages = self._get_channels(user_ids, format=self.format)
         with open(f'{path}/channels.csv', 'w') as csv_file:
-            writer = csv.writer(csv_file, delimiter=',', quoting=csv.QUOTE_ALL)
-            writer.writerows([channel[1:] for channel in channels])
+            channel_writer = csv.writer(csv_file, delimiter=',', quoting=csv.QUOTE_ALL)
 
-        for channel in channels:
-            messages, attachments = self._get_messages(channel, user_ids)
+            for channel in channels:
+                messages, attachments = self._get_messages(channel, user_ids, since=since, format=self.format)
 
-            if not messages:
-                continue
-            # Create folder
-            channel_path = f'{path}/{channel[1]}'
-            if not os.path.exists(channel_path):
-                try:
-                    os.makedirs(channel_path)
-                except OSError as exc:  # Guard against race condition
-                    if exc.errno != errno.EEXIST:
-                        raise
-            with open(f'{channel_path}/messages.csv', 'a') as csv_file:
-                writer = csv.writer(csv_file, delimiter=',', quoting=csv.QUOTE_ALL)
-                writer.writerows(messages)
-            if attachments:
-                with open(f'{channel_path}/uploads.csv', 'a') as csv_file:
+                if not messages:
+                    continue
+                # Create folder
+                channel_path = f'{path}/{channel[1]}'
+                if not os.path.exists(channel_path):
+                    try:
+                        os.makedirs(channel_path)
+                    except OSError as exc:  # Guard against race condition
+                        if exc.errno != errno.EEXIST:
+                            raise
+                with open(f'{channel_path}/messages.csv', 'a') as csv_file:
                     writer = csv.writer(csv_file, delimiter=',', quoting=csv.QUOTE_ALL)
-                    writer.writerows(attachments)
+                    writer.writerows(messages)
+                if attachments:
+                    with open(f'{channel_path}/uploads.csv', 'a') as csv_file:
+                        writer = csv.writer(csv_file, delimiter=',', quoting=csv.QUOTE_ALL)
+                        writer.writerows(attachments)
+                channel_writer.writerow(channel[1:])
+
+        if self.format != 'old':
+            dm_path = f'{path}/directmessages'
+            os.makedirs(dm_path)
+            for dm in direct_messages:
+                messages, attachments = self._get_messages(dm, user_ids, format='direct')
+
+                with open(f'{dm_path}/{dm[0]}-messages.csv', 'a') as csv_file:
+                    writer = csv.writer(csv_file, delimiter=',', quoting=csv.QUOTE_ALL)
+                    writer.writerows(messages)
+                if attachments:
+                    with open(f'{dm_path}/{dm[0]}-uploads.csv', 'a') as csv_file:
+                        writer = csv.writer(csv_file, delimiter=',', quoting=csv.QUOTE_ALL)
+                        writer.writerows(attachments)
 
         # Return zip file
         zip_filename = 'export.zip'
