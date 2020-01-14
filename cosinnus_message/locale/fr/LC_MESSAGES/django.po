@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-03 17:47+0200\n"
+"POT-Creation-Date: 2020-01-14 19:31+0100\n"
 "PO-Revision-Date: 2018-09-14 18:30+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -39,6 +39,14 @@ msgstr "Destinataire non défini."
 
 msgid "Portal"
 msgstr "Portail"
+
+#, python-format
+msgid "Request about your project \"%(group_name)s\""
+msgstr ""
+
+#, python-format
+msgid "Request about your group \"%(group_name)s\""
+msgstr ""
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
 msgstr "Tu peux joindre des fichiers et des images aux messages uniquement si tu es membre du forum. Tu peux le rejoindre ici :"
