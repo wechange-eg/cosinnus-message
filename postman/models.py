@@ -346,6 +346,10 @@ class Message(AttachableObjectModel, LastVisitedMixin, MultiConversationModel):
     def __str__(self):
         return "{0}:: {1}>{2}:{3}".format(self.id, self.obfuscated_sender, self.obfuscated_recipient, Truncator(self.subject).words(5))
     
+    def get_icon(self):
+        """ Returns the font-awesome icon specific to this object type """
+        return 'fa-envelope'
+    
     def save(self, *args, **kwargs):
         if not getattr(self, 'id', None):
             self.direct_reply_hash = get_random_string(32)
