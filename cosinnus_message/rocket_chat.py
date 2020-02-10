@@ -260,22 +260,17 @@ class RocketChatConnection:
 
         # Get user information and ID
         response = self.rocket.users_info(user_id=user_id)
+        if not response.status_code == 200:
+            logger.error('users_info', response)
+            return
         response = response.json()
         if not response.get('success'):
             logger.error('users_info', response)
             return
         user_data = response.get('user')
 
-        # Check name changes affecting username
-        profile = user.cosinnus_profile
-        rocket_username = profile.get_new_rocket_username()
-        if rocket_username != profile.rocket_username:
-            profile.rocket_username = rocket_username
-            profile.save(update_fields=['settings'])
-
         # Update name and email address
-        if user_data.get('name') != user.get_full_name() or \
-                user_data.get('email') != user.email:
+        if user_data.get('name') != user.get_full_name() or user_data.get('email') != user.email:
             profile = user.cosinnus_profile
             data = {
                 "username": profile.rocket_username,
@@ -735,3 +730,4 @@ class RocketChatConnection:
             logger.error('subscriptions_get', response)
 
         return sum(subscription['unread'] for subscription in response['update'])
+

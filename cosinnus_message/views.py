@@ -232,7 +232,10 @@ class RocketChatWriteView(BaseRocketChatView):
         if username:
             user = get_user_model().objects.filter(username=username).first()
         if user:
-            return f'{self.base_url}/direct/{user.id}/'
+            profile = user.cosinnus_profile
+            if not profile:
+                return self.base_url
+            return f'{self.base_url}/direct/{profile.rocket_username}/'
         else:
             return self.base_url
 
