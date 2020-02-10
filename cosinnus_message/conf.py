@@ -44,8 +44,9 @@ class CosinnusMessageDefaultSettings(AppConf):
         # 'Accounts_AllowUserStatusMessageChange': True,
         'Accounts_AllowUsernameChange': True,
         'Accounts_ShowFormLogin': True,
-        # 'Accounts_Default_User_Preferences_sidebarGroupByType': False,
-        # 'Accounts_Default_User_Preferences_hideUsernames': True,
+        'Accounts_Default_User_Preferences_sidebarGroupByType': True,
+        'Accounts_Default_User_Preferences_sidebarShowUnread': True,
+
 
         # Layout
         'Layout_Home_Body': '''<p>Willkommen bei Rocket.Chat!</p>
@@ -64,6 +65,7 @@ class CosinnusMessageDefaultSettings(AppConf):
 
         # Nachrichten
         'API_Embed': False,
+        'Message_HideType_au': False,
     }
     COSINNUS_CHAT_USER = None
     COSINNUS_CHAT_PASSWORD = None
