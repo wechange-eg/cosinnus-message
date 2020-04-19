@@ -69,3 +69,5 @@ class CosinnusMessageDefaultSettings(AppConf):
     }
     COSINNUS_CHAT_USER = None
     COSINNUS_CHAT_PASSWORD = None
+    
+    COSINNUS_CHAT_CONNECTION_CACHE_TIMEOUT = 60 * 60 * 24 * 7 # rocket authentication timeout is 7 days default

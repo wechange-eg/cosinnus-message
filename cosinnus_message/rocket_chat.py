@@ -11,7 +11,8 @@ from django.db.models import Q
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 
-from rocketchat_API.APIExceptions.RocketExceptions import RocketAuthenticationException
+from rocketchat_API.APIExceptions.RocketExceptions import RocketAuthenticationException,\
+    RocketConnectionException
 from rocketchat_API.rocketchat import RocketChat as RocketChatAPI
 from cosinnus.models.group import MEMBERSHIP_MEMBER, MEMBERSHIP_ADMIN,\
     CosinnusPortal
@@ -35,17 +36,22 @@ def get_cached_rocket_connection(user, password, server_url, reset=False):
     
     if rocket_connection is None:
         rocket_connection = RocketChat(user=user, password=password, server_url=server_url)
-        cache.set(cache_key, rocket_connection)
+        cache.set(cache_key, rocket_connection, settings.COSINNUS_CHAT_CONNECTION_CACHE_TIMEOUT)
     return rocket_connection
 
 
 def delete_cached_rocket_connection(user):
     """ Deletes a cached rocketchat connection or creates a new one and caches it """
     cache_key = ROCKETCHAT_USER_CONNECTION_CACHE_KEY % (CosinnusPortal.get_current().id, user)
-    
+    cache.delete(cache_key)
 
 
 class RocketChat(RocketChatAPI):
+    
+    def __init__(self, *args, **kwargs):
+        # this fixes the re-used dict from the original rocket API object
+        self.headers = {}
+        super(RocketChat, self).__init__(*args, **kwargs)
 
     def rooms_upload(self, rid, file, **kwargs):
         """
@@ -742,26 +748,45 @@ class RocketChatConnection:
         """
         profile = user.cosinnus_profile
         try:
-            user_connection = RocketChat(user=profile.rocket_username, password=user.password,
-                                         server_url=settings.COSINNUS_CHAT_BASE_URL)
-        except RocketAuthenticationException:
-            user_id = user.cosinnus_profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_ID)
-            if not user_id:
-                return 0
-            response = self.rocket.users_update(user_id=user_id, password=user.password).json()
-            if not response.get('success'):
-                logger.error('unread_messages', 'users_update', response)
-                return 0
-            user_connection = get_cached_rocket_connection(user=profile.rocket_username, password=user.password,
-                                         server_url=settings.COSINNUS_CHAT_BASE_URL, reset=True)
+            try:
+                user_connection = get_cached_rocket_connection(user=profile.rocket_username, password=user.password,
+                                             server_url=settings.COSINNUS_CHAT_BASE_URL)
+            except RocketAuthenticationException:
+                user_id = user.cosinnus_profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_ID)
+                if not user_id:
+                    # user not connected to rocketchat
+                    return 0 
+                # try to re-initi the user's account and reconnect
+                response = self.rocket.users_update(user_id=user_id, password=user.password).json()
+                if not response.get('success'):
+                    logger.error('unread_messages did not receive a success response', 'users_update', response)
+                    return 0
+                user_connection = get_cached_rocket_connection(user=profile.rocket_username, password=user.password,
+                                             server_url=settings.COSINNUS_CHAT_BASE_URL, reset=True) # resets cache
             
-        response = user_connection.subscriptions_get().json()
+            response = user_connection.subscriptions_get()
             
-        # TODO: which exception is received when the user has been logged out with this connection?
-        # then call delete_cached_rocket_connection() and retry get_cached_rocket_connection!
-        if not response.get('success'):
-            logger.error('subscriptions_get', response)
-            return 0
-
-        return sum(subscription['unread'] for subscription in response['update'])
-
+            # if we didn't receive a successful response, the server may be down or the user logged out
+            # reset the user connection and let the response be tried on the next run
+            if not response.status_code == 200:
+                delete_cached_rocket_connection(user=profile.rocket_username)
+                logger.warn('Rocket: unread_message_count: non-200 response.',
+                            extra={'response': response, 'status': response.status_code, 'content': response.content})
+                return 0
+            
+            # check if we got proper data back from the API
+            response_json = response.json()
+            if not response_json.get('success'):
+                logger.error('Rocket: subscriptions_get did not return a success', response_json)
+                return 0
+            
+            # add all unread channel updates and return
+            return sum(subscription['unread'] for subscription in response_json['update'])
+        
+        except RocketConnectionException as e:
+            logger.warn('Rocketchat unread message count: connection exception',
+                     extra={'exception': e})
+        except Exception as e:
+            logger.error('Rocketchat unread message count: unexpected exception',
+                     extra={'exception': e})
+            
