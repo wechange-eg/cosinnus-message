@@ -246,6 +246,7 @@ class RocketChatConnection:
             "username": profile.rocket_username,
             "active": user.is_active,
             "verified": True,
+            "requirePasswordChange": False,
         }
         response = self.rocket.users_create(**data).json()
         if not response.get('success'):
@@ -313,6 +314,8 @@ class RocketChatConnection:
                 "email": user.email,
                 #"active": user.is_active,
                 "password": user.password,
+                "verified": True,
+                "requirePasswordChange": False,
             }
             response = self.rocket.users_update(user_id=user_id, **data).json()
             if not response.get('success'):
