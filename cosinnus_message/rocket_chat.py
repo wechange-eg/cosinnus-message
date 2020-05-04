@@ -33,6 +33,15 @@ def get_cached_rocket_connection(user, password, server_url, reset=False):
         rocket_connection = None
     else:
         rocket_connection = cache.get(cache_key)
+        # check if rocket connection is still alive, if not, remove it from cache
+        alive = False
+        try:
+            alive = rocket_connection.me().status_code == 200
+        except:
+            pass
+        if not alive:
+            cache.delete(cache_key)
+            rocket_connection = None
     
     if rocket_connection is None:
         rocket_connection = RocketChat(user=user, password=password, server_url=server_url)
