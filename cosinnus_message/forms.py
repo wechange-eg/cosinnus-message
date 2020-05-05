@@ -64,17 +64,19 @@ class CustomWriteForm(BaseWriteForm):
                 
             if use_ids:
                 # restrict writing to the forum group
-                try:
-                    forum_group_id = CosinnusGroup.objects.get_cached(slugs=getattr(settings, 'NEWW_FORUM_GROUP_SLUG')).id
-                    if forum_group_id in group_tokens and not check_user_superuser(kwargs['sender']):
-                        self.restricted_recipient_flag = True
-                except CosinnusGroup.DoesNotExist:
-                    pass
+                forum_slug = getattr(settings, 'NEWW_FORUM_GROUP_SLUG', None)
+                if forum_slug:
+                    try:
+                        forum_group_id = CosinnusGroup.objects.get_cached(slugs=forum_slug).id
+                        if forum_group_id in group_tokens and not check_user_superuser(kwargs['sender']):
+                            self.restricted_recipient_flag = True
+                    except CosinnusGroup.DoesNotExist:
+                        pass
                 users = get_user_model().objects.filter(id__in=user_tokens)
                 groups = CosinnusGroup.objects.get_cached(pks=group_tokens)
             else:
                 # restrict writing to the forum group
-                if getattr(settings, 'NEWW_FORUM_GROUP_SLUG') in group_tokens:
+                if getattr(settings, 'NEWW_FORUM_GROUP_SLUG', None) and getattr(settings, 'NEWW_FORUM_GROUP_SLUG') in group_tokens:
                     self.restricted_recipient_flag = True
                 users = get_user_model().objects.filter(username__in=user_tokens)
                 groups = CosinnusGroup.objects.get_cached(slugs=group_tokens)
