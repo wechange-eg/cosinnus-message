@@ -800,7 +800,7 @@ class RocketChatConnection:
             logger.warn('Rocketchat unread message count: connection exception',
                      extra={'exception': e})
         except Exception as e:
-            trace = traceback.format_exc()
             logger.error('Rocketchat unread message count: unexpected exception',
-                     extra={'exception': e, 'trace': trace})
+                     extra={'exception': e})
+            logger.exception(e)
             
