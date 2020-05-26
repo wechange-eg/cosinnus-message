@@ -17,6 +17,7 @@ from rocketchat_API.rocketchat import RocketChat as RocketChatAPI
 from cosinnus.models.group import MEMBERSHIP_MEMBER, MEMBERSHIP_ADMIN,\
     CosinnusPortal
 from cosinnus.models.profile import PROFILE_SETTING_ROCKET_CHAT_ID, PROFILE_SETTING_ROCKET_CHAT_USERNAME
+import traceback
 
 logger = logging.getLogger(__name__)
 
@@ -801,4 +802,5 @@ class RocketChatConnection:
         except Exception as e:
             logger.error('Rocketchat unread message count: unexpected exception',
                      extra={'exception': e})
+            logger.exception(e)
             
