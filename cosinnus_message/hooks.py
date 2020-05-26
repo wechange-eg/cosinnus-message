@@ -10,6 +10,9 @@ from cosinnus.models.group import MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING
 from cosinnus.models.group_extra import CosinnusSociety, CosinnusProject
 from cosinnus_note.models import Note
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 if settings.COSINNUS_ROCKET_ENABLED:
     def handle_app_authorized(sender, request, token, **kwargs):
@@ -20,25 +23,23 @@ if settings.COSINNUS_ROCKET_ENABLED:
     
     @receiver(pre_save, sender=get_user_model())
     def handle_user_updated(sender, instance, created, **kwargs):
+        # this handles the user update, it is not in post_save!
         if instance.id:
-            old_instance = get_user_model().objects.get(pk=instance.id)
-            setattr(instance, '_old_fields', {
-                'password': old_instance.password,
-                'first_name': old_instance.first_name,
-                'last_name': old_instance.last_name,
-                'email': old_instance.email,
-            })
-
+            try:
+                rocket = RocketChatConnection()
+                old_instance = get_user_model().objects.get(pk=instance.id)
+                force = any([getattr(instance, fname) != getattr(old_instance, fname) \
+                                for fname in ('password', 'first_name', 'last_name', 'email')])
+                rocket.users_update(instance, force_user_update=force)
+            except Exception as e:
+                logger.exception(e)
+                
+                
     @receiver(post_save, sender=get_user_model())
     def handle_user_updated(sender, instance, created, **kwargs):
         rocket = RocketChatConnection()
         if created:
             rocket.users_create(instance)
-        else:
-            # if any of the "important" user fields have changed, always update the rocket user!
-            force = any([getattr(instance, fname) != instance._old_fields.get(fname) \
-                            for fname in instance._old_fields.keys()])
-            rocket.users_update(instance, force_user_update=force)
 
 
     @receiver(post_save, sender=UserProfile)
