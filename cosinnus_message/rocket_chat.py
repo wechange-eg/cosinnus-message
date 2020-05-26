@@ -294,7 +294,7 @@ class RocketChatConnection:
         if not response.get('success'):
             logger.error('users_update', response)
 
-    def users_update(self, user, request=None):
+    def users_update(self, user, request=None, force_user_update=False):
         """
         Updates user name, email address and avatar
         :return:
@@ -314,8 +314,8 @@ class RocketChatConnection:
             return
         user_data = response.get('user')
 
-        # Update name and email address
-        if user_data.get('name') != user.get_full_name() or user_data.get('email') != user.email:
+        # Update name, email address, password
+        if force_user_update or user_data.get('name') != user.get_full_name() or user_data.get('email') != user.email:
             profile = user.cosinnus_profile
             data = {
                 "username": profile.rocket_username,

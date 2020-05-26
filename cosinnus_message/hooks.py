@@ -17,7 +17,17 @@ if settings.COSINNUS_ROCKET_ENABLED:
         rocket.users_update(token.user, request=request)
 
     app_authorized.connect(handle_app_authorized)
-
+    
+    @receiver(pre_save, sender=get_user_model())
+    def handle_user_updated(sender, instance, created, **kwargs):
+        if instance.id:
+            old_instance = get_user_model().objects.get(pk=instance.id)
+            setattr(instance, '_old_fields', {
+                'password': old_instance.password,
+                'first_name': old_instance.first_name,
+                'last_name': old_instance.last_name,
+                'email': old_instance.email,
+            })
 
     @receiver(post_save, sender=get_user_model())
     def handle_user_updated(sender, instance, created, **kwargs):
@@ -25,7 +35,10 @@ if settings.COSINNUS_ROCKET_ENABLED:
         if created:
             rocket.users_create(instance)
         else:
-            rocket.users_update(instance)
+            # if any of the "important" user fields have changed, always update the rocket user!
+            force = any([getattr(instance, fname) != instance._old_fields.get(fname) \
+                            for fname in instance._old_fields.keys()])
+            rocket.users_update(instance, force_user_update=force)
 
 
     @receiver(post_save, sender=UserProfile)
