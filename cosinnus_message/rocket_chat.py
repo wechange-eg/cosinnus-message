@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
+from oauth2_provider.models import Application
 
 from rocketchat_API.APIExceptions.RocketExceptions import RocketAuthenticationException
 from rocketchat_API.rocketchat import RocketChat as RocketChatAPI
@@ -45,11 +46,22 @@ class RocketChatConnection:
         if stderr:
             self.stderr = stderr
 
+    def oauth_sync(self):
+        app, created = Application.objects.get_or_create(
+            client_type='confidential',
+            authorization_grant_type='authorization-code',
+            redirect_uris=f'{self.rocket.server_url}/_oauth/{settings.COSINNUS_PORTAL_NAME}',
+            skip_authorization=True
+        )
+        # FIXME: Create/update oauth client app on Rocket.Chat, once version 3.4 is released
+        # https://github.com/RocketChat/Rocket.Chat/pull/14912
+
     def settings_update(self):
         for setting, value in settings.COSINNUS_CHAT_SETTINGS.items():
             response = self.rocket.settings_update(setting, value).json()
             if not response.get('success'):
                 self.stderr.write(str(response))
+        self.oauth_sync()
 
     def users_sync(self):
         """
