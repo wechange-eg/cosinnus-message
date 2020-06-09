@@ -10,6 +10,9 @@ from cosinnus.models.group import MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING
 from cosinnus.models.group_extra import CosinnusSociety, CosinnusProject
 from cosinnus_note.models import Note
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 if settings.COSINNUS_ROCKET_ENABLED:
     def handle_app_authorized(sender, request, token, **kwargs):
@@ -17,15 +20,26 @@ if settings.COSINNUS_ROCKET_ENABLED:
         rocket.users_update(token.user, request=request)
 
     app_authorized.connect(handle_app_authorized)
-
-
+    
+    @receiver(pre_save, sender=get_user_model())
+    def handle_user_updated(sender, instance, created, **kwargs):
+        # this handles the user update, it is not in post_save!
+        if instance.id:
+            try:
+                rocket = RocketChatConnection()
+                old_instance = get_user_model().objects.get(pk=instance.id)
+                force = any([getattr(instance, fname) != getattr(old_instance, fname) \
+                                for fname in ('password', 'first_name', 'last_name', 'email')])
+                rocket.users_update(instance, force_user_update=force)
+            except Exception as e:
+                logger.exception(e)
+                
+                
     @receiver(post_save, sender=get_user_model())
     def handle_user_updated(sender, instance, created, **kwargs):
         rocket = RocketChatConnection()
         if created:
             rocket.users_create(instance)
-        else:
-            rocket.users_update(instance)
 
 
     @receiver(post_save, sender=UserProfile)

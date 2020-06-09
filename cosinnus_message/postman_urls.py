@@ -88,7 +88,7 @@ Refer to documentation.
 """
 from __future__ import unicode_literals
 from cosinnus_message.forms import CustomReplyForm, CustomWriteForm
-from cosinnus_message.views import UserSelect2View, CosinnusMessageView,\
+from cosinnus_message.views import CosinnusMessageView,\
     CosinnusConversationView, ArchiveView, DeleteView, UndeleteView,\
     MarkAsReadView
 
@@ -98,6 +98,7 @@ from django.views.generic.base import RedirectView
 from postman import OPTIONS
 from postman.views import (InboxView, SentView, ArchivesView, TrashView,
         WriteView, ReplyView)
+from cosinnus.views.user import UserSelect2View
 
 
 urlpatterns = [

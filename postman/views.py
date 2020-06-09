@@ -154,7 +154,7 @@ class RestrictRecipientMixin(object):
     def check_restricted_recipient(self, message, user=None):
         if message.multi_conversation:
             recipient_group_slugs = message.multi_conversation.targetted_groups.all().values_list('slug', flat=True)
-            if getattr(settings, 'NEWW_FORUM_GROUP_SLUG') in recipient_group_slugs and not check_user_superuser(user or self.request.user):
+            if getattr(settings, 'NEWW_FORUM_GROUP_SLUG', None) and getattr(settings, 'NEWW_FORUM_GROUP_SLUG') in recipient_group_slugs and not check_user_superuser(user or self.request.user):
                 return True
         return False
     

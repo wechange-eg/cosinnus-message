@@ -43,9 +43,11 @@ class CosinnusMessageDefaultSettings(AppConf):
         'Accounts_AllowPasswordChange': True,
         # 'Accounts_AllowUserStatusMessageChange': True,
         'Accounts_AllowUsernameChange': True,
-        'Accounts_ShowFormLogin': True,
         'Accounts_Default_User_Preferences_sidebarGroupByType': True,
         'Accounts_Default_User_Preferences_sidebarShowUnread': True,
+        'Accounts_ShowFormLogin': False,  # Required to be able to login as bot on first deployment
+        'Accounts_RegistrationForm': 'Disabled',
+        'Accounts_RegistrationForm_LinkReplacementText': '',
 
 
         # Layout
@@ -54,8 +56,8 @@ class CosinnusMessageDefaultSettings(AppConf):
     <p>Die native Mobile-App Rocket.Chat für Android und iOS ist bei <a title="Rocket.Chat+ on Google Play" href="https://play.google.com/store/apps/details?id=chat.rocket.android" target="_blank" rel="noopener">Google Play</a> und im  <a title="Rocket.Chat+ on the App Store" href="https://itunes.apple.com/app/rocket-chat/id1148741252" target="_blank" rel="noopener">App Store</a> erhältlich.</p>
     <p>Weitere Informationen finden Sie in der <a title="Rocket.Chat Documentation" href="https://rocket.chat/docs/" target="_blank" rel="noopener">Dokumentation</a>.</p>
     ''',
-        'Layout_Terms_of_Service': '<a href="https://plattform-n.org/cms/datenschutz/">Nutzungsbedingungen</a><br><a href="https://wechange.de/cms/datenschutz/">Datenschutz</a>',
-        'Layout_Login_Terms': 'Indem Sie fortfahren, stimmen Sie unseren <a href="https://plattform-n.org/cms/nutzungsbedingungen/">Nutzungs-</a> und <a href="https://wechange.de/cms/datenschutz/">Datenschutzbestimmungen</a> zu.',
+        'Layout_Terms_of_Service': '<a href="https://wechange.de/cms/datenschutz/">Nutzungsbedingungen</a><br><a href="https://wechange.de/cms/datenschutz/">Datenschutz</a>',
+        'Layout_Login_Terms': 'Indem Sie fortfahren, stimmen Sie unseren <a href="https://wechange.de/cms/nutzungsbedingungen/">Nutzungs-</a> und <a href="https://wechange.de/cms/datenschutz/">Datenschutzbestimmungen</a> zu.',
         'Layout_Privacy_Policy': '<a href="https://wechange.de/cms/datenschutz/">Datenschutz</a>',
         # 'UI_Group_Channels_By_Type': False,
         'UI_Use_Real_Name': True,
@@ -69,3 +71,5 @@ class CosinnusMessageDefaultSettings(AppConf):
     }
     COSINNUS_CHAT_USER = None
     COSINNUS_CHAT_PASSWORD = None
+    
+    COSINNUS_CHAT_CONNECTION_CACHE_TIMEOUT = 60 * 60 * 24 * 7 # rocket authentication timeout is 7 days default

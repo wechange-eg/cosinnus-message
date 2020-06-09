@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wechange RU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-03 17:47+0200\n"
+"POT-Creation-Date: 2020-04-22 13:06+0200\n"
 "PO-Revision-Date: 2019-07-03 17:40+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -38,6 +38,14 @@ msgstr "Неопределенный адресат."
 
 msgid "Portal"
 msgstr "Портал"
+
+#, python-format
+msgid "Request about your project \"%(group_name)s\""
+msgstr ""
+
+#, python-format
+msgid "Request about your group \"%(group_name)s\""
+msgstr ""
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
 msgstr "Вы можете прикладывать файлы и изображения к сообщениям, если вы член форума. Вы можете присоединиться здесь:"
