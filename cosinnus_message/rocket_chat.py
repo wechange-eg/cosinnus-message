@@ -371,7 +371,19 @@ class RocketChatConnection:
         response = self.rocket.users_update(user_id=user_id, **data).json()
         if not response.get('success'):
             logger.error('users_enable', response)
-
+    
+    def users_delete(self, user):
+        """
+        Delete a user
+        :return:
+        """
+        user_id = self.get_user_id(user)
+        if not user_id:
+            return
+        response = self.rocket.users_delete(user_id=user_id).json()
+        if not response.get('success'):
+            logger.error('users_delete', response)
+    
     def groups_request(self, group, user):
         """
         Returns name of group if user is member of group, otherwise creates private group for group request

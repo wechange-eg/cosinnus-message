@@ -9,6 +9,7 @@ from cosinnus.models import UserProfile, CosinnusGroupMembership
 from cosinnus.models.group import MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING
 from cosinnus.models.group_extra import CosinnusSociety, CosinnusProject
 from cosinnus_note.models import Note
+from cosinnus.core import signals
 
 import logging
 logger = logging.getLogger(__name__)
@@ -47,12 +48,6 @@ if settings.COSINNUS_ROCKET_ENABLED:
         if not created:
             rocket = RocketChatConnection()
             rocket.users_update(instance.user)
-
-
-    #@receiver(post_delete, sender=get_user_model())
-    #def handle_user_deleted(sender, instance, **kwargs):
-    #    rocket = RocketChatConnection()
-    #    rocket.disable_user(instance)
 
 
     @receiver(pre_save, sender=CosinnusSociety)
@@ -143,3 +138,10 @@ if settings.COSINNUS_ROCKET_ENABLED:
     def handle_note_deleted(sender, instance, **kwargs):
         rocket = RocketChatConnection()
         rocket.notes_delete(instance)
+
+
+    @receiver(signals.pre_userprofile_delete)
+    def handle_note_deleted(sender, profile, **kwargs):
+        """ Called when a user deletes their account. Completely deletes the user's rocket profile """
+        rocket = RocketChatConnection()
+        rocket.users_delete(profile.user)
