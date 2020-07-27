@@ -63,7 +63,7 @@ class CosinnusMessageDefaultSettings(AppConf):
         'UI_Use_Real_Name': True,
 
         # Rate Limiter
-        'API_Enable_Rate_Limiter_Limit_Calls_Default': 100,
+        'API_Enable_Rate_Limiter_Limit_Calls_Default': 10000,
 
         # Nachrichten
         'API_Embed': False,
