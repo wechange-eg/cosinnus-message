@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-22 13:06+0200\n"
-"PO-Revision-Date: 2018-08-31 11:28+0200\n"
+"PO-Revision-Date: 2020-07-02 20:57+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Poedit 2.3.1\n"
 
 msgid "Message"
 msgstr "Wiadomość"
@@ -41,11 +41,11 @@ msgstr "Portal"
 
 #, python-format
 msgid "Request about your project \"%(group_name)s\""
-msgstr ""
+msgstr "Żądanie dotyczące twojego projektu \"%(group_name)s\""
 
 #, python-format
 msgid "Request about your group \"%(group_name)s\""
-msgstr ""
+msgstr "Żądanie dotyczące twojej grupy \"%(group_name)s\""
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
 msgstr "Możesz załączać pliki i zdjęcia do wiadomości tylko, jeśli jesteś członkiem forum. Możesz dołączyć tutaj:"
@@ -141,7 +141,7 @@ msgid "You have received a message from the user '%(sender_first)s %(sender_last
 msgstr "Otrzymałeś/aś wiadomość od użytkownika '%(sender_first)s %(sender_last)s'."
 
 msgid "This message was sent in a conversation with: "
-msgstr "Ta wiadomość została wysłana w konwersacji z:"
+msgstr "Ta wiadomość została wysłana w konwersacji z: "
 
 msgid "Project/Group"
 msgstr "Projekt/Grupa"
