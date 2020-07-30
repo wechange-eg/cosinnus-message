@@ -31,6 +31,7 @@ class CosinnusMessageDefaultSettings(AppConf):
         # General
         'UTF8_Names_Validation': '[0-9a-zA-Z-_.äÄöÖüÜß]+',
         'Favorite_Rooms': True,
+        'Iframe_Restrict_Access': False,
 
         # Accounts
         # 'Accounts_AllowAnonymousRead': False,
