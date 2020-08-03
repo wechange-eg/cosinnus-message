@@ -31,7 +31,8 @@ if settings.COSINNUS_ROCKET_ENABLED:
                 old_instance = get_user_model().objects.get(pk=instance.id)
                 force = any([getattr(instance, fname) != getattr(old_instance, fname) \
                                 for fname in ('password', 'first_name', 'last_name', 'email')])
-                rocket.users_update(instance, force_user_update=force)
+                password_updated = instance.password != old_instance.password
+                rocket.users_update(instance, force_user_update=force, update_password=password_updated)
             except Exception as e:
                 logger.exception(e)
                 

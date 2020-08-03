@@ -307,7 +307,7 @@ class RocketChatConnection:
         if not response.get('success'):
             logger.error('users_update', response)
 
-    def users_update(self, user, request=None, force_user_update=False):
+    def users_update(self, user, request=None, force_user_update=False, update_password=False):
         """
         Updates user name, email address and avatar
         :return:
@@ -335,10 +335,16 @@ class RocketChatConnection:
                 "name": user.get_full_name(),
                 "email": user.email,
                 #"active": user.is_active,
-                "password": user.password,
                 "verified": True,
                 "requirePasswordChange": False,
             }
+            # updating the password invalidates existing user sessions, so use it only
+            # when actually needed
+            if update_password:
+                logger.warn('Rocketchat updated a user AND its password!', extra={'userid': user.id})
+                data.update({
+                    "password": user.password,
+                })
             response = self.rocket.users_update(user_id=user_id, **data).json()
             if not response.get('success'):
                 logger.error('users_update', response)
