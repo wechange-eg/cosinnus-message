@@ -24,6 +24,7 @@ if settings.COSINNUS_ROCKET_ENABLED:
     
     @receiver(pre_save, sender=get_user_model())
     def handle_user_updated(sender, instance, created, **kwargs):
+        # TODO: does this hook trigger correctly?
         # this handles the user update, it is not in post_save!
         if instance.id:
             try:
@@ -31,12 +32,19 @@ if settings.COSINNUS_ROCKET_ENABLED:
                 old_instance = get_user_model().objects.get(pk=instance.id)
                 force = any([getattr(instance, fname) != getattr(old_instance, fname) \
                                 for fname in ('password', 'first_name', 'last_name', 'email')])
-                password_updated = instance.password != old_instance.password
+                password_updated = bool(instance.password != old_instance.password)
                 rocket.users_update(instance, force_user_update=force, update_password=password_updated)
             except Exception as e:
                 logger.exception(e)
-                
-                
+    
+    
+    @receiver(signals.user_password_changed)
+    def handle_user_password_updated(sender, user, **kwargs):            
+        logger.warn('Directly triggered user password update for rocketchat')
+        rocket = RocketChatConnection()
+        rocket.users_update(user, force_user_update=True, update_password=True)
+        
+    
     @receiver(post_save, sender=get_user_model())
     def handle_user_updated(sender, instance, created, **kwargs):
         rocket = RocketChatConnection()
