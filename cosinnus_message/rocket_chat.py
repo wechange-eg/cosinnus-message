@@ -341,7 +341,6 @@ class RocketChatConnection:
             # updating the password invalidates existing user sessions, so use it only
             # when actually needed
             if update_password:
-                logger.warn('Rocketchat updated a user AND its password!', extra={'userid': user.id})
                 data.update({
                     "password": user.password,
                 })

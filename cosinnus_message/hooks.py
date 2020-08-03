@@ -40,7 +40,6 @@ if settings.COSINNUS_ROCKET_ENABLED:
     
     @receiver(signals.user_password_changed)
     def handle_user_password_updated(sender, user, **kwargs):            
-        logger.warn('Directly triggered user password update for rocketchat')
         rocket = RocketChatConnection()
         rocket.users_update(user, force_user_update=True, update_password=True)
         
