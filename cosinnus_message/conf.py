@@ -24,6 +24,9 @@ class CosinnusMessageDefaultSettings(AppConf):
     POSTMAN_SHOW_USER_AS = 'username'
 
     # Chat config
+    COSINNUS_ROCKET_ENABLED = False
+    COSINNUS_ROCKET_EXPORT_ENABLED = False
+    
     COSINNUS_CHAT_BASE_URL = None
     COSINNUS_CHAT_GROUP_GENERAL = '%s-general'
     COSINNUS_CHAT_GROUP_NEWS = '%s-news'
@@ -74,3 +77,8 @@ class CosinnusMessageDefaultSettings(AppConf):
     COSINNUS_CHAT_PASSWORD = None
     
     COSINNUS_CHAT_CONNECTION_CACHE_TIMEOUT = 60 * 60 * 24 * 7 # rocket authentication timeout is 7 days default
+    
+    # enables the read-only mode for the legacy postman messages system and shows an
+    # "archived messages button" in the user profile
+    COSINNUS_POSTMAN_ARCHIVE_MODE = False 
+    

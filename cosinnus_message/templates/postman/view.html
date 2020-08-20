@@ -111,7 +111,7 @@
     
     {% endfor %}
 
-    {% if reply_to_pk %}
+    {% if reply_to_pk and not SETTINGS.COSINNUS_POSTMAN_ARCHIVE_MODE %}
     <form action="{% url 'postman:reply' reply_to_pk %}?next={{ next_url|urlencode }}" method="post">{% csrf_token %}
 	    
 	    <div class="btn btn-emphasized w100">

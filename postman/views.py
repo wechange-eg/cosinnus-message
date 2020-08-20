@@ -27,6 +27,7 @@ from .fields import autocompleter_app
 from .forms import WriteForm, AnonymousWriteForm, QuickReplyForm, FullReplyForm
 from .models import Message, get_order_by
 from .utils import format_subject, format_body
+from django.http.response import HttpResponseForbidden
 
 login_required_m = method_decorator(login_required)
 csrf_protect_m = method_decorator(csrf_protect)
@@ -243,6 +244,10 @@ class WriteView(ComposeMixin, FormView):
 
     @csrf_protect_m
     def dispatch(self, *args, **kwargs):
+        # view is disabled in archive mode
+        if getattr(settings, 'COSINNUS_POSTMAN_ARCHIVE_MODE', False):
+            return HttpResponseForbidden('This view is disabled.')
+        
         if getattr(settings, 'POSTMAN_DISALLOW_ANONYMOUS', False):
             return login_required(super(WriteView, self).dispatch)(*args, **kwargs)
         return super(WriteView, self).dispatch(*args, **kwargs)
@@ -309,6 +314,10 @@ class ReplyView(ComposeMixin, RestrictRecipientMixin, FormView):
     @csrf_protect_m
     @login_required_m
     def dispatch(self, request, message_id, *args, **kwargs):
+        # view is disabled in archive mode
+        if getattr(settings, 'COSINNUS_POSTMAN_ARCHIVE_MODE', False):
+            return HttpResponseForbidden('This view is disabled.')
+        
         perms = Message.objects.perms(request.user)
         self.parent = get_object_or_404(Message, perms, pk=message_id)
         return super(ReplyView, self).dispatch(request,*args, **kwargs)

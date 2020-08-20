@@ -28,8 +28,9 @@
 {% captureas label %}{% trans "Trash" %}{% endcaptureas %}
 {% include "cosinnus/leftnav_button.html" with extra_classes="regular-space" active=active icon="fa-trash-o" label=label href=trash_url  %}
 
-{% captureas active %}{% if request.get_full_path == write_url %}True{% endif %}{% endcaptureas %}
-{% captureas label %}{% trans "Write" %}{% endcaptureas %}
-{% include "cosinnus/leftnav_button.html" with extra_classes="" active=active icon="fa-pencil" label=label href=write_url  %}
-
+{% if not SETTINGS.COSINNUS_POSTMAN_ARCHIVE_MODE %}
+	{% captureas active %}{% if request.get_full_path == write_url %}True{% endif %}{% endcaptureas %}
+	{% captureas label %}{% trans "Write" %}{% endcaptureas %}
+	{% include "cosinnus/leftnav_button.html" with extra_classes="" active=active icon="fa-pencil" label=label href=write_url  %}
+{% endif %}
 {% endblock %}

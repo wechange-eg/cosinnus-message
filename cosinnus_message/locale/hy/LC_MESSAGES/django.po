@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-23 12:30+0100\n"
+"POT-Creation-Date: 2020-08-20 11:36+0200\n"
 "PO-Revision-Date: 2020-04-01 11:56+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: hy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Last-Translator: \n"
-"Language-Team: \n"
 "X-Generator: Poedit 2.3\n"
 
 msgid "Message"
@@ -55,6 +55,12 @@ msgstr "Ֆորում"
 
 msgid "Messages"
 msgstr "Հաղորդագրություններ"
+
+msgid "Legacy Messages Archive"
+msgstr ""
+
+msgid "The legacy messaging app is no longer in use. You can view all of your old messages, but you cannot write new ones. Please use the new messaging app in the navigation from now on!"
+msgstr ""
 
 #, python-format
 msgid ""
