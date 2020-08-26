@@ -105,12 +105,15 @@ class RocketChatConnection:
         for setting, value in settings.COSINNUS_CHAT_SETTINGS.items():
             response = self.rocket.settings_update(setting, value).json()
             if not response.get('success'):
-                self.stderr.write(str(response))
+                self.stderr.write('ERROR! ' + str(setting) + ': ' + str(value) + ':: ' + str(response))
+            else:
+                self.stdout.write('OK! ' + str(setting) + ': ' + str(value)) 
         self.oauth_sync()
 
-    def users_sync(self):
+    def users_sync(self, skip_update=False):
         """
         Sync users
+        @param skip_update: if True, skips updating existing users
         :return:
         """
         # Get existing rocket users
@@ -159,6 +162,9 @@ class RocketChatConnection:
 
             # Username exists?
             if rocket_user:
+                if skip_update:
+                    continue
+                
                 changed = False
                 # TODO: Introducing User.updated_at would improve performance here
                 rocket_emails = (e['address'] for e in rocket_user.get('emails'))
@@ -187,8 +193,10 @@ class RocketChatConnection:
         Sync groups
         :return:
         """
+        portal = CosinnusPortal.get_current()
+        
         # Sync WECHANGE groups
-        groups = CosinnusSociety.objects.filter(is_active=True)
+        groups = CosinnusSociety.objects.filter(is_active=True, portal=portal)
         groups = groups.filter(Q(**{f'settings__{PROFILE_SETTING_ROCKET_CHAT_ID}_general__isnull': True}) |
                                Q(**{f'settings__{PROFILE_SETTING_ROCKET_CHAT_ID}_general': None}))
         count = len(groups)
@@ -198,7 +206,7 @@ class RocketChatConnection:
             self.groups_create(group)
 
         # Sync WECHANGE projects
-        projects = CosinnusProject.objects.filter(is_active=True)
+        projects = CosinnusProject.objects.filter(is_active=True, portal=portal)
         projects = projects.filter(Q(**{'settings__{PROFILE_SETTING_ROCKET_CHAT_ID}_general__isnull': True}) |
                                    Q(**{'settings__{PROFILE_SETTING_ROCKET_CHAT_ID}_general': None}))
         count = len(projects)
@@ -354,7 +362,8 @@ class RocketChatConnection:
             if request:
                 avatar_url = request.build_absolute_uri(avatar_url)
             else:
-                avatar_url = f'{settings.COSINNUS_SITE_PROTOCOL}://{settings.COSINNUS_PORTAL_URL}{avatar_url}'
+                portal_domain = CosinnusPortal.get_current().get_domain()
+                avatar_url = f'{portal_domain}{avatar_url}'
             response = self.rocket.users_set_avatar(avatar_url, userId=user_id).json()
             if not response.get('success'):
                 logger.error('users_update', 'users_set_avatar', response)
