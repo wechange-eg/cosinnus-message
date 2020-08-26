@@ -19,6 +19,7 @@ from cosinnus.models.group import MEMBERSHIP_MEMBER, MEMBERSHIP_ADMIN,\
     CosinnusPortal
 from cosinnus.models.profile import PROFILE_SETTING_ROCKET_CHAT_ID, PROFILE_SETTING_ROCKET_CHAT_USERNAME
 import traceback
+from cosinnus.utils.user import filter_active_users, filter_portal_users
 
 logger = logging.getLogger(__name__)
 
@@ -138,7 +139,8 @@ class RocketChatConnection:
             offset += response['count']
 
         # Check active users in DB
-        users = get_user_model().objects.filter(is_active=True)
+        users = filter_active_users(filter_portal_users(get_user_model().objects.all()))
+        
         count = len(users)
         for i, user in enumerate(users):
             self.stdout.write('User %i/%i' % (i, count), ending='\r')
