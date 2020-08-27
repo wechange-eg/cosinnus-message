@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
 
     def handle(self, *args, **options):
-        skip_update = options['skip-update']
+        skip_update = options['skip_update']
         
         rocket = RocketChatConnection(stdout=self.stdout, stderr=self.stderr)
         rocket.users_sync(skip_update=skip_update)

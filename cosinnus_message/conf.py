@@ -52,7 +52,7 @@ class CosinnusMessageDefaultSettings(AppConf):
         'Accounts_ShowFormLogin': False,  # Required to be able to login as bot on first deployment
         'Accounts_RegistrationForm': 'Disabled',
         'Accounts_RegistrationForm_LinkReplacementText': '',
-
+        'Accounts_TwoFactorAuthentication_By_Email_Enabled': False,
 
         # Layout
         'Layout_Home_Body': '''<p>Willkommen bei Rocket.Chat!</p>
