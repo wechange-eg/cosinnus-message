@@ -240,15 +240,15 @@ class RocketChatConnection:
             type(profile).objects.filter(pk=profile.pk).update(settings=profile.settings)
         return profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_ID)
 
-    def get_group_id(self, group, type='general'):
+    def get_group_id(self, group, group_type='general'):
         """
-        Returns Rocket.Chat ID from user settings or Rocket.Chat API
+        Returns Rocket.Chat ID from group settings or Rocket.Chat API
         :param user:
         :return:
         """
         key = f'{PROFILE_SETTING_ROCKET_CHAT_ID}_{type}'
         if not group.settings.get(key):
-            if type == 'general':
+            if group_type == 'general':
                 group_name = settings.COSINNUS_CHAT_GROUP_GENERAL % group.slug
             else:
                 group_name = settings.COSINNUS_CHAT_GROUP_NEWS % group.slug
@@ -256,8 +256,8 @@ class RocketChatConnection:
             if not response.get('success'):
                 logger.error('get_group_id', response)
                 return
-            user_data = response.get('user')
-            rocket_chat_id = user_data.get('_id')
+            group_data = response.get('group')
+            rocket_chat_id = group_data.get('_id')
             group.settings[key] = rocket_chat_id
             # Update group settings without triggering signals to prevent cycles
             type(group).objects.filter(pk=group.pk).update(settings=group.settings)
@@ -550,7 +550,7 @@ class RocketChatConnection:
         :return:
         """
         # Rename general channel
-        room_id = self.get_group_id(group, type='general')
+        room_id = self.get_group_id(group, group_type='general')
         if room_id:
             room_name = settings.COSINNUS_CHAT_GROUP_GENERAL % group.slug
             response = self.rocket.groups_rename(room_id=room_id, name=room_name).json()
@@ -558,7 +558,7 @@ class RocketChatConnection:
                 logger.error('groups_rename', response)
 
         # Rename news channel
-        room_id = self.get_group_id(group, type='news')
+        room_id = self.get_group_id(group, group_type='news')
         if room_id:
             room_name = settings.COSINNUS_CHAT_GROUP_NEWS % group.slug
             response = self.rocket.groups_rename(room_id=room_id, name=room_name).json()
@@ -572,14 +572,14 @@ class RocketChatConnection:
         :return:
         """
         # Archive general channel
-        room_id = self.get_group_id(group, type='general')
+        room_id = self.get_group_id(group, group_type='general')
         if room_id:
             response = self.rocket.groups_archive(room_id=room_id).json()
             if not response.get('success'):
                 logger.error('groups_archive', response)
 
         # Archive, news channel
-        room_id = self.get_group_id(group, type='news')
+        room_id = self.get_group_id(group, group_type='news')
         if room_id:
             response = self.rocket.groups_archive(room_id=room_id).json()
             if not response.get('success'):
@@ -595,15 +595,15 @@ class RocketChatConnection:
         if not user_id:
             return
 
-        # Remove role in general group
-        room_id = self.get_group_id(membership.group, type='general')
+        # Create role in general group
+        room_id = self.get_group_id(membership.group, group_type='general')
         if room_id:
             response = self.rocket.groups_invite(room_id=room_id, user_id=user_id).json()
             if not response.get('success'):
                 logger.error('groups_invite', response)
 
-        # Remove role in news group
-        room_id = self.get_group_id(membership.group, type='news')
+        # Create role in news group
+        room_id = self.get_group_id(membership.group, group_type='news')
         if room_id:
             response = self.rocket.groups_invite(room_id=room_id, user_id=user_id).json()
             if not response.get('success'):
@@ -620,14 +620,14 @@ class RocketChatConnection:
             return
 
         # Remove role in general group
-        room_id = self.get_group_id(membership.group, type='general')
+        room_id = self.get_group_id(membership.group, group_type='general')
         if room_id:
             response = self.rocket.groups_kick(room_id=room_id, user_id=user_id).json()
             if not response.get('success'):
                 logger.error('groups_kick', response)
 
         # Remove role in news group
-        room_id = self.get_group_id(membership.group, type='news')
+        room_id = self.get_group_id(membership.group, group_type='news')
         if room_id:
             response = self.rocket.groups_kick(room_id=room_id, user_id=user_id).json()
             if not response.get('success'):
@@ -644,14 +644,14 @@ class RocketChatConnection:
             return
 
         # Remove role in general group
-        room_id = self.get_group_id(membership.group, type='general')
+        room_id = self.get_group_id(membership.group, group_type='general')
         if room_id:
             response = self.rocket.groups_add_moderator(room_id=room_id, user_id=user_id).json()
             if not response.get('success'):
                 logger.error('groups_add_moderator', response)
 
         # Remove role in news group
-        room_id = self.get_group_id(membership.group, type='news')
+        room_id = self.get_group_id(membership.group, group_type='news')
         if room_id:
             response = self.rocket.groups_add_moderator(room_id=room_id, user_id=user_id).json()
             if not response.get('success'):
@@ -668,14 +668,14 @@ class RocketChatConnection:
             return
 
         # Remove role in general group
-        room_id = self.get_group_id(membership.group, type='general')
+        room_id = self.get_group_id(membership.group, group_type='general')
         if room_id:
             response = self.rocket.groups_remove_moderator(room_id=room_id, user_id=user_id).json()
             if not response.get('success'):
                 logger.error('groups_remove_moderator', response)
 
         # Remove role in news group
-        room_id = self.get_group_id(membership.group, type='news')
+        room_id = self.get_group_id(membership.group, group_type='news')
         if room_id:
             response = self.rocket.groups_remove_moderator(room_id=room_id, user_id=user_id).json()
             if not response.get('success'):
@@ -714,7 +714,7 @@ class RocketChatConnection:
         url = note.get_absolute_url()
         text = self.format_message(note.text)
         message = f'*{note.title}*\n{text}\n\n[{url}]({url})'
-        room_id = self.get_group_id(note.group, type='news')
+        room_id = self.get_group_id(note.group, group_type='news')
         if not room_id:
             return
         response = self.rocket.chat_post_message(text=message, room_id=room_id).json()
@@ -737,7 +737,7 @@ class RocketChatConnection:
         url = note.get_absolute_url()
         text = self.format_message(note.text)
         message = f'*{note.title}*\n{text}\n\n[{url}]({url})'
-        room_id = self.get_group_id(note.group, type='news')
+        room_id = self.get_group_id(note.group, group_type='news')
         if not msg_id or not room_id:
             return
         response = self.rocket.chat_update(msg_id=msg_id, room_id=room_id, text=message).json()
@@ -752,7 +752,7 @@ class RocketChatConnection:
         :return:
         """
         msg_id = note.settings.get('rocket_chat_message_id')
-        room_id = self.get_group_id(note.group, type='news')
+        room_id = self.get_group_id(note.group, group_type='news')
         if not msg_id or not room_id:
             return
 
@@ -786,7 +786,7 @@ class RocketChatConnection:
         :return:
         """
         msg_id = note.settings.get('rocket_chat_message_id')
-        room_id = self.get_group_id(note.group, type='news')
+        room_id = self.get_group_id(note.group, group_type='news')
         if not msg_id or not room_id:
             return
         response = self.rocket.chat_delete(room_id=room_id, msg_id=msg_id).json()
