@@ -4,7 +4,8 @@ from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
 from oauth2_provider.signals import app_authorized
 
-from cosinnus_message.rocket_chat import RocketChatConnection
+from cosinnus_message.rocket_chat import RocketChatConnection,\
+    delete_cached_rocket_connection
 from cosinnus.models import UserProfile, CosinnusGroupMembership
 from cosinnus.models.group import MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING
 from cosinnus.models.group_extra import CosinnusSociety, CosinnusProject
@@ -43,6 +44,7 @@ if settings.COSINNUS_ROCKET_ENABLED:
         try:
             rocket = RocketChatConnection()
             rocket.users_update(user, force_user_update=True, update_password=True)
+            delete_cached_rocket_connection(user)
         except Exception as e:
             logger.exception(e)
     
