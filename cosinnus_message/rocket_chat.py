@@ -246,7 +246,7 @@ class RocketChatConnection:
         :param user:
         :return:
         """
-        key = f'{PROFILE_SETTING_ROCKET_CHAT_ID}_{type}'
+        key = f'{PROFILE_SETTING_ROCKET_CHAT_ID}_{group_type}'
         if not group.settings.get(key):
             if group_type == 'general':
                 group_name = settings.COSINNUS_CHAT_GROUP_GENERAL % group.slug
