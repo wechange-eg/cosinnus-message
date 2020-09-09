@@ -44,15 +44,17 @@ class CosinnusMessageDefaultSettings(AppConf):
         'Accounts_AllowUserAvatarChange': True,
         'Accounts_AllowRealNameChange': True,
         'Accounts_AllowEmailChange': True,
-        'Accounts_AllowPasswordChange': True,
+        'Accounts_AllowPasswordChange': False,
         # 'Accounts_AllowUserStatusMessageChange': True,
-        'Accounts_AllowUsernameChange': True,
+        'Accounts_AllowUsernameChange': False,
         'Accounts_Default_User_Preferences_sidebarGroupByType': True,
         'Accounts_Default_User_Preferences_sidebarShowUnread': True,
         'Accounts_ShowFormLogin': False,  # Required to be able to login as bot on first deployment
         'Accounts_RegistrationForm': 'Disabled',
         'Accounts_RegistrationForm_LinkReplacementText': '',
         'Accounts_TwoFactorAuthentication_By_Email_Enabled': False,
+        'Accounts_Send_Email_When_Activating': False,
+        'Accounts_Send_Email_When_Deactivating': False,
 
         # Layout
         'Layout_Home_Body': '''<p>Willkommen bei Rocket.Chat!</p>
