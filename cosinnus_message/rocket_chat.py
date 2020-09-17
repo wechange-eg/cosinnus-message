@@ -458,6 +458,29 @@ class RocketChatConnection:
                 logger.error('groups_request', 'groups_set_description', response)
 
         return group_name
+    
+    def create_private_room(self, group_name, moderator_user, member_users=None):
+        """ Create a private group with a user as first member and moderator.
+            @param moderator_user: user who will become both a member and moderator
+            @param member_users: list of users who become members. may contain the moderator_user again
+            @return: the rocketchat room_id """
+        # create group
+        member_users = member_users or []
+        members = [moderator_user.cosinnus_profile.rocket_username, ] + [member.cosinnus_profile.rocket_username for member in member_users]
+        members = list(set(members))
+        response = self.rocket.groups_create(group_name, members=members).json()
+        if not response.get('success'):
+            logger.error('Direct create_private_group', 'groups_create', response)
+        group_name = response.get('group', {}).get('name')
+        room_id = response.get('group', {}).get('_id')
+
+        # Make user moderator of group
+        user_id = moderator_user.cosinnus_profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_ID)
+        if user_id:
+            response = self.rocket.groups_add_moderator(room_id=room_id, user_id=moderator_user.cosinnus_profile.rocket_username).json()
+            if not response.get('success'):
+                logger.error('Direct create_private_group', 'groups_add_moderator', response)
+        return room_id
 
     def groups_create(self, group):
         """
@@ -680,7 +703,43 @@ class RocketChatConnection:
             response = self.rocket.groups_remove_moderator(room_id=room_id, user_id=user_id).json()
             if not response.get('success'):
                 logger.error('groups_remove_moderator', response)
-
+                
+    def add_member_to_room(self, user, room_id):
+        """ Add a member to a given room """
+        user_id = self.get_user_id(user)
+        if not user_id:
+            return
+        response = self.rocket.groups_invite(room_id=room_id, user_id=user_id).json()
+        if not response.get('success'):
+            logger.error('Direct room_add_member', response)
+            
+    def remove_member_from_room(self, user, room_id):
+        """ Remove a member for a given room """
+        user_id = self.get_user_id(user)
+        if not user_id:
+            return
+        response = self.rocket.groups_kick(room_id=room_id, user_id=user_id).json()
+        if not response.get('success'):
+            logger.error('Direct room_remove_member', response)
+    
+    def add_moderator_to_room(self, user, room_id):
+        """ Add a moderator to a given room """
+        user_id = self.get_user_id(user)
+        if not user_id:
+            return
+        response = self.rocket.groups_add_moderator(room_id=room_id, user_id=user_id).json()
+        if not response.get('success'):
+            logger.error('Direct room_remove_moderator', response)
+        
+    def remove_moderator_from_room(self, user, room_id):
+        """ Remove a moderator for a given room """
+        user_id = self.get_user_id(user)
+        if not user_id:
+            return
+        response = self.rocket.groups_remove_moderator(room_id=room_id, user_id=user_id).json()
+        if not response.get('success'):
+            logger.error('Direct groups_remove_moderator', response)
+    
     def format_message(self, text):
         """
         Replace WECHANGE formatting language with Rocket.Chat formatting language:
