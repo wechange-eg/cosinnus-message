@@ -146,8 +146,8 @@ class RocketChatConnection:
             self.stdout.write('User %i/%i' % (i, count), ending='\r')
             self.stdout.flush()
 
-            if not user.cosinnus_profile:
-                continue
+            if not hasattr(user, 'cosinnus_profile'):
+                return
             profile = user.cosinnus_profile
             rocket_username = profile.rocket_username
 
@@ -223,6 +223,8 @@ class RocketChatConnection:
         :param user:
         :return:
         """
+        if not hasattr(user, 'cosinnus_profile'):
+            return
         profile = user.cosinnus_profile
         if not profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_ID):
             username = profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_USERNAME)
@@ -268,7 +270,7 @@ class RocketChatConnection:
         Create user with name, email address and avatar
         :return:
         """
-        if not user.cosinnus_profile:
+        if not hasattr(user, 'cosinnus_profile'):
             return
         profile = user.cosinnus_profile
         data = {
@@ -297,6 +299,8 @@ class RocketChatConnection:
         :return:
         """
         # Get user ID
+        if not hasattr(user, 'cosinnus_profile'):
+            return
         profile = user.cosinnus_profile
         if not profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_ID):
             response = self.rocket.users_info(username=rocket_username).json()
@@ -324,6 +328,8 @@ class RocketChatConnection:
         """
         user_id = self.get_user_id(user)
         if not user_id:
+            return
+        if not hasattr(user, 'cosinnus_profile'):
             return
 
         # Get user information and ID
@@ -431,6 +437,8 @@ class RocketChatConnection:
         else:
             # Create private group
             group_name = f'{group.slug}-{get_random_string(7)}'
+            if not hasattr(user, 'cosinnus_profile'):
+                return
             profile = user.cosinnus_profile
             members = [str(u.id) for u in group.actual_admins] + [profile.rocket_username, ]
             response = self.rocket.groups_create(group_name, members=members).json()
@@ -464,6 +472,8 @@ class RocketChatConnection:
             @param moderator_user: user who will become both a member and moderator
             @param member_users: list of users who become members. may contain the moderator_user again
             @return: the rocketchat room_id """
+        if not hasattr(moderator_user, 'cosinnus_profile'):
+            return
         # create group
         member_users = member_users or []
         members = [moderator_user.cosinnus_profile.rocket_username, ] + [member.cosinnus_profile.rocket_username for member in member_users]
@@ -858,7 +868,10 @@ class RocketChatConnection:
         :param user:
         :return:
         """
+        if not hasattr(user, 'cosinnus_profile'):
+            return
         profile = user.cosinnus_profile
+        
         try:
             try:
                 user_connection = get_cached_rocket_connection(user=profile.rocket_username, password=user.password,
