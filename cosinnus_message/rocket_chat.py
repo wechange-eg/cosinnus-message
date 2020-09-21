@@ -233,7 +233,7 @@ class RocketChatConnection:
                 return
             response = self.rocket.users_info(username=username).json()
             if not response.get('success'):
-                logger.exception('get_user_id', response, extra={'trace': traceback.print_exc()})
+                logger.exception('get_user_id', response, extra={'trace': traceback.print_stack()})
                 return
             user_data = response.get('user')
             rocket_chat_id = user_data.get('_id')
