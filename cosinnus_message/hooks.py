@@ -24,7 +24,7 @@ if settings.COSINNUS_ROCKET_ENABLED:
     app_authorized.connect(handle_app_authorized)
     
     @receiver(pre_save, sender=get_user_model())
-    def handle_user_updated(sender, instance, created, **kwargs):
+    def handle_user_updated(sender, instance, **kwargs):
         # TODO: does this hook trigger correctly?
         # this handles the user update, it is not in post_save!
         if instance.id:
