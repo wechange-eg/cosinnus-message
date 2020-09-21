@@ -48,21 +48,13 @@ if settings.COSINNUS_ROCKET_ENABLED:
         except Exception as e:
             logger.exception(e)
     
-    @receiver(post_save, sender=get_user_model())
-    def handle_user_updated(sender, instance, created, **kwargs):
-        try:
-            rocket = RocketChatConnection()
-            if created:
-                rocket.users_create(instance)
-        except Exception as e:
-            logger.exception(e)
-
-
     @receiver(post_save, sender=UserProfile)
     def handle_profile_updated(sender, instance, created, **kwargs):
         try:
-            if not created:
-                rocket = RocketChatConnection()
+            rocket = RocketChatConnection()
+            if created:
+                rocket.users_create(instance.user)
+            else:
                 rocket.users_update(instance.user)
         except Exception as e:
             logger.exception(e)
