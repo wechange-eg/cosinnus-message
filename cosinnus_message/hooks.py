@@ -27,7 +27,7 @@ if settings.COSINNUS_ROCKET_ENABLED:
     def handle_user_updated(sender, instance, **kwargs):
         # TODO: does this hook trigger correctly?
         # this handles the user update, it is not in post_save!
-        if instance.id:
+        if instance.id and instance.cosinnus_profile:
             try:
                 rocket = RocketChatConnection()
                 old_instance = get_user_model().objects.get(pk=instance.id)
