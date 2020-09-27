@@ -233,7 +233,7 @@ class RocketChatConnection:
                 return
             response = self.rocket.users_info(username=username).json()
             if not response.get('success'):
-                logger.exception('get_user_id', response, extra={'trace': traceback.print_stack()})
+                logger.exception('get_user_id: ' + str(response), extra={'trace': traceback.print_stack()})
                 return
             user_data = response.get('user')
             rocket_chat_id = user_data.get('_id')
@@ -721,7 +721,7 @@ class RocketChatConnection:
             return
         response = self.rocket.groups_invite(room_id=room_id, user_id=user_id).json()
         if not response.get('success'):
-            logger.error('Direct room_add_member', response)
+            logger.error('Direct room_add_member', response, extra={'user_email': user.email})
             
     def remove_member_from_room(self, user, room_id):
         """ Remove a member for a given room """
@@ -730,7 +730,7 @@ class RocketChatConnection:
             return
         response = self.rocket.groups_kick(room_id=room_id, user_id=user_id).json()
         if not response.get('success'):
-            logger.error('Direct room_remove_member', response)
+            logger.error('Direct room_remove_member' +  str(response), extra={'user_email': user.email})
     
     def add_moderator_to_room(self, user, room_id):
         """ Add a moderator to a given room """
@@ -739,7 +739,7 @@ class RocketChatConnection:
             return
         response = self.rocket.groups_add_moderator(room_id=room_id, user_id=user_id).json()
         if not response.get('success'):
-            logger.error('Direct room_remove_moderator', response)
+            logger.error('Direct room_remove_moderator', response, extra={'user_email': user.email})
         
     def remove_moderator_from_room(self, user, room_id):
         """ Remove a moderator for a given room """
@@ -748,7 +748,7 @@ class RocketChatConnection:
             return
         response = self.rocket.groups_remove_moderator(room_id=room_id, user_id=user_id).json()
         if not response.get('success'):
-            logger.error('Direct groups_remove_moderator', response)
+            logger.error('Direct groups_remove_moderator', response, extra={'user_email': user.email})
     
     def format_message(self, text):
         """
