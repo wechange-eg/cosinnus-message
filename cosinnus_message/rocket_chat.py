@@ -154,9 +154,9 @@ class RocketChatConnection:
             rocket_user = rocket_users.get(rocket_username)
 
             # User with different username but same email address exists?
-            if not rocket_user and user.email in rocket_emails_usernames.keys():
+            if not rocket_user and user.email.lower() in rocket_emails_usernames.keys():
                 # Change username in DB
-                rocket_username = rocket_emails_usernames.get(user.email)
+                rocket_username = rocket_emails_usernames.get(user.email.lower())
                 rocket_user = rocket_users.get(rocket_username)
 
                 profile.settings[PROFILE_SETTING_ROCKET_CHAT_USERNAME] = rocket_username
@@ -171,7 +171,7 @@ class RocketChatConnection:
                 # TODO: Introducing User.updated_at would improve performance here
                 rocket_emails = (e['address'] for e in rocket_user.get('emails'))
                 # Email address changed?
-                if user.email not in rocket_emails:
+                if user.email.lower() not in rocket_emails:
                     changed = True
                 # Name changed?
                 elif user.get_full_name() != rocket_user.get('name'):
@@ -274,7 +274,7 @@ class RocketChatConnection:
             return
         profile = user.cosinnus_profile
         data = {
-            "email": user.email,
+            "email": user.email.lower(),
             "name": user.get_full_name(),
             "password": user.password,
             "username": profile.rocket_username,
@@ -344,12 +344,12 @@ class RocketChatConnection:
         user_data = response.get('user')
 
         # Update name, email address, password
-        if force_user_update or user_data.get('name') != user.get_full_name() or user_data.get('email') != user.email:
+        if force_user_update or user_data.get('name') != user.get_full_name() or user_data.get('email') != user.email.lower():
             profile = user.cosinnus_profile
             data = {
                 "username": profile.rocket_username,
                 "name": user.get_full_name(),
-                "email": user.email,
+                "email": user.email.lower(),
                 #"active": user.is_active,
                 "verified": True,
                 "requirePasswordChange": False,
