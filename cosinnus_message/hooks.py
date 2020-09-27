@@ -44,7 +44,7 @@ if settings.COSINNUS_ROCKET_ENABLED:
         try:
             rocket = RocketChatConnection()
             rocket.users_update(user, force_user_update=True, update_password=True)
-            delete_cached_rocket_connection(user)
+            delete_cached_rocket_connection(user.cosinnus_profile.rocket_username)
         except Exception as e:
             logger.exception(e)
     
