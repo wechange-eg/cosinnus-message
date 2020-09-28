@@ -485,8 +485,9 @@ class RocketChatConnection:
         room_id = response.get('group', {}).get('_id')
 
         # Make user moderator of group
-        admin_users = [] if additional_admin_users is None else list(additional_admin_users)
+        admin_users = list(additional_admin_users) if additional_admin_users else [] 
         admin_users.append(moderator_user)
+        admin_users = list(set(admin_users))
         for admin_user in admin_users:
             user_id = admin_user.cosinnus_profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_ID)
             if user_id:
