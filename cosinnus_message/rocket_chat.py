@@ -467,7 +467,7 @@ class RocketChatConnection:
 
         return group_name
     
-    def create_private_room(self, group_name, moderator_user, member_users=None):
+    def create_private_room(self, group_name, moderator_user, member_users=None, additional_admin_users=None):
         """ Create a private group with a user as first member and moderator.
             @param moderator_user: user who will become both a member and moderator
             @param member_users: list of users who become members. may contain the moderator_user again
@@ -480,16 +480,19 @@ class RocketChatConnection:
         members = list(set(members))
         response = self.rocket.groups_create(group_name, members=members).json()
         if not response.get('success'):
-            logger.error('Direct create_private_group', 'groups_create', response)
+            logger.error('Direct create_private_group groups_create', response)
         group_name = response.get('group', {}).get('name')
         room_id = response.get('group', {}).get('_id')
 
         # Make user moderator of group
-        user_id = moderator_user.cosinnus_profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_ID)
-        if user_id:
-            response = self.rocket.groups_add_moderator(room_id=room_id, user_id=moderator_user.cosinnus_profile.rocket_username).json()
-            if not response.get('success'):
-                logger.error('Direct create_private_group', 'groups_add_moderator', response)
+        admin_users = additional_admin_users or []
+        admin_users.append(moderator_user)
+        for admin_user in admin_users:
+            user_id = admin_user.cosinnus_profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_ID)
+            if user_id:
+                response = self.rocket.groups_add_moderator(room_id=room_id, user_id=user_id).json()
+                if not response.get('success'):
+                    logger.error('Direct create_private_group groups_add_moderator', response)
         return room_id
 
     def groups_create(self, group):
