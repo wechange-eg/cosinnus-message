@@ -7,7 +7,7 @@ from oauth2_provider.signals import app_authorized
 from cosinnus_message.rocket_chat import RocketChatConnection,\
     delete_cached_rocket_connection
 from cosinnus.models import UserProfile, CosinnusGroupMembership
-from cosinnus.models.group import MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING
+from cosinnus.models.group import MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING, MEMBERSHIP_ADMIN
 from cosinnus.models.group_extra import CosinnusSociety, CosinnusProject
 from cosinnus_note.models import Note
 from cosinnus.core import signals
@@ -108,11 +108,11 @@ if settings.COSINNUS_ROCKET_ENABLED:
             is_pending = instance.status in (MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING)
             if instance.id:
                 old_instance = CosinnusGroupMembership.objects.get(pk=instance.id)
-                #status_changed = instance.status != old_instance.status
                 was_pending = old_instance.status in (MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING)
                 user_changed = instance.user_id != old_instance.user_id
                 group_changed = instance.group_id != old_instance.group_id
-                is_moderator_changed = instance.is_moderator != old_instance.is_moderator
+                is_moderator_changed = instance.status != old_instance.status and \
+                        (instance.status == MEMBERSHIP_ADMIN or old_instance.status == MEMBERSHIP_ADMIN)
     
                 # Invalidate old membership
                 if (is_pending and not was_pending) or user_changed or group_changed:
@@ -125,15 +125,15 @@ if settings.COSINNUS_ROCKET_ENABLED:
                 # Update membership
                 if not is_pending and is_moderator_changed:
                     # Upgrade
-                    if not old_instance.is_moderator and instance.is_moderator:
+                    if not old_instance.status == MEMBERSHIP_ADMIN and instance.status == MEMBERSHIP_ADMIN:
                         rocket.groups_add_moderator(instance)
                     # Downgrade
-                    elif old_instance.is_moderator and not instance.is_moderator:
+                    elif old_instance.status == MEMBERSHIP_ADMIN and not instance.status == MEMBERSHIP_ADMIN:
                         rocket.groups_remove_moderator(instance)
             elif not is_pending:
                 # Create new membership
                 rocket.groups_invite(instance)
-                if instance.is_moderator:
+                if instance.status == MEMBERSHIP_ADMIN:
                     rocket.groups_add_moderator(instance)
         except Exception as e:
             logger.exception(e)
