@@ -53,6 +53,8 @@ class CosinnusMessageDefaultSettings(AppConf):
         'Accounts_RegistrationForm': 'Disabled',
         'Accounts_RegistrationForm_LinkReplacementText': '',
         'Accounts_TwoFactorAuthentication_By_Email_Enabled': False,
+        'Email_Changed_Email_Subject': 'Your Registration has been received',
+        'Email_Changed_Email': 'Thank you for signing up. Your E-Mail validation link will arrive shortly.',
         'Accounts_Send_Email_When_Activating': False,
         'Accounts_Send_Email_When_Deactivating': False,
 
