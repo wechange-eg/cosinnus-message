@@ -15,8 +15,9 @@ from oauth2_provider.models import Application
 from rocketchat_API.APIExceptions.RocketExceptions import RocketAuthenticationException,\
     RocketConnectionException
 from rocketchat_API.rocketchat import RocketChat as RocketChatAPI
-from cosinnus.models.group import MEMBERSHIP_MEMBER, MEMBERSHIP_ADMIN,\
-    CosinnusPortal
+from cosinnus.models.group import CosinnusPortal
+from cosinnus.models import MEMBERSHIP_ADMIN
+from cosinnus.models.membership import MEMBERSHIP_MEMBER
 from cosinnus.models.profile import PROFILE_SETTING_ROCKET_CHAT_ID, PROFILE_SETTING_ROCKET_CHAT_USERNAME
 import traceback
 from cosinnus.utils.user import filter_active_users, filter_portal_users
@@ -273,7 +274,7 @@ class RocketChatConnection:
         profile = user.cosinnus_profile
         data = {
             "email": user.email,
-            "name": user.get_full_name(),
+            "name": user.get_full_name() or str(user.id),
             "password": user.password,
             "username": profile.rocket_username,
             "active": user.is_active,

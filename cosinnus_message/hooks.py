@@ -6,8 +6,7 @@ from oauth2_provider.signals import app_authorized
 
 from cosinnus_message.rocket_chat import RocketChatConnection,\
     delete_cached_rocket_connection
-from cosinnus.models import UserProfile, CosinnusGroupMembership
-from cosinnus.models.group import MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING
+from cosinnus.models import UserProfile, CosinnusGroupMembership, MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING
 from cosinnus.models.group_extra import CosinnusSociety, CosinnusProject
 from cosinnus_note.models import Note
 from cosinnus.core import signals
