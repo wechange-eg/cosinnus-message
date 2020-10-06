@@ -27,10 +27,10 @@ logger = logging.getLogger(__name__)
 ROCKETCHAT_USER_CONNECTION_CACHE_KEY = 'cosinnus/core/portal/%d/rocketchat-user-connection/%s/'
 
 
-def get_cached_rocket_connection(user, password, server_url, reset=False):
+def get_cached_rocket_connection(rocket_username, password, server_url, reset=False):
     """ Retrieves a cached rocketchat connection or creates a new one and caches it.
         @param reset: Resets the cached connection and connects a fresh one immediately """
-    cache_key = ROCKETCHAT_USER_CONNECTION_CACHE_KEY % (CosinnusPortal.get_current().id, user)
+    cache_key = ROCKETCHAT_USER_CONNECTION_CACHE_KEY % (CosinnusPortal.get_current().id, rocket_username)
 
     if reset:
         cache.delete(cache_key)
@@ -48,14 +48,14 @@ def get_cached_rocket_connection(user, password, server_url, reset=False):
             rocket_connection = None
 
     if rocket_connection is None:
-        rocket_connection = RocketChat(user=user, password=password, server_url=server_url)
+        rocket_connection = RocketChat(user=rocket_username, password=password, server_url=server_url)
         cache.set(cache_key, rocket_connection, settings.COSINNUS_CHAT_CONNECTION_CACHE_TIMEOUT)
     return rocket_connection
 
 
-def delete_cached_rocket_connection(user):
+def delete_cached_rocket_connection(rocket_username):
     """ Deletes a cached rocketchat connection or creates a new one and caches it """
-    cache_key = ROCKETCHAT_USER_CONNECTION_CACHE_KEY % (CosinnusPortal.get_current().id, user)
+    cache_key = ROCKETCHAT_USER_CONNECTION_CACHE_KEY % (CosinnusPortal.get_current().id, rocket_username)
     cache.delete(cache_key)
 
 
@@ -147,17 +147,17 @@ class RocketChatConnection:
             self.stdout.write('User %i/%i' % (i, count), ending='\r')
             self.stdout.flush()
 
-            if not user.cosinnus_profile:
-                continue
+            if not hasattr(user, 'cosinnus_profile'):
+                return
             profile = user.cosinnus_profile
             rocket_username = profile.rocket_username
 
             rocket_user = rocket_users.get(rocket_username)
 
             # User with different username but same email address exists?
-            if not rocket_user and user.email in rocket_emails_usernames.keys():
+            if not rocket_user and user.email.lower() in rocket_emails_usernames.keys():
                 # Change username in DB
-                rocket_username = rocket_emails_usernames.get(user.email)
+                rocket_username = rocket_emails_usernames.get(user.email.lower())
                 rocket_user = rocket_users.get(rocket_username)
 
                 profile.settings[PROFILE_SETTING_ROCKET_CHAT_USERNAME] = rocket_username
@@ -172,7 +172,7 @@ class RocketChatConnection:
                 # TODO: Introducing User.updated_at would improve performance here
                 rocket_emails = (e['address'] for e in rocket_user.get('emails'))
                 # Email address changed?
-                if user.email not in rocket_emails:
+                if user.email.lower() not in rocket_emails:
                     changed = True
                 # Name changed?
                 elif user.get_full_name() != rocket_user.get('name'):
@@ -224,6 +224,8 @@ class RocketChatConnection:
         :param user:
         :return:
         """
+        if not hasattr(user, 'cosinnus_profile'):
+            return
         profile = user.cosinnus_profile
         if not profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_ID):
             username = profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_USERNAME)
@@ -232,7 +234,7 @@ class RocketChatConnection:
                 return
             response = self.rocket.users_info(username=username).json()
             if not response.get('success'):
-                logger.error('get_user_id', response)
+                logger.exception('get_user_id: ' + str(response), extra={'trace': traceback.print_stack(), 'username': username})
                 return
             user_data = response.get('user')
             rocket_chat_id = user_data.get('_id')
@@ -269,11 +271,11 @@ class RocketChatConnection:
         Create user with name, email address and avatar
         :return:
         """
-        if not user.cosinnus_profile:
+        if not hasattr(user, 'cosinnus_profile'):
             return
         profile = user.cosinnus_profile
         data = {
-            "email": user.email,
+            "email": user.email.lower(),
             "name": user.get_full_name() or str(user.id),
             "password": user.password,
             "username": profile.rocket_username,
@@ -298,6 +300,8 @@ class RocketChatConnection:
         :return:
         """
         # Get user ID
+        if not hasattr(user, 'cosinnus_profile'):
+            return
         profile = user.cosinnus_profile
         if not profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_ID):
             response = self.rocket.users_info(username=rocket_username).json()
@@ -326,6 +330,8 @@ class RocketChatConnection:
         user_id = self.get_user_id(user)
         if not user_id:
             return
+        if not hasattr(user, 'cosinnus_profile'):
+            return
 
         # Get user information and ID
         response = self.rocket.users_info(user_id=user_id)
@@ -339,12 +345,12 @@ class RocketChatConnection:
         user_data = response.get('user')
 
         # Update name, email address, password
-        if force_user_update or user_data.get('name') != user.get_full_name() or user_data.get('email') != user.email:
+        if force_user_update or user_data.get('name') != user.get_full_name() or user_data.get('email') != user.email.lower():
             profile = user.cosinnus_profile
             data = {
                 "username": profile.rocket_username,
                 "name": user.get_full_name(),
-                "email": user.email,
+                "email": user.email.lower(),
                 #"active": user.is_active,
                 "verified": True,
                 "requirePasswordChange": False,
@@ -432,6 +438,8 @@ class RocketChatConnection:
         else:
             # Create private group
             group_name = f'{group.slug}-{get_random_string(7)}'
+            if not hasattr(user, 'cosinnus_profile'):
+                return
             profile = user.cosinnus_profile
             members = [str(u.id) for u in group.actual_admins] + [profile.rocket_username, ]
             response = self.rocket.groups_create(group_name, members=members).json()
@@ -459,6 +467,35 @@ class RocketChatConnection:
                 logger.error('groups_request', 'groups_set_description', response)
 
         return group_name
+
+    def create_private_room(self, group_name, moderator_user, member_users=None, additional_admin_users=None):
+        """ Create a private group with a user as first member and moderator.
+            @param moderator_user: user who will become both a member and moderator
+            @param member_users: list of users who become members. may contain the moderator_user again
+            @return: the rocketchat room_id """
+        if not hasattr(moderator_user, 'cosinnus_profile'):
+            return
+        # create group
+        member_users = member_users or []
+        members = [moderator_user.cosinnus_profile.rocket_username, ] + [member.cosinnus_profile.rocket_username for member in member_users]
+        members = list(set(members))
+        response = self.rocket.groups_create(group_name, members=members).json()
+        if not response.get('success'):
+            logger.error('Direct create_private_group groups_create', response)
+        group_name = response.get('group', {}).get('name')
+        room_id = response.get('group', {}).get('_id')
+
+        # Make user moderator of group
+        admin_users = list(additional_admin_users) if additional_admin_users else []
+        admin_users.append(moderator_user)
+        admin_users = list(set(admin_users))
+        for admin_user in admin_users:
+            user_id = admin_user.cosinnus_profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_ID)
+            if user_id:
+                response = self.rocket.groups_add_moderator(room_id=room_id, user_id=user_id).json()
+                if not response.get('success'):
+                    logger.error('Direct create_private_group groups_add_moderator', response)
+        return room_id
 
     def groups_create(self, group):
         """
@@ -682,6 +719,42 @@ class RocketChatConnection:
             if not response.get('success'):
                 logger.error('groups_remove_moderator', response)
 
+    def add_member_to_room(self, user, room_id):
+        """ Add a member to a given room """
+        user_id = self.get_user_id(user)
+        if not user_id:
+            return
+        response = self.rocket.groups_invite(room_id=room_id, user_id=user_id).json()
+        if not response.get('success'):
+            logger.error('Direct room_add_member', response, extra={'user_email': user.email})
+
+    def remove_member_from_room(self, user, room_id):
+        """ Remove a member for a given room """
+        user_id = self.get_user_id(user)
+        if not user_id:
+            return
+        response = self.rocket.groups_kick(room_id=room_id, user_id=user_id).json()
+        if not response.get('success'):
+            logger.error('Direct room_remove_member' +  str(response), extra={'user_email': user.email})
+
+    def add_moderator_to_room(self, user, room_id):
+        """ Add a moderator to a given room """
+        user_id = self.get_user_id(user)
+        if not user_id:
+            return
+        response = self.rocket.groups_add_moderator(room_id=room_id, user_id=user_id).json()
+        if not response.get('success'):
+            logger.error('Direct room_remove_moderator', response, extra={'user_email': user.email})
+
+    def remove_moderator_from_room(self, user, room_id):
+        """ Remove a moderator for a given room """
+        user_id = self.get_user_id(user)
+        if not user_id:
+            return
+        response = self.rocket.groups_remove_moderator(room_id=room_id, user_id=user_id).json()
+        if not response.get('success'):
+            logger.error('Direct groups_remove_moderator', response, extra={'user_email': user.email})
+
     def format_message(self, text):
         """
         Replace WECHANGE formatting language with Rocket.Chat formatting language:
@@ -800,10 +873,13 @@ class RocketChatConnection:
         :param user:
         :return:
         """
+        if not hasattr(user, 'cosinnus_profile'):
+            return
         profile = user.cosinnus_profile
+
         try:
             try:
-                user_connection = get_cached_rocket_connection(user=profile.rocket_username, password=user.password,
+                user_connection = get_cached_rocket_connection(rocket_username=profile.rocket_username, password=user.password,
                                              server_url=settings.COSINNUS_CHAT_BASE_URL)
             except RocketAuthenticationException:
                 user_id = user.cosinnus_profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_ID)
@@ -815,7 +891,7 @@ class RocketChatConnection:
                 if not response.get('success'):
                     logger.error('unread_messages did not receive a success response', 'users_update', response)
                     return 0
-                user_connection = get_cached_rocket_connection(user=profile.rocket_username, password=user.password,
+                user_connection = get_cached_rocket_connection(rocket_username=profile.rocket_username, password=user.password,
                                              server_url=settings.COSINNUS_CHAT_BASE_URL, reset=True) # resets cache
 
             response = user_connection.subscriptions_get()
@@ -823,7 +899,7 @@ class RocketChatConnection:
             # if we didn't receive a successful response, the server may be down or the user logged out
             # reset the user connection and let the response be tried on the next run
             if not response.status_code == 200:
-                delete_cached_rocket_connection(user=profile.rocket_username)
+                delete_cached_rocket_connection(rocket_username=profile.rocket_username)
                 logger.warn('Rocket: unread_message_count: non-200 response.',
                             extra={'response': response, 'status': response.status_code, 'content': response.content})
                 return 0

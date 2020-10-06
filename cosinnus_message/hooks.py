@@ -23,10 +23,10 @@ if settings.COSINNUS_ROCKET_ENABLED:
     app_authorized.connect(handle_app_authorized)
     
     @receiver(pre_save, sender=get_user_model())
-    def handle_user_updated(sender, instance, created, **kwargs):
+    def handle_user_updated(sender, instance, **kwargs):
         # TODO: does this hook trigger correctly?
         # this handles the user update, it is not in post_save!
-        if instance.id:
+        if instance.id and hasattr(instance, 'cosinnus_profile'):
             try:
                 rocket = RocketChatConnection()
                 old_instance = get_user_model().objects.get(pk=instance.id)
@@ -43,25 +43,17 @@ if settings.COSINNUS_ROCKET_ENABLED:
         try:
             rocket = RocketChatConnection()
             rocket.users_update(user, force_user_update=True, update_password=True)
-            delete_cached_rocket_connection(user)
+            delete_cached_rocket_connection(user.cosinnus_profile.rocket_username)
         except Exception as e:
             logger.exception(e)
-    
-    @receiver(post_save, sender=get_user_model())
-    def handle_user_updated(sender, instance, created, **kwargs):
-        try:
-            rocket = RocketChatConnection()
-            if created:
-                rocket.users_create(instance)
-        except Exception as e:
-            logger.exception(e)
-
 
     @receiver(post_save, sender=UserProfile)
     def handle_profile_updated(sender, instance, created, **kwargs):
         try:
-            if not created:
-                rocket = RocketChatConnection()
+            rocket = RocketChatConnection()
+            if created:
+                rocket.users_create(instance.user)
+            else:
                 rocket.users_update(instance.user)
         except Exception as e:
             logger.exception(e)
@@ -115,11 +107,11 @@ if settings.COSINNUS_ROCKET_ENABLED:
             is_pending = instance.status in (MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING)
             if instance.id:
                 old_instance = CosinnusGroupMembership.objects.get(pk=instance.id)
-                #status_changed = instance.status != old_instance.status
                 was_pending = old_instance.status in (MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING)
                 user_changed = instance.user_id != old_instance.user_id
                 group_changed = instance.group_id != old_instance.group_id
-                is_moderator_changed = instance.is_moderator != old_instance.is_moderator
+                is_moderator_changed = instance.status != old_instance.status and \
+                        (instance.status == MEMBERSHIP_ADMIN or old_instance.status == MEMBERSHIP_ADMIN)
     
                 # Invalidate old membership
                 if (is_pending and not was_pending) or user_changed or group_changed:
@@ -132,15 +124,15 @@ if settings.COSINNUS_ROCKET_ENABLED:
                 # Update membership
                 if not is_pending and is_moderator_changed:
                     # Upgrade
-                    if not old_instance.is_moderator and instance.is_moderator:
+                    if not old_instance.status == MEMBERSHIP_ADMIN and instance.status == MEMBERSHIP_ADMIN:
                         rocket.groups_add_moderator(instance)
                     # Downgrade
-                    elif old_instance.is_moderator and not instance.is_moderator:
+                    elif old_instance.status == MEMBERSHIP_ADMIN and not instance.status == MEMBERSHIP_ADMIN:
                         rocket.groups_remove_moderator(instance)
             elif not is_pending:
                 # Create new membership
                 rocket.groups_invite(instance)
-                if instance.is_moderator:
+                if instance.status == MEMBERSHIP_ADMIN:
                     rocket.groups_add_moderator(instance)
         except Exception as e:
             logger.exception(e)
