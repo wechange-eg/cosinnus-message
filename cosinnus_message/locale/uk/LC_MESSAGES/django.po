@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-06 16:06+0200\n"
-"PO-Revision-Date: 2019-07-03 17:40+0100\n"
+"PO-Revision-Date: 2020-10-13 18:38+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 2.4.1\n"
 
 msgid "Message"
 msgstr "Повідомлення"
@@ -42,11 +42,11 @@ msgstr "Портал"
 
 #, python-format
 msgid "Request about your project \"%(group_name)s\""
-msgstr ""
+msgstr "Запит щодо Вашого проєкту \"%(group_name)s\""
 
 #, python-format
 msgid "Request about your group \"%(group_name)s\""
-msgstr ""
+msgstr "Запит щодо Вашої групи \"%(group_name)s\""
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
 msgstr "Ви можете додавати файли та зображення до повідомлень, якщо Ви член форуму. Ви можете приєднатися тут:"
@@ -58,10 +58,10 @@ msgid "Messages"
 msgstr "Повідомлення"
 
 msgid "Legacy Messages Archive"
-msgstr ""
+msgstr "Архів застарілих повідомлень"
 
 msgid "The legacy messaging app is no longer in use. You can view all of your old messages, but you cannot write new ones. Please use the new messaging app in the navigation from now on!"
-msgstr ""
+msgstr "Застаріла програма обміну повідомленнями більше не використовується. Ви можете переглядати всі свої старі повідомлення, але не можете писати нові. Відтепер використовуйте новий застосунок для обміну повідомленнями в навігації!"
 
 #, python-format
 msgid ""
