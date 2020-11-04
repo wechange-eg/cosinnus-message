@@ -15,8 +15,9 @@ from oauth2_provider.models import Application
 from rocketchat_API.APIExceptions.RocketExceptions import RocketAuthenticationException,\
     RocketConnectionException
 from rocketchat_API.rocketchat import RocketChat as RocketChatAPI
-from cosinnus.models.group import MEMBERSHIP_MEMBER, MEMBERSHIP_ADMIN,\
-    CosinnusPortal
+from cosinnus.models.group import CosinnusPortal
+from cosinnus.models import MEMBERSHIP_ADMIN
+from cosinnus.models.membership import MEMBERSHIP_MEMBER
 from cosinnus.models.profile import PROFILE_SETTING_ROCKET_CHAT_ID, PROFILE_SETTING_ROCKET_CHAT_USERNAME
 import traceback
 from cosinnus.utils.user import filter_active_users, filter_portal_users
@@ -275,7 +276,7 @@ class RocketChatConnection:
         profile = user.cosinnus_profile
         data = {
             "email": user.email.lower(),
-            "name": user.get_full_name(),
+            "name": user.get_full_name() or str(user.id),
             "password": user.password,
             "username": profile.rocket_username,
             "active": user.is_active,
@@ -466,7 +467,7 @@ class RocketChatConnection:
                 logger.error('groups_request', 'groups_set_description', response)
 
         return group_name
-    
+
     def create_private_room(self, group_name, moderator_user, member_users=None, additional_admin_users=None):
         """ Create a private group with a user as first member and moderator.
             @param moderator_user: user who will become both a member and moderator
@@ -485,7 +486,7 @@ class RocketChatConnection:
         room_id = response.get('group', {}).get('_id')
 
         # Make user moderator of group
-        admin_users = list(additional_admin_users) if additional_admin_users else [] 
+        admin_users = list(additional_admin_users) if additional_admin_users else []
         admin_users.append(moderator_user)
         admin_users = list(set(admin_users))
         for admin_user in admin_users:
@@ -717,7 +718,7 @@ class RocketChatConnection:
             response = self.rocket.groups_remove_moderator(room_id=room_id, user_id=user_id).json()
             if not response.get('success'):
                 logger.error('groups_remove_moderator', response)
-                
+
     def add_member_to_room(self, user, room_id):
         """ Add a member to a given room """
         user_id = self.get_user_id(user)
@@ -726,7 +727,7 @@ class RocketChatConnection:
         response = self.rocket.groups_invite(room_id=room_id, user_id=user_id).json()
         if not response.get('success'):
             logger.error('Direct room_add_member', response, extra={'user_email': user.email})
-            
+
     def remove_member_from_room(self, user, room_id):
         """ Remove a member for a given room """
         user_id = self.get_user_id(user)
@@ -735,7 +736,7 @@ class RocketChatConnection:
         response = self.rocket.groups_kick(room_id=room_id, user_id=user_id).json()
         if not response.get('success'):
             logger.error('Direct room_remove_member' +  str(response), extra={'user_email': user.email})
-    
+
     def add_moderator_to_room(self, user, room_id):
         """ Add a moderator to a given room """
         user_id = self.get_user_id(user)
@@ -744,7 +745,7 @@ class RocketChatConnection:
         response = self.rocket.groups_add_moderator(room_id=room_id, user_id=user_id).json()
         if not response.get('success'):
             logger.error('Direct room_remove_moderator', response, extra={'user_email': user.email})
-        
+
     def remove_moderator_from_room(self, user, room_id):
         """ Remove a moderator for a given room """
         user_id = self.get_user_id(user)
@@ -753,7 +754,7 @@ class RocketChatConnection:
         response = self.rocket.groups_remove_moderator(room_id=room_id, user_id=user_id).json()
         if not response.get('success'):
             logger.error('Direct groups_remove_moderator', response, extra={'user_email': user.email})
-    
+
     def format_message(self, text):
         """
         Replace WECHANGE formatting language with Rocket.Chat formatting language:
@@ -875,7 +876,7 @@ class RocketChatConnection:
         if not hasattr(user, 'cosinnus_profile'):
             return
         profile = user.cosinnus_profile
-        
+
         try:
             try:
                 user_connection = get_cached_rocket_connection(rocket_username=profile.rocket_username, password=user.password,

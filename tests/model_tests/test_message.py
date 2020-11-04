@@ -8,8 +8,8 @@ import django
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from cosinnus.models import (CosinnusGroup, CosinnusGroupMembership,
-    MEMBERSHIP_MEMBER)
+from cosinnus.models import (CosinnusGroup, CosinnusGroupMembership)
+from cosinnus.models.membership import MEMBERSHIP_MEMBER
 from cosinnus_message.models import Message
 
 

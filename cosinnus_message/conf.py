@@ -57,6 +57,7 @@ class CosinnusMessageDefaultSettings(AppConf):
         'Email_Changed_Email': 'Thank you for signing up. Your E-Mail validation link will arrive shortly.',
         'Accounts_Send_Email_When_Activating': False,
         'Accounts_Send_Email_When_Deactivating': False,
+        'Accounts_Registration_AuthenticationServices_Enabled': False,
 
         # Layout
         'Layout_Home_Body': '''<p>Willkommen bei Rocket.Chat!</p>

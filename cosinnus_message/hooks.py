@@ -6,8 +6,8 @@ from oauth2_provider.signals import app_authorized
 
 from cosinnus_message.rocket_chat import RocketChatConnection,\
     delete_cached_rocket_connection
-from cosinnus.models import UserProfile, CosinnusGroupMembership
-from cosinnus.models.group import MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING, MEMBERSHIP_ADMIN
+from cosinnus.models import UserProfile, CosinnusGroupMembership, MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING, \
+    MEMBERSHIP_ADMIN
 from cosinnus.models.group_extra import CosinnusSociety, CosinnusProject
 from cosinnus_note.models import Note
 from cosinnus.core import signals
@@ -47,7 +47,7 @@ if settings.COSINNUS_ROCKET_ENABLED:
             delete_cached_rocket_connection(user.cosinnus_profile.rocket_username)
         except Exception as e:
             logger.exception(e)
-    
+
     @receiver(post_save, sender=UserProfile)
     def handle_profile_updated(sender, instance, created, **kwargs):
         try:
