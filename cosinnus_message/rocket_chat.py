@@ -266,6 +266,14 @@ class RocketChatConnection:
             type(group).objects.filter(pk=group.pk).update(settings=group.settings)
         return group.settings.get(key)
 
+    def users_create_or_update(self, user, request=None):
+        if not hasattr(user, 'cosinnus_profile'):
+            return
+        if PROFILE_SETTING_ROCKET_CHAT_ID in user.cosinnus_profile.settings:
+            return self.users_update(user, request)
+        else:
+            return self.users_create(user, request)
+
     def users_create(self, user, request=None):
         """
         Create user with name, email address and avatar

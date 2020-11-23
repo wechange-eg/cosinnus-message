@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 if settings.COSINNUS_ROCKET_ENABLED:
     def handle_app_authorized(sender, request, token, **kwargs):
         rocket = RocketChatConnection()
-        rocket.users_update(token.user, request=request)
+        rocket.users_create_or_update(token.user, request=request)
 
     app_authorized.connect(handle_app_authorized)
     
