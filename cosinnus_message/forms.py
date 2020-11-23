@@ -60,7 +60,9 @@ class CustomWriteForm(BaseWriteForm):
             use_ids = True
             
         if recipient_list:
-            user_tokens, group_tokens = self.fields['recipients'].get_user_and_group_ids_for_value(recipient_list, intify=use_ids)
+            ids = self.fields['recipients'].get_ids_for_value(recipient_list, intify=use_ids)
+            user_tokens = ids.get('user', [])
+            group_tokens = ids.get('group', [])
                 
             if use_ids:
                 # restrict writing to the forum group
