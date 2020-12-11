@@ -105,6 +105,7 @@ class RocketChatConnection:
 
     def settings_update(self):
         for setting, value in settings.COSINNUS_CHAT_SETTINGS.items():
+            value = value % settings.__dict__['_wrapped'].__dict__
             response = self.rocket.settings_update(setting, value).json()
             if not response.get('success'):
                 self.stderr.write('ERROR! ' + str(setting) + ': ' + str(value) + ':: ' + str(response))

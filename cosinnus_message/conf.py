@@ -60,11 +60,17 @@ class CosinnusMessageDefaultSettings(AppConf):
         'Accounts_Registration_AuthenticationServices_Enabled': False,
 
         # Layout
-        'Layout_Home_Body': '''<p>Willkommen bei Rocket.Chat!</p>
-    <p>Die Rocket.Chat-Desktops-Apps für Windows, MacOS und Linux stehen <a title="Rocket.Chat desktop apps" href="https://rocket.chat/download" target="_blank" rel="noopener">hier</a> zum Download bereit..</p>
-    <p>Die native Mobile-App Rocket.Chat für Android und iOS ist bei <a title="Rocket.Chat+ on Google Play" href="https://play.google.com/store/apps/details?id=chat.rocket.android" target="_blank" rel="noopener">Google Play</a> und im  <a title="Rocket.Chat+ on the App Store" href="https://itunes.apple.com/app/rocket-chat/id1148741252" target="_blank" rel="noopener">App Store</a> erhältlich.</p>
-    <p>Weitere Informationen finden Sie in der <a title="Rocket.Chat Documentation" href="https://rocket.chat/docs/" target="_blank" rel="noopener">Dokumentation</a>.</p>
-    ''',
+        'Layout_Home_Body': '''<p>Willkommen beim %(COSINNUS_BASE_PAGE_TITLE_TRANS)s Rocket.Chat!</p>
+
+        <p>Schreibt private Nachrichten im Browser, per Smartphone- oder Desktop-App in Echtzeit an andere, in Projekten und Gruppen oder in eigenen Kanälen.</p>
+        
+        <p>Wenn du die App nach der Installation &ouml;ffnest, klicke auf <strong>Mit einem Server verbinden</strong>. Gebe im nachfolgenden Fenster folgende<strong> Serveradresse ein</strong>: <a href="%(COSINNUS_PORTAL_URL)s" target="_blank" rel="nofollow noopener noreferrer">%(COSINNUS_PORTAL_URL)s</a> und klicke auf <strong>Verbinden</strong>. Klicke auf <strong>Enter Chat</strong> und gib deine %(COSINNUS_BASE_PAGE_TITLE_TRANS)s Zugangsdaten in das sich &ouml;ffnende Fenster.</p>
+        
+            <p>Die Rocket.Chat-Desktops-Apps für Windows, MacOS und Linux stehen <a title="Rocket.Chat desktop apps" href="https://rocket.chat/download" target="_blank" rel="noopener">hier</a> zum Download bereit..</p>
+            <p>Die native Mobile-App Rocket.Chat für Android und iOS ist bei <a title="Rocket.Chat+ on Google Play" href="https://play.google.com/store/apps/details?id=chat.rocket.android" target="_blank" rel="noopener">Google Play</a> und im  <a title="Rocket.Chat+ on the App Store" href="https://itunes.apple.com/app/rocket-chat/id1148741252" target="_blank" rel="noopener">App Store</a> erhältlich.</p>
+            <p>Weitere Informationen finden Sie in der <a title="Rocket.Chat Documentation" href="https://rocket.chat/docs/" target="_blank" rel="noopener">Dokumentation</a>.</p>
+            
+        ''',
         'Layout_Terms_of_Service': '<a href="https://wechange.de/cms/datenschutz/">Nutzungsbedingungen</a><br><a href="https://wechange.de/cms/datenschutz/">Datenschutz</a>',
         'Layout_Login_Terms': 'Indem Sie fortfahren, stimmen Sie unseren <a href="https://wechange.de/cms/nutzungsbedingungen/">Nutzungs-</a> und <a href="https://wechange.de/cms/datenschutz/">Datenschutzbestimmungen</a> zu.',
         'Layout_Privacy_Policy': '<a href="https://wechange.de/cms/datenschutz/">Datenschutz</a>',
