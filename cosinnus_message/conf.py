@@ -58,6 +58,8 @@ class CosinnusMessageDefaultSettings(AppConf):
         'Accounts_Send_Email_When_Activating': False,
         'Accounts_Send_Email_When_Deactivating': False,
         'Accounts_Registration_AuthenticationServices_Enabled': False,
+        'Accounts_TwoFactorAuthentication_Enforce_Password_Fallback': False,
+        'Accounts_TwoFactorAuthentication_Enabled': False,
 
         # Layout
         'Layout_Home_Body': '''<p>Willkommen beim %(COSINNUS_BASE_PAGE_TITLE_TRANS)s Rocket.Chat!</p>
