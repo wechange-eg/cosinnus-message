@@ -15,9 +15,10 @@ from oauth2_provider.models import Application
 from rocketchat_API.APIExceptions.RocketExceptions import RocketAuthenticationException,\
     RocketConnectionException
 from rocketchat_API.rocketchat import RocketChat as RocketChatAPI
-from cosinnus.models.group import CosinnusPortal
+from cosinnus.models.group import CosinnusPortal, CosinnusGroupMembership
 from cosinnus.models import MEMBERSHIP_ADMIN
-from cosinnus.models.membership import MEMBERSHIP_MEMBER
+from cosinnus.models.membership import MEMBERSHIP_MEMBER,\
+    MEMBERSHIP_INVITED_PENDING, MEMBERSHIP_PENDING
 from cosinnus.models.profile import PROFILE_SETTING_ROCKET_CHAT_ID, PROFILE_SETTING_ROCKET_CHAT_USERNAME
 import traceback
 from cosinnus.utils.user import filter_active_users, filter_portal_users
@@ -280,7 +281,7 @@ class RocketChatConnection:
     def users_create(self, user, request=None):
         """
         Create user with name, email address and avatar
-        :return:
+        :return: A user object if the creation was done without errors.
         """
         if not hasattr(user, 'cosinnus_profile'):
             return
@@ -304,6 +305,7 @@ class RocketChatConnection:
         profile.settings[PROFILE_SETTING_ROCKET_CHAT_ID] = user_id
         # Update profile settings without triggering signals to prevent cycles
         type(profile).objects.filter(pk=profile.pk).update(settings=profile.settings)
+        return user
 
     def users_update_username(self, rocket_username, user):
         """
@@ -332,7 +334,63 @@ class RocketChatConnection:
         response = self.rocket.users_update(user_id=user_id, username=profile.rocket_username).json()
         if not response.get('success'):
             logger.error('users_update_username: ' + str(response), extra={'response': response})
-
+    
+    def check_user_account_status(self, user):
+        """ Read-only check whether or not the user exists in rocket chat.
+            @return:   True if the user account exists.
+                        False if the user account definitely does not exist.
+                        None if another error occurred or was returned, or the service was unavailable. """
+        user_id = self.get_user_id(user)
+        if not user_id:
+            return False
+        else:
+            response = self.rocket.users_info(user_id=user_id)
+            if response.status_code == 200 and response.json().get('success', False) and response.json().get('user', None):
+                # user account is healthy
+                return True
+            elif response.status_code == 400 and response.json().get('error', '').lower() == 'user not found.':
+                return False
+            else:
+                logger.info('Rocketchat check_user_account_status: users_info response returned a status code or error message we could not interpret.',
+                    extra={'response-text': response.text, 'response_code': response.status_code})
+                return None
+    
+    def ensure_user_account_sanity(self, user):
+        """ A helper function that can always be safely called on any user object.
+            Checks if the user account exists.
+            @param return: True if the account was either healthy or was newly created. False (and causes logs) otherwise """
+        if not hasattr(user, 'cosinnus_profile'):
+            # just return here, appearently this is a special/corrupted user account
+            logger.error('Could not perform ensure_user_account_sanity: User object has no CosinnusProfile!', extra={'user_id': getattr(user, 'id', None)})
+            return None
+        
+        # check for False, as None would mean unknown status
+        status = self.check_user_account_status(user)
+        if status is False:
+            user = self.users_create(user)
+            # re-check again to make sure the user was actually created
+            if user and self.check_user_account_status(user):
+                logger.info('ensure_user_account_sanity successfully created new rocketchat user account', extra={'user_id': getattr(user, 'id', None)})
+                # newly created user, do a invite to their group memberships' rooms
+                self.force_redo_user_room_memberships(user)
+                return True
+            else:
+                logger.info('ensure_user_account_sanity attempted to create a new rocketchat user account, but failed!', extra={'user_id': getattr(user, 'id', None)})
+                return False
+        elif status is None:
+            logger.error('ensure_user_account_sanity was called, but could not do anything as `check_user_account_status` received an unknown status code.')
+        else:
+            return True
+            
+    def force_redo_user_room_memberships(self, user):
+        """ A helper function that will re-do all room memberships by
+            saving each user's membership (and having the invite-room hooks trigger) """
+        for membership in CosinnusGroupMembership.objects.filter(group__portal=CosinnusPortal.get_current(), user=user):
+            # force the re-invite
+            self.invite_or_kick_for_membership(membership)
+            # saving causes conference room memberships to be re-done
+            membership.save()
+    
     def users_update(self, user, request=None, force_user_update=False, update_password=False):
         """
         Updates user name, email address and avatar
@@ -633,7 +691,20 @@ class RocketChatConnection:
             response = self.rocket.groups_archive(room_id=room_id).json()
             if not response.get('success'):
                 logger.error('groups_archive ' + str(response), extra={'response': response})
-
+    
+    def invite_or_kick_for_membership(self, membership):
+        """ For a CosinnusGroupMembership, force do:
+                either kick or invite and promote or demote a user depending on their status """
+        is_pending = membership.status in (MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING)
+        if is_pending:
+            self.groups_kick(membership)
+        else:
+            self.groups_invite(membership)
+            if membership.status == MEMBERSHIP_ADMIN:
+                self.groups_add_moderator(membership)
+            else:
+                self.groups_remove_moderator(membership)
+    
     def groups_invite(self, membership):
         """
         Create membership for default channels
@@ -681,7 +752,7 @@ class RocketChatConnection:
             response = self.rocket.groups_kick(room_id=room_id, user_id=user_id).json()
             if not response.get('success'):
                 logger.error('groups_kick ' + str(response), extra={'response': response})
-
+    
     def groups_add_moderator(self, membership):
         """
         Add role to user in group
@@ -696,14 +767,14 @@ class RocketChatConnection:
         room_id = self.get_group_id(membership.group, group_type='general')
         if room_id:
             response = self.rocket.groups_add_moderator(room_id=room_id, user_id=user_id).json()
-            if not response.get('success'):
+            if not response.get('success') and not response.get('errorType', '') == 'error-user-already-moderator':
                 logger.error('groups_add_moderator ' + str(response), extra={'response': response})
 
         # Remove role in news group
         room_id = self.get_group_id(membership.group, group_type='news')
         if room_id:
             response = self.rocket.groups_add_moderator(room_id=room_id, user_id=user_id).json()
-            if not response.get('success'):
+            if not response.get('success') and not response.get('errorType', '') == 'error-user-already-moderator':
                 logger.error('groups_add_moderator ' + str(response), extra={'response': response})
 
     def groups_remove_moderator(self, membership):
@@ -720,14 +791,14 @@ class RocketChatConnection:
         room_id = self.get_group_id(membership.group, group_type='general')
         if room_id:
             response = self.rocket.groups_remove_moderator(room_id=room_id, user_id=user_id).json()
-            if not response.get('success'):
+            if not response.get('success') and not response.get('errorType', '') == 'error-user-not-moderator':
                 logger.error('groups_remove_moderator ' + str(response), extra={'response': response})
 
         # Remove role in news group
         room_id = self.get_group_id(membership.group, group_type='news')
         if room_id:
             response = self.rocket.groups_remove_moderator(room_id=room_id, user_id=user_id).json()
-            if not response.get('success'):
+            if not response.get('success') and not response.get('errorType', '') == 'error-user-not-moderator':
                 logger.error('groups_remove_moderator ' + str(response), extra={'response': response})
 
     def add_member_to_room(self, user, room_id):

@@ -13,6 +13,8 @@ from cosinnus_note.models import Note
 from cosinnus.core import signals
 
 import logging
+from django.contrib.auth.signals import user_logged_in
+from threading import Thread
 logger = logging.getLogger(__name__)
 
 
@@ -38,6 +40,19 @@ if settings.COSINNUS_ROCKET_ENABLED:
             except Exception as e:
                 logger.exception(e)
     
+    @receiver(user_logged_in)
+    def handle_user_logged_in(sender, user, request, **kwargs):
+        """ Checks if the user exists in rocketchat, and if not, attempts to create them """
+        # we're Threading this entire hook as it might take a while
+        class UserSanityCheck(Thread):
+            def run(self):
+                try:
+                    rocket = RocketChatConnection()
+                    rocket.ensure_user_account_sanity(user)
+                except Exception as e:
+                    logger.exception(e)
+        
+        UserSanityCheck().start()
     
     @receiver(signals.user_password_changed)
     def handle_user_password_updated(sender, user, **kwargs):
