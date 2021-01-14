@@ -21,6 +21,7 @@ from cosinnus.models.membership import MEMBERSHIP_MEMBER
 from cosinnus.models.profile import PROFILE_SETTING_ROCKET_CHAT_ID, PROFILE_SETTING_ROCKET_CHAT_USERNAME
 import traceback
 from cosinnus.utils.user import filter_active_users, filter_portal_users
+import six
 
 logger = logging.getLogger(__name__)
 
@@ -105,7 +106,8 @@ class RocketChatConnection:
 
     def settings_update(self):
         for setting, value in settings.COSINNUS_CHAT_SETTINGS.items():
-            value = value % settings.__dict__['_wrapped'].__dict__
+            if type(value) in six.string_types:
+                value = value % settings.__dict__['_wrapped'].__dict__
             response = self.rocket.settings_update(setting, value).json()
             if not response.get('success'):
                 self.stderr.write('ERROR! ' + str(setting) + ': ' + str(value) + ':: ' + str(response))
