@@ -104,18 +104,36 @@ if settings.COSINNUS_ROCKET_ENABLED:
     def handle_cosinnus_society_deleted(sender, instance, **kwargs):
         try:
             rocket = RocketChatConnection()
-            rocket.groups_archive(instance)
+            rocket.groups_delete(instance)
         except Exception as e:
             logger.exception(e)
-
+            
     @receiver(post_delete, sender=CosinnusProject)
     def handle_cosinnus_project_deleted(sender, instance, **kwargs):
         try:
             rocket = RocketChatConnection()
-            rocket.groups_archive(instance)
+            rocket.groups_delete(instance)
         except Exception as e:
             logger.exception(e)
 
+    @receiver(signals.group_deactivated)
+    def handle_cosinnus_group_deactivated(sender, group, **kwargs):
+        """ Archive a group that gets deactivated """
+        try:
+            rocket = RocketChatConnection()
+            rocket.groups_archive(group)
+        except Exception as e:
+            logger.exception(e)
+    
+    @receiver(signals.group_reactivated)
+    def handle_cosinnus_group_reactivated(sender, group, **kwargs):
+        """ Unarchive a group that gets reactivated """
+        try:
+            rocket = RocketChatConnection()
+            rocket.groups_unarchive(group)
+        except Exception as e:
+            logger.exception(e)
+            
     @receiver(pre_save, sender=CosinnusGroupMembership)
     def handle_membership_updated(sender, instance, **kwargs):
         try:
