@@ -3,7 +3,8 @@ import mimetypes
 import os
 import re
 
-from cosinnus.models.group_extra import CosinnusSociety, CosinnusProject
+from cosinnus.models.group_extra import CosinnusSociety, CosinnusProject,\
+    CosinnusConference
 from django.conf import settings
 from django.core.cache import cache
 from django.contrib.auth import get_user_model
@@ -121,10 +122,32 @@ class RocketChatConnection:
             else:
                 self.stdout.write('OK! ' + str(setting) + ': ' + str(value)) 
         self.oauth_sync()
+        
+    def create_missing_users(self, skip_inactive=False, force_group_membership_sync=False):
+        """ 
+        Create missing user accounts in rocketchat (and verify that ones with an existing
+        connection still exist in rocketchat properly).
+        Inactive user accounts and ones that never logged in will also be created.
+        Will never create accounts for users with __unverified__ emails.
+            
+        @param skip_inactive: if True, will not create any accounts for inactive users
+        @param force_group_membership_sync: if True, will also re-do and sync all group
+            memberships, for all users. (default: only sync memberships for users created 
+            during this run)
+        """
+        users = filter_portal_users(get_user_model().objects.all())
+        users = users.exclude(email__startswith='__unverified__')
+        if skip_inactive:
+            users = filter_active_users(users)
+        count = len(users)
+        for i, user in enumerate(users):
+            result = self.ensure_user_account_sanity(user, force_group_membership_sync=force_group_membership_sync)
+            self.stdout.write('User %i/%i. Success: %s \t %s' % (i, count, str(result), user.email),)
 
     def users_sync(self, skip_update=False):
         """
-        Sync users
+        Sync active users that have already been created in rocketchat.
+        Will not create new users.
         @param skip_update: if True, skips updating existing users
         :return:
         """
@@ -209,24 +232,16 @@ class RocketChatConnection:
         portal = CosinnusPortal.get_current()
         
         # Sync WECHANGE groups
-        groups = CosinnusSociety.objects.filter(is_active=True, portal=portal)
-        groups = groups.filter(Q(**{f'settings__{PROFILE_SETTING_ROCKET_CHAT_ID}_general__isnull': True}) |
-                               Q(**{f'settings__{PROFILE_SETTING_ROCKET_CHAT_ID}_general': None}))
-        count = len(groups)
-        for i, group in enumerate(groups):
-            self.stdout.write('Group %i/%i' % (i, count), ending='\r')
-            self.stdout.flush()
-            self.groups_create(group)
+        for group_model in (CosinnusConference, CosinnusSociety, CosinnusProject):
+            groups = group_model.objects.filter(is_active=True, portal=portal)
+            groups = groups.filter(Q(**{f'settings__{PROFILE_SETTING_ROCKET_CHAT_ID}_general__isnull': True}) |
+                                   Q(**{f'settings__{PROFILE_SETTING_ROCKET_CHAT_ID}_general': None}))
+            count = len(groups)
+            for i, group in enumerate(groups):
+                self.stdout.write('%s %i/%i' % (str(group_model), i, count), ending='\r')
+                self.stdout.flush()
+                self.groups_create(group)
 
-        # Sync WECHANGE projects
-        projects = CosinnusProject.objects.filter(is_active=True, portal=portal)
-        projects = projects.filter(Q(**{'settings__{PROFILE_SETTING_ROCKET_CHAT_ID}_general__isnull': True}) |
-                                   Q(**{'settings__{PROFILE_SETTING_ROCKET_CHAT_ID}_general': None}))
-        count = len(projects)
-        for i, project in enumerate(projects):
-            self.stdout.write('Project %i/%i' % (i, count), ending='\r')
-            self.stdout.flush()
-            self.groups_create(project)
 
     def get_user_id(self, user):
         """
@@ -244,7 +259,7 @@ class RocketChatConnection:
                 return
             response = self.rocket.users_info(username=username).json()
             if not response.get('success'):
-                logger.exception('get_user_id: ' + response.get('errorType', '<No Error Type>'), extra={'trace': traceback.format_stack(), 'username': username, 'response': response})
+                logger.exception('get_user_id: ' + str(response.get('errorType', '<No Error Type>')), extra={'trace': traceback.format_stack(), 'username': username, 'response': response})
                 return
             user_data = response.get('user')
             rocket_chat_id = user_data.get('_id')
@@ -362,9 +377,11 @@ class RocketChatConnection:
                     extra={'response-text': response.text, 'response_code': response.status_code})
                 return None
     
-    def ensure_user_account_sanity(self, user):
+    def ensure_user_account_sanity(self, user, force_group_membership_sync=False):
         """ A helper function that can always be safely called on any user object.
             Checks if the user account exists.
+            @param force_group_membership_sync: if True, will also re-do group memberships for active users
+                instead of only for freshly created accounts
             @param return: True if the account was either healthy or was newly created. False (and causes logs) otherwise """
         if not hasattr(user, 'cosinnus_profile'):
             # just return here, appearently this is a special/corrupted user account
@@ -386,8 +403,12 @@ class RocketChatConnection:
                 return False
         elif status is None:
             logger.error('RocketChat: ensure_user_account_sanity was called, but could not do anything as `check_user_account_status` received an unknown status code.')
-        else:
-            return True
+            return False
+        
+        # status is True, account exists
+        if force_group_membership_sync:
+            self.force_redo_user_room_memberships(user)
+        return True
             
     def force_redo_user_room_memberships(self, user):
         """ A helper function that will re-do all room memberships by
