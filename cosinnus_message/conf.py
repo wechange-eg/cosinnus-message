@@ -74,7 +74,7 @@ class CosinnusMessageDefaultSettings(AppConf):
             
         ''',
         'Layout_Terms_of_Service': '<a href="https://wechange.de/cms/datenschutz/">Nutzungsbedingungen</a><br><a href="https://wechange.de/cms/datenschutz/">Datenschutz</a>',
-        'Layout_Login_Terms': 'Indem Sie fortfahren, stimmen Sie unseren <a href="https://wechange.de/cms/nutzungsbedingungen/">Nutzungs-</a> und <a href="https://wechange.de/cms/datenschutz/">Datenschutzbestimmungen</a> zu.',
+        'Layout_Login_Terms': '',
         'Layout_Privacy_Policy': '<a href="https://wechange.de/cms/datenschutz/">Datenschutz</a>',
         # 'UI_Group_Channels_By_Type': False,
         'UI_Use_Real_Name': True,
