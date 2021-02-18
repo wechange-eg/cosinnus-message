@@ -8,7 +8,8 @@ from cosinnus_message.rocket_chat import RocketChatConnection,\
     delete_cached_rocket_connection
 from cosinnus.models import UserProfile, CosinnusGroupMembership, MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING, \
     MEMBERSHIP_ADMIN
-from cosinnus.models.group_extra import CosinnusSociety, CosinnusProject
+from cosinnus.models.group_extra import CosinnusSociety, CosinnusProject,\
+    CosinnusConference
 from cosinnus_note.models import Note
 from cosinnus.core import signals
 
@@ -99,6 +100,19 @@ if settings.COSINNUS_ROCKET_ENABLED:
                 rocket.groups_create(instance)
         except Exception as e:
             logger.exception(e)
+            
+    @receiver(pre_save, sender=CosinnusConference)
+    def handle_cosinnus_conference_updated(sender, instance, **kwargs):
+        try:
+            rocket = RocketChatConnection()
+            if instance.id:
+                old_instance = CosinnusConference.objects.get(pk=instance.id)
+                if instance.slug != old_instance.slug:
+                    rocket.groups_rename(instance)
+            else:
+                rocket.groups_create(instance)
+        except Exception as e:
+            logger.exception(e)
 
     @receiver(post_delete, sender=CosinnusSociety)
     def handle_cosinnus_society_deleted(sender, instance, **kwargs):
@@ -110,6 +124,14 @@ if settings.COSINNUS_ROCKET_ENABLED:
             
     @receiver(post_delete, sender=CosinnusProject)
     def handle_cosinnus_project_deleted(sender, instance, **kwargs):
+        try:
+            rocket = RocketChatConnection()
+            rocket.groups_delete(instance)
+        except Exception as e:
+            logger.exception(e)
+            
+    @receiver(post_delete, sender=CosinnusConference)
+    def handle_cosinnus_conference_deleted(sender, instance, **kwargs):
         try:
             rocket = RocketChatConnection()
             rocket.groups_delete(instance)

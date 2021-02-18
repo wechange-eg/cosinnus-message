@@ -234,8 +234,8 @@ class RocketChatConnection:
         # Sync WECHANGE groups
         for group_model in (CosinnusConference, CosinnusSociety, CosinnusProject):
             groups = group_model.objects.filter(is_active=True, portal=portal)
-            groups = groups.filter(Q(**{f'settings__{PROFILE_SETTING_ROCKET_CHAT_ID}_general__isnull': True}) |
-                                   Q(**{f'settings__{PROFILE_SETTING_ROCKET_CHAT_ID}_general': None}))
+            
+            
             count = len(groups)
             for i, group in enumerate(groups):
                 self.stdout.write('%s %i/%i' % (str(group_model), i, count), ending='\r')
@@ -527,7 +527,11 @@ class RocketChatConnection:
         group_name = ''
         if group.is_member(user):
             # Return Rocket.Chat group url
-            room_id = group.settings.get(f'{PROFILE_SETTING_ROCKET_CHAT_ID}_general')
+            room_id = group.settings.get(f'{PROFILE_SETTING_ROCKET_CHAT_ID}_general', None)
+            # create group if it didn't exist
+            if not room_id:
+                self.groups_create(group)
+                room_id = group.settings.get(f'{PROFILE_SETTING_ROCKET_CHAT_ID}_general', None)
             response = self.rocket.groups_info(room_id=room_id).json()
             if not response.get('success'):
                 logger.error('RocketChat: groups_request: groups_info ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
@@ -596,7 +600,7 @@ class RocketChatConnection:
 
     def groups_create(self, group):
         """
-        Create default channels for group or project:
+        Create default channels for group or project or conference, if they doesn't exist yet:
         1. #slug-general: Private group with all members
         2. #slug-news: Private ready-only group with all members, new notes appear here.
         :param group:
@@ -612,6 +616,14 @@ class RocketChatConnection:
 
         # Create general and news channel
         for room_name_setting, group_room_name in self.GROUP_ROOM_SETTINGS_AND_NAMES:
+            # check if group room exists
+            room_id = group.settings.get(f'{PROFILE_SETTING_ROCKET_CHAT_ID}_{group_room_name}', None)
+            if room_id:
+                response = self.rocket.groups_info(room_id=room_id).json()
+                if response.get('success'):
+                    # room existed, don't create
+                    continue
+            
             group_name = room_name_setting % group.slug
             response = self.rocket.groups_create(name=group_name, members=member_usernames).json()
             
