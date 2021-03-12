@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-23 18:24+0100\n"
-"PO-Revision-Date: 2020-09-27 08:36+0300\n"
+"POT-Creation-Date: 2021-03-12 17:55+0100\n"
+"PO-Revision-Date: 2021-03-08 23:48+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 
 msgid "Message"
 msgstr "הודעה"
@@ -58,10 +58,10 @@ msgid "Messages"
 msgstr "הודעות"
 
 msgid "Legacy Messages Archive"
-msgstr "ארכיון הודעות לגסי"
+msgstr "ארכיון הודעות Legacy"
 
 msgid "The legacy messaging app is no longer in use. You can view all of your old messages, but you cannot write new ones. Please use the new messaging app in the navigation from now on!"
-msgstr "אפליקציית ממסר ההודעות לגסי איננה בשימוש יותר. אתם יכולים לצפות בהודעותיכם הישנות אך אין באפשרותכם לכתוב חדשות. אנא השתמשו באפליקציית הממסר החדש בניווט מעתה והלאה!"
+msgstr "אפליקציית ממסר ההודעות Lgacy איננה בשימוש יותר. אתם יכולים לצפות בהודעותיכם הישנות אך אין באפשרותכם לכתוב חדשות. אנא השתמשו באפליקציית הממסר החדשה בניווט מעתה והלאה!"
 
 #, python-format
 msgid ""
@@ -155,7 +155,7 @@ msgid "Project/Group"
 msgstr "פרוייקט/קבוצה"
 
 msgid "Follow this link to view the message on the site"
-msgstr "עקוב אחר קישור זה כדי לצפות בהודעה שבאתר"
+msgstr "עקבו אחר קישור זה כדי לצפות בהודעה שבאתר"
 
 msgid "If you do not wish to receive any more emails from us, click here to unsubscribe:"
 msgstr "אם אין ברצונכם לקבל מאיתנו הודעות דוא\"ל נוספות, לחצו כאן כדי לבטל את המנוי:"
@@ -171,7 +171,7 @@ msgid "Message \"%(subject)s\" on the site %(sitename)s"
 msgstr "הודעה \"%(subject)s\" באתר %(sitename)s"
 
 msgid "Dear visitor,"
-msgstr "אורח'ת יקר,"
+msgstr "אורח/ת יקר,"
 
 msgid "As a reminder, please find below the content of your message."
 msgstr "כתזכורת, נא מצאו להלן את תוכן הודעתכם."
@@ -181,7 +181,7 @@ msgid "On %(date)s, you sent a message to the user '%(sender_first)s %(sender_la
 msgstr "בתאריך %(date)s, שלחת הודעה למשתמש '%(sender_first)s %(sender_last)s'."
 
 msgid "Please find below the answer from your correspondent."
-msgstr "נא מצא להלן תשובה מההתכתבות שלך"
+msgstr "נא מצא להלן תשובה מההתכתבות שלך."
 
 msgid "Thank you again for your interest in our services."
 msgstr "שוב תודה על התעניינותך בשירותים שלנו."
@@ -251,7 +251,7 @@ msgid "An internal error occured."
 msgstr "אירעה שגיאה פנימית."
 
 msgid "The email adress you sent the reply from is not the one associated with your user account. Please send direct replies only from the email adress you are registered with on the site!"
-msgstr "כתובת הדואר האלקטרוני ממנה שלחתם את התשובה אינה זו המשויכת לחשבון המשתמש שלכם. אנא שלחו תגובות ישירות רק מכתובת הדוא\"ל איתה נרשמתם באתר."
+msgstr "כתובת הדואר האלקטרוני ממנה שלחתם את התשובה אינה זו המשויכת לחשבון המשתמש שלכם. אנא שלחו תגובות ישירות רק מכתובת הדוא\"ל איתה נרשמתם באתר!"
 
 msgid "There was an error when processing your message text!"
 msgstr "אירעה שגיאה בעת עיבוד טקסט ההודעה שלך!"
