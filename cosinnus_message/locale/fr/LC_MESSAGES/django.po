@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-12 17:55+0100\n"
-"PO-Revision-Date: 2018-09-14 18:30+0200\n"
+"POT-Creation-Date: 2021-02-23 18:24+0100\n"
+"PO-Revision-Date: 2021-03-16 06:28+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.0.8\n"
+"X-Generator: Poedit 2.4.2\n"
 
 msgid "Message"
 msgstr "Message"
@@ -42,11 +42,11 @@ msgstr "Portail"
 
 #, python-format
 msgid "Request about your project \"%(group_name)s\""
-msgstr ""
+msgstr "Demande à propos de ton projet \"%(group_name)s\""
 
 #, python-format
 msgid "Request about your group \"%(group_name)s\""
-msgstr ""
+msgstr "Demande à propos de ton groupe \"%(group_name)s\""
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
 msgstr "Tu peux joindre des fichiers et des images aux messages uniquement si tu es membre du forum. Tu peux le rejoindre ici :"
@@ -58,10 +58,10 @@ msgid "Messages"
 msgstr "Messages"
 
 msgid "Legacy Messages Archive"
-msgstr ""
+msgstr "Archive des messages hérités"
 
 msgid "The legacy messaging app is no longer in use. You can view all of your old messages, but you cannot write new ones. Please use the new messaging app in the navigation from now on!"
-msgstr ""
+msgstr "L’application de messagerie héritée n’est plus en service. Tu peux afficher tous tes anciens messages, mais tu ne peux pas en écrire de nouveaux. Utilise la nouvelle application de messagerie dans la navigation à partir de maintenant !"
 
 #, python-format
 msgid ""

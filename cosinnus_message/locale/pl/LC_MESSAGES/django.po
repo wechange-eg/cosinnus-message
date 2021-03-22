@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-12 17:55+0100\n"
+"POT-Creation-Date: 2021-02-23 18:24+0100\n"
 "PO-Revision-Date: 2020-10-09 20:00+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -41,7 +41,7 @@ msgstr "Portal"
 
 #, python-format
 msgid "Request about your project \"%(group_name)s\""
-msgstr "Żądanie dotyczące twojego projektu \"%(group_name)s\""
+msgstr "Żądanie dotyczące Twojego projektu \"%(group_name)s\""
 
 #, python-format
 msgid "Request about your group \"%(group_name)s\""
@@ -104,7 +104,7 @@ msgid "Delete"
 msgstr "Usuń"
 
 msgid "Archive"
-msgstr "Zarchiwizuj"
+msgstr "Archiwizuj"
 
 msgid "Undelete"
 msgstr "Cofnij usunięcie"
@@ -198,7 +198,7 @@ msgstr "Wysłane"
 
 msgctxt "the noun for an Archive"
 msgid "Archive"
-msgstr "Archiwum"
+msgstr "Archiwizuj"
 
 msgid "Trash"
 msgstr "Kosz"
