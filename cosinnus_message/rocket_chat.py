@@ -704,7 +704,10 @@ class RocketChatConnection:
                     response = self.rocket.groups_set_description(room_id=room_id, description=group.name).json()
                     if not response.get('success'):
                         logger.error('RocketChat: groups_create: groups_set_description ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
-
+                    
+                    # Set topic to plattform group URL as backlink
+                    self.group_set_topic_to_url(group, specific_room_names=[group_room_name])
+                    
 
     def groups_rename(self, group):
         """
@@ -720,7 +723,21 @@ class RocketChatConnection:
                 response = self.rocket.groups_rename(room_id=room_id, name=room_name).json()
                 if not response.get('success'):
                     logger.error('RocketChat: groups_rename ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
-
+    
+    def group_set_topic_to_url(self, group, specific_room_names=None):
+        """ Sets the CosinnusGroup url as topic of the group's room 
+            @param specific_room_names: if set to a list, the topic will only be 
+                set for those specific room names, instead of for all rooms of that group """
+                
+        room_names = specific_room_names or [tup[1] for tup in self.GROUP_ROOM_SETTINGS_AND_NAMES]
+        for group_room_name in room_names:
+            # check if group room exists
+            room_id = group.settings.get(f'{PROFILE_SETTING_ROCKET_CHAT_ID}_{group_room_name}', None)
+            if room_id:
+                response = self.rocket.groups_set_topic(room_id=room_id, topic=group.get_absolute_url()).json()
+                if not response.get('success'):
+                    logger.error('RocketChat: groups_set_topic: ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
+        
     def groups_archive(self, group):
         """
         Archive default channels for group or project
