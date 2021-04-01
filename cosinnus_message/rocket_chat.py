@@ -1024,22 +1024,9 @@ class RocketChatConnection:
         profile = user.cosinnus_profile
 
         try:
-            try:
-                user_connection = get_cached_rocket_connection(rocket_username=profile.rocket_username, password=user.password,
-                                             server_url=settings.COSINNUS_CHAT_BASE_URL)
-            except RocketAuthenticationException:
-                user_id = user.cosinnus_profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_ID)
-                if not user_id:
-                    # user not connected to rocketchat
-                    return 0
-                # try to re-initi the user's account and reconnect
-                response = self.rocket.users_update(user_id=user_id, password=user.password).json()
-                if not response.get('success'):
-                    logger.error('RocketChat: unread_messages did not receive a success response: ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
-                    return 0
-                user_connection = get_cached_rocket_connection(rocket_username=profile.rocket_username, password=user.password,
-                                             server_url=settings.COSINNUS_CHAT_BASE_URL, reset=True) # resets cache
-
+            user_connection = self._get_user_connection(user)
+            if not user_connection:
+                return 0
             response = user_connection.subscriptions_get()
 
             # if we didn't receive a successful response, the server may be down or the user logged out
@@ -1066,3 +1053,53 @@ class RocketChatConnection:
             logger.error('RocketChat: unread message count: unexpected exception',
                      extra={'exception': e})
             logger.exception(e)
+    
+    def get_user_preferences(self, user):
+        """ Gets the given user's rocketchat preferences.
+            Note: the preference set is empty for preferences that have never been changed
+                from the default!
+                'emailNotificationMode': 'mentions'|'default'|'nothing'
+         """
+        
+        ROCKETCHAT_SETTING_OFF = 'nothing'
+        ROCKETCHAT_SETTING_DEFAULT = 'default'
+        ROCKETCHAT_SETTING_MENTIONS = 'mentions'
+        
+        user_connection = self._get_user_connection(user)
+        if not user_connection:
+            return None
+        
+        response = user_connection.users_get_preferences().json()
+        if not response.get('success'):
+            print('>> nonsuccess')
+            return None
+        from pprint import pprint
+        pprint(response)
+        
+        
+        
+    def _get_user_connection(self, user):
+        """ Returns a user-specific rocketchat connection for the given user, 
+            or None if this fails for any reason """
+            
+        profile = user.cosinnus_profile
+        user_connection = None
+        try:
+            user_connection = get_cached_rocket_connection(rocket_username=profile.rocket_username, password=user.password,
+                                         server_url=settings.COSINNUS_CHAT_BASE_URL)
+        except RocketAuthenticationException:
+            user_id = user.cosinnus_profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_ID)
+            if not user_id:
+                # user not connected to rocketchat
+                return None
+            # try to re-initi the user's account and reconnect
+            response = self.rocket.users_update(user_id=user_id, password=user.password).json()
+            if not response.get('success'):
+                logger.error('RocketChat: unread_messages did not receive a success response: ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
+                return None
+            user_connection = get_cached_rocket_connection(rocket_username=profile.rocket_username, password=user.password,
+                                         server_url=settings.COSINNUS_CHAT_BASE_URL, reset=True) # resets cache
+        return user_connection
+        
+        
+        
