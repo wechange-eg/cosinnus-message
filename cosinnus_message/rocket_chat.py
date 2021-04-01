@@ -516,6 +516,21 @@ class RocketChatConnection:
         if not response.get('success'):
             logger.error('RocketChat: users_delete: ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
     
+    def get_group_room_name(self, group):
+        """ Returns the rocketchat room name for a CosinnusGroup, for use in any URLs.
+            Creates a room for the group if it doesn't exist yet """
+        room_id = group.settings.get(f'{PROFILE_SETTING_ROCKET_CHAT_ID}_general', None)
+        # create group if it didn't exist
+        if not room_id:
+            self.groups_create(group)
+            room_id = group.settings.get(f'{PROFILE_SETTING_ROCKET_CHAT_ID}_general', None)
+        response = self.rocket.groups_info(room_id=room_id).json()
+        if not response.get('success'):
+            logger.error('RocketChat: groups_request: groups_info ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
+            return None
+        group_name = response.get('group', {}).get('name', None)
+        return group_name
+    
     def groups_request(self, group, user):
         """
         Returns name of group if user is member of group, otherwise creates private group for group request
@@ -526,16 +541,7 @@ class RocketChatConnection:
         """
         group_name = ''
         if group.is_member(user):
-            # Return Rocket.Chat group url
-            room_id = group.settings.get(f'{PROFILE_SETTING_ROCKET_CHAT_ID}_general', None)
-            # create group if it didn't exist
-            if not room_id:
-                self.groups_create(group)
-                room_id = group.settings.get(f'{PROFILE_SETTING_ROCKET_CHAT_ID}_general', None)
-            response = self.rocket.groups_info(room_id=room_id).json()
-            if not response.get('success'):
-                logger.error('RocketChat: groups_request: groups_info ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
-            group_name = response.get('group', {}).get('name')
+            group_name = self.get_group_room_name(group)
         else:
             # Create private group
             group_name = f'{group.slug}-{get_random_string(7)}'

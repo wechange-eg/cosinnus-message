@@ -23,6 +23,7 @@ from cosinnus.models.group import CosinnusPortal
 from cosinnus_message.models import CosinnusMailbox
 from django.core.exceptions import MultipleObjectsReturned
 from postman.views import RestrictRecipientMixin
+from cosinnus_message.rocket_chat import RocketChatConnection
 
 logger = logging.getLogger('cosinnus')
 
@@ -291,3 +292,15 @@ def _test_direct_reply_mail(sender_email=None, body_text=None):
             -------------------------------------------------------------------------------
         """
     process_direct_reply_messages([Msg()], True)
+    
+
+def get_rocketchat_group_embed_url_for_user(group, user):
+    """ Returns the iframe-embeddable URL for an only-group-chat view for a CosinnusGroup for
+        a user if the user is a member of it, None otherwise """
+    
+    if user and user.is_authenticated and group.is_member(user):
+        rocket = RocketChatConnection()
+        group_name = rocket.get_group_room_name(group)
+        if group_name:
+            return f'{settings.COSINNUS_CHAT_BASE_URL}/group/{group_name}?layout=embedded'
+    return None

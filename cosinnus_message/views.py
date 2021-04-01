@@ -195,7 +195,6 @@ class RocketChatWriteGroupView(BaseRocketChatView):
         creates a new private group with group admins if not
         :return:
         """
-        group_name = ''
         group = self.get_object()
         if not group:
             return self.base_url
