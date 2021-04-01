@@ -202,7 +202,7 @@ class RocketChatWriteGroupView(BaseRocketChatView):
         group_name = ''
         if user and user.is_authenticated:
             rocket = RocketChatConnection()
-            group_name = rocket.groups_request(group, user)
+            group_name = rocket.groups_request(group, user, force_sync_membership=True)
 
         if group_name:
             return f'{self.base_url}/group/{group_name}/'

@@ -24,6 +24,7 @@ from cosinnus.models.profile import PROFILE_SETTING_ROCKET_CHAT_ID, PROFILE_SETT
 import traceback
 from cosinnus.utils.user import filter_active_users, filter_portal_users
 import six
+from annoying.functions import get_object_or_None
 
 logger = logging.getLogger(__name__)
 
@@ -409,7 +410,15 @@ class RocketChatConnection:
         if force_group_membership_sync:
             self.force_redo_user_room_memberships(user)
         return True
-            
+    
+    def force_redo_user_room_membership_for_group(self, user, group):
+        """ A helper function that will re-do all room memberships by
+            saving each user's membership (and having the invite-room hooks trigger) """
+        membership = get_object_or_None(CosinnusGroupMembership, group__portal=CosinnusPortal.get_current(), user=user, group=group)
+        if membership:
+            # force the re-invite
+            self.invite_or_kick_for_membership(membership)
+    
     def force_redo_user_room_memberships(self, user):
         """ A helper function that will re-do all room memberships by
             saving each user's membership (and having the invite-room hooks trigger) """
@@ -531,17 +540,22 @@ class RocketChatConnection:
         group_name = response.get('group', {}).get('name', None)
         return group_name
     
-    def groups_request(self, group, user):
+    def groups_request(self, group, user, force_sync_membership=False):
         """
         Returns name of group if user is member of group, otherwise creates private group for group request
         (with user and group admins as members) and returns group name
         :param group:
         :param user:
+        :param force_sync_membership: if True, and the user is a member of the CosinnusGroup,
+            the user will be added to the rocketchat group again (useful to make sure
+            that users are *really* members of the group)
         :return:
         """
         group_name = ''
         if group.is_member(user):
             group_name = self.get_group_room_name(group)
+            if force_sync_membership:
+                self.force_redo_user_room_membership_for_group(user, group)
         else:
             # Create private group
             group_name = f'{group.slug}-{get_random_string(7)}'

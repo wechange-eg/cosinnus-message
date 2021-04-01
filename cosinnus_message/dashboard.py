@@ -31,9 +31,6 @@ class EmbeddedRocketchatDashboardWidget(DashboardWidget):
             if has_more == False, the receiving widget will assume no further data can be loaded.
          """
         rocketchat_room_embed_url = get_rocketchat_group_embed_url_for_user(self.config.group, self.request.user)
-        # make sure user is really in this rocketchat room!
-        # TODO
-        
         data = {
             'rocketchat_room_embed_url': rocketchat_room_embed_url,
             'group': self.config.group,
