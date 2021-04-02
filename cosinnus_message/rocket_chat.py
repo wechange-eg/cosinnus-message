@@ -25,11 +25,20 @@ import traceback
 from cosinnus.utils.user import filter_active_users, filter_portal_users
 import six
 from annoying.functions import get_object_or_None
+from cosinnus_message.utils.utils import save_rocketchat_mail_notification_preference_for_user_setting
 
 logger = logging.getLogger(__name__)
 
 ROCKETCHAT_USER_CONNECTION_CACHE_KEY = 'cosinnus/core/portal/%d/rocketchat-user-connection/%s/'
 
+ROCKETCHAT_PREFERENCE_EMAIL_NOTIFICATION_OFF = 'nothing'
+ROCKETCHAT_PREFERENCE_EMAIL_NOTIFICATION_DEFAULT = 'default'
+ROCKETCHAT_PREFERENCE_EMAIL_NOTIFICATION_MENTIONS = 'mentions'
+ROCKETCHAT_PREFERENCES_EMAIL_NOTIFICATION = (
+    ROCKETCHAT_PREFERENCE_EMAIL_NOTIFICATION_OFF,
+    ROCKETCHAT_PREFERENCE_EMAIL_NOTIFICATION_DEFAULT,
+    ROCKETCHAT_PREFERENCE_EMAIL_NOTIFICATION_MENTIONS
+)
 
 def get_cached_rocket_connection(rocket_username, password, server_url, reset=False):
     """ Retrieves a cached rocketchat connection or creates a new one and caches it.
@@ -309,10 +318,12 @@ class RocketChatConnection:
         if not hasattr(user, 'cosinnus_profile'):
             return
         profile = user.cosinnus_profile
+        original_password = user.password
+        rocket_user_password = user.password or get_random_string(length=16)
         data = {
             "email": user.email.lower(),
             "name": user.get_full_name() or str(user.id),
-            "password": user.password or get_random_string(length=16),
+            "password": rocket_user_password,
             "username": profile.rocket_username,
             "active": user.is_active,
             "verified": True,
@@ -328,6 +339,16 @@ class RocketChatConnection:
         profile.settings[PROFILE_SETTING_ROCKET_CHAT_ID] = user_id
         # Update profile settings without triggering signals to prevent cycles
         type(profile).objects.filter(pk=profile.pk).update(settings=profile.settings)
+        user.cosinnus_profile = profile
+        
+        # Update the user's email preferences based on the portal default
+        # Hack: since the user object might have a null password on creation, we give the user object a temporary password, 
+        # because otherwise the rocket user connection would not be able to log in. 
+        # Note: the user should not be saved in between this! if it it ever does, 
+        # we have to re-save the user afterwards with the original password
+        user.password = rocket_user_password
+        save_rocketchat_mail_notification_preference_for_user_setting(user, settings.COSINNUS_DEFAULT_ROCKETCHAT_NOTIFICATION_SETTING)
+        user.password = original_password
         return user
 
     def users_update_username(self, rocket_username, user):
@@ -1058,25 +1079,55 @@ class RocketChatConnection:
         """ Gets the given user's rocketchat preferences.
             Note: the preference set is empty for preferences that have never been changed
                 from the default!
-                'emailNotificationMode': 'mentions'|'default'|'nothing'
-         """
-        
-        ROCKETCHAT_SETTING_OFF = 'nothing'
-        ROCKETCHAT_SETTING_DEFAULT = 'default'
-        ROCKETCHAT_SETTING_MENTIONS = 'mentions'
-        
+            @return: a dict of preferences. `None`, if there was an error.
+        """
         user_connection = self._get_user_connection(user)
         if not user_connection:
             return None
         
         response = user_connection.users_get_preferences().json()
-        if not response.get('success'):
-            print('>> nonsuccess')
+        print(f'>>> resp {response}')
+        if not response.get('success') or not 'preferences' in response:
+            logger.error('RocketChat: get_user_preferences did not receive a success response or data: ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
             return None
-        from pprint import pprint
-        pprint(response)
+        return response.get('preferences', None)
         
-        
+    def get_user_email_preference(self, user):
+        """ Gets the user preference for email notifications
+            Preference for emails is: 'emailNotificationMode': 'mentions'|'default'|'nothing'
+            @return: one of the values of `ROCKETCHAT_PREFERENCES_EMAIL_NOTIFICATION` or None if 
+                no setting is set, it is of unknown value or an error occured """
+        prefs = self.get_user_preferences(user)
+        if not prefs:
+            return None
+        email_pref = prefs.get('emailNotificationMode', None)
+        if email_pref and email_pref not in ROCKETCHAT_PREFERENCES_EMAIL_NOTIFICATION:
+            logger.error('RocketChat: get_user_email_preference did not receive a known value: ' + str(email_pref))
+            return None
+        return email_pref
+    
+    def set_user_email_preference(self, user, preference):
+        """ Sets the user's email preferences to be one of the values of `ROCKETCHAT_PREFERENCES_EMAIL_NOTIFICATION`
+            @return: True if successful, False if not """
+        if not preference in ROCKETCHAT_PREFERENCES_EMAIL_NOTIFICATION:
+            logger.error('RocketChat: set_user_email_preference got an invalid value: ' + str(preference))
+            return False
+        user_connection = self._get_user_connection(user)
+        if not user_connection:
+            return False
+        user_id = user.cosinnus_profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_ID, None)
+        if not user_id:
+            # user not connected to rocketchat
+            return False
+        data = {
+            'emailNotificationMode': preference,
+        }
+        response = user_connection.users_set_preferences(user_id, data).json()
+        if not response.get('success'):
+            logger.error('RocketChat: set_user_email_preference did not receive a success response: ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
+            import ipdb;ipdb.set_trace()
+            return False
+        return True
         
     def _get_user_connection(self, user):
         """ Returns a user-specific rocketchat connection for the given user, 
