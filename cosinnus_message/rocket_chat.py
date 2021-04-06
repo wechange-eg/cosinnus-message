@@ -24,11 +24,25 @@ from cosinnus.models.profile import PROFILE_SETTING_ROCKET_CHAT_ID, PROFILE_SETT
 import traceback
 from cosinnus.utils.user import filter_active_users, filter_portal_users
 import six
+from annoying.functions import get_object_or_None
+from cosinnus_message.utils.utils import save_rocketchat_mail_notification_preference_for_user_setting
+from cosinnus.templatetags.cosinnus_tags import full_name
+from django.template.defaultfilters import truncatewords
 
 logger = logging.getLogger(__name__)
 
 ROCKETCHAT_USER_CONNECTION_CACHE_KEY = 'cosinnus/core/portal/%d/rocketchat-user-connection/%s/'
 
+ROCKETCHAT_NOTE_ID_SETTINGS_KEY = 'rocket_chat_message_id'
+
+ROCKETCHAT_PREFERENCE_EMAIL_NOTIFICATION_OFF = 'nothing'
+ROCKETCHAT_PREFERENCE_EMAIL_NOTIFICATION_DEFAULT = 'default'
+ROCKETCHAT_PREFERENCE_EMAIL_NOTIFICATION_MENTIONS = 'mentions'
+ROCKETCHAT_PREFERENCES_EMAIL_NOTIFICATION = (
+    ROCKETCHAT_PREFERENCE_EMAIL_NOTIFICATION_OFF,
+    ROCKETCHAT_PREFERENCE_EMAIL_NOTIFICATION_DEFAULT,
+    ROCKETCHAT_PREFERENCE_EMAIL_NOTIFICATION_MENTIONS
+)
 
 def get_cached_rocket_connection(rocket_username, password, server_url, reset=False):
     """ Retrieves a cached rocketchat connection or creates a new one and caches it.
@@ -86,12 +100,6 @@ class RocketChatConnection:
     rocket = None
     stdout, stderr = None, None
     
-    GROUP_ROOM_NAMES = ['general', 'news']
-    GROUP_ROOM_SETTINGS_AND_NAMES = [
-        (settings.COSINNUS_CHAT_GROUP_GENERAL, 'general',),
-        (settings.COSINNUS_CHAT_GROUP_NEWS, 'news'),
-    ]
-
     def __init__(self, user=settings.COSINNUS_CHAT_USER, password=settings.COSINNUS_CHAT_PASSWORD,
                  url=settings.COSINNUS_CHAT_BASE_URL, stdout=None, stderr=None):
         # get a cached version of the rocket connection
@@ -268,19 +276,18 @@ class RocketChatConnection:
             type(profile).objects.filter(pk=profile.pk).update(settings=profile.settings)
         return profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_ID)
 
-    def get_group_id(self, group, group_type='general'):
+    def get_group_id(self, group, room_key=None):
         """
         Returns Rocket.Chat ID from group settings or Rocket.Chat API
         :param user:
         :return:
         """
-        key = f'{PROFILE_SETTING_ROCKET_CHAT_ID}_{group_type}'
+        room_key = room_key or settings.COSINNUS_ROCKET_GROUP_ROOM_KEYS[0]
+        room_name_code = settings.COSINNUS_ROCKET_GROUP_ROOM_NAMES_MAP[room_key]
+        # if the group doesn't have a room id in its settings, try to find the room by name
+        key = f'{PROFILE_SETTING_ROCKET_CHAT_ID}_{room_key}'
         if not group.settings.get(key):
-            # FIXME: what is this condition? ignores group_type name
-            if group_type == 'general':
-                group_name = settings.COSINNUS_CHAT_GROUP_GENERAL % group.slug
-            else:
-                group_name = settings.COSINNUS_CHAT_GROUP_NEWS % group.slug
+            group_name = room_name_code % group.slug
             response = self.rocket.groups_info(room_name=group_name).json()
             if not response.get('success'):
                 logger.error('RocketChat: get_group_id ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
@@ -308,10 +315,12 @@ class RocketChatConnection:
         if not hasattr(user, 'cosinnus_profile'):
             return
         profile = user.cosinnus_profile
+        original_password = user.password
+        rocket_user_password = user.password or get_random_string(length=16)
         data = {
             "email": user.email.lower(),
             "name": user.get_full_name() or str(user.id),
-            "password": user.password or get_random_string(length=16),
+            "password": rocket_user_password,
             "username": profile.rocket_username,
             "active": user.is_active,
             "verified": True,
@@ -327,6 +336,16 @@ class RocketChatConnection:
         profile.settings[PROFILE_SETTING_ROCKET_CHAT_ID] = user_id
         # Update profile settings without triggering signals to prevent cycles
         type(profile).objects.filter(pk=profile.pk).update(settings=profile.settings)
+        user.cosinnus_profile = profile
+        
+        # Update the user's email preferences based on the portal default
+        # Hack: since the user object might have a null password on creation, we give the user object a temporary password, 
+        # because otherwise the rocket user connection would not be able to log in. 
+        # Note: the user should not be saved in between this! if it it ever does, 
+        # we have to re-save the user afterwards with the original password
+        user.password = rocket_user_password
+        save_rocketchat_mail_notification_preference_for_user_setting(user, settings.COSINNUS_DEFAULT_ROCKETCHAT_NOTIFICATION_SETTING)
+        user.password = original_password
         return user
 
     def users_update_username(self, rocket_username, user):
@@ -409,7 +428,15 @@ class RocketChatConnection:
         if force_group_membership_sync:
             self.force_redo_user_room_memberships(user)
         return True
-            
+    
+    def force_redo_user_room_membership_for_group(self, user, group):
+        """ A helper function that will re-do all room memberships by
+            saving each user's membership (and having the invite-room hooks trigger) """
+        membership = get_object_or_None(CosinnusGroupMembership, group__portal=CosinnusPortal.get_current(), user=user, group=group)
+        if membership:
+            # force the re-invite
+            self.invite_or_kick_for_membership(membership)
+    
     def force_redo_user_room_memberships(self, user):
         """ A helper function that will re-do all room memberships by
             saving each user's membership (and having the invite-room hooks trigger) """
@@ -516,26 +543,38 @@ class RocketChatConnection:
         if not response.get('success'):
             logger.error('RocketChat: users_delete: ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
     
-    def groups_request(self, group, user):
+    def get_group_room_name(self, group, room_key=None):
+        """ Returns the rocketchat room name for a CosinnusGroup, for use in any URLs.
+            Creates a room for the group if it doesn't exist yet """
+        room_key = room_key or settings.COSINNUS_ROCKET_GROUP_ROOM_KEYS[0]
+        room_id = group.settings.get(f'{PROFILE_SETTING_ROCKET_CHAT_ID}_{room_key}', None)
+        # create group if it didn't exist
+        if not room_id:
+            self.groups_create(group)
+            room_id = group.settings.get(f'{PROFILE_SETTING_ROCKET_CHAT_ID}_{room_key}', None)
+        response = self.rocket.groups_info(room_id=room_id).json()
+        if not response.get('success'):
+            logger.error('RocketChat: groups_request: groups_info ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
+            return None
+        group_name = response.get('group', {}).get('name', None)
+        return group_name
+    
+    def groups_request(self, group, user, force_sync_membership=False):
         """
         Returns name of group if user is member of group, otherwise creates private group for group request
         (with user and group admins as members) and returns group name
         :param group:
         :param user:
+        :param force_sync_membership: if True, and the user is a member of the CosinnusGroup,
+            the user will be added to the rocketchat group again (useful to make sure
+            that users are *really* members of the group)
         :return:
         """
         group_name = ''
         if group.is_member(user):
-            # Return Rocket.Chat group url
-            room_id = group.settings.get(f'{PROFILE_SETTING_ROCKET_CHAT_ID}_general', None)
-            # create group if it didn't exist
-            if not room_id:
-                self.groups_create(group)
-                room_id = group.settings.get(f'{PROFILE_SETTING_ROCKET_CHAT_ID}_general', None)
-            response = self.rocket.groups_info(room_id=room_id).json()
-            if not response.get('success'):
-                logger.error('RocketChat: groups_request: groups_info ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
-            group_name = response.get('group', {}).get('name')
+            group_name = self.get_group_room_name(group)
+            if force_sync_membership:
+                self.force_redo_user_room_membership_for_group(user, group)
         else:
             # Create private group
             group_name = f'{group.slug}-{get_random_string(7)}'
@@ -614,17 +653,17 @@ class RocketChatConnection:
                             for m in members_qs if m.user.cosinnus_profile]
         member_usernames.append(settings.COSINNUS_CHAT_USER)
 
-        # Create general and news channel
-        for room_name_setting, group_room_name in self.GROUP_ROOM_SETTINGS_AND_NAMES:
+        # Createconfigured channels
+        for group_room_key, room_name_code in settings.COSINNUS_ROCKET_GROUP_ROOM_NAMES_MAP.items():
             # check if group room exists
-            room_id = group.settings.get(f'{PROFILE_SETTING_ROCKET_CHAT_ID}_{group_room_name}', None)
+            room_id = group.settings.get(f'{PROFILE_SETTING_ROCKET_CHAT_ID}_{group_room_key}', None)
             if room_id:
                 response = self.rocket.groups_info(room_id=room_id).json()
                 if response.get('success'):
                     # room existed, don't create
                     continue
             
-            group_name = room_name_setting % group.slug
+            group_name = room_name_code % group.slug
             response = self.rocket.groups_create(name=group_name, members=member_usernames).json()
             
             if not response.get('success'):
@@ -637,13 +676,13 @@ class RocketChatConnection:
                     room_id = response.get('group', {}).get('_id')
                     if room_id:
                         # Update group settings without triggering signals to prevent cycles
-                        group.settings[f'{PROFILE_SETTING_ROCKET_CHAT_ID}_{group_room_name}'] = room_id
+                        group.settings[f'{PROFILE_SETTING_ROCKET_CHAT_ID}_{group_room_key}'] = room_id
                         type(group).objects.filter(pk=group.pk).update(settings=group.settings)
                     continue
                 elif response.get('errorType') in ('error-room-archived', 'error-archived-duplicate-name'):
                     # group has an archived room, which is probably a different one
                     # we rename the old room to a random one, leave it archived, and create the new room properly
-                    old_room_id = self.get_group_id(group, group_type=group_room_name)
+                    old_room_id = self.get_group_id(group, room_key=group_room_key)
                     if old_room_id:
                         random_room_name = group_name + '-' + get_random_string(6)
                         # we need to unarchive the room to rename it
@@ -677,71 +716,102 @@ class RocketChatConnection:
                         if not response.get('success'):
                             logger.error('RocketChat: groups_create: groups_add_moderator ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
                     # Update group settings without triggering signals to prevent cycles
-                    group.settings[f'{PROFILE_SETTING_ROCKET_CHAT_ID}_{group_room_name}'] = room_id
+                    group.settings[f'{PROFILE_SETTING_ROCKET_CHAT_ID}_{group_room_key}'] = room_id
                     type(group).objects.filter(pk=group.pk).update(settings=group.settings)
     
                     # Set description
                     response = self.rocket.groups_set_description(room_id=room_id, description=group.name).json()
                     if not response.get('success'):
                         logger.error('RocketChat: groups_create: groups_set_description ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
-
+                    
+                    # Set topic to plattform group URL as backlink
+                    self.group_set_topic_to_url(group, specific_room_keys=[group_room_key])
+                    
 
     def groups_rename(self, group):
         """
         Update default channels for group or project
         :param group:
-        :return:
+        :return: True if successful, False if there were any errors
         """
-        # Rename general and news channel
-        for room_setting, room in self.GROUP_ROOM_SETTINGS_AND_NAMES:
-            room_id = self.get_group_id(group, group_type=room)
+        # Rename configured channels
+        success = True
+        for room_key, room_name_code in settings.COSINNUS_ROCKET_GROUP_ROOM_NAMES_MAP.items():
+            room_id = self.get_group_id(group, room_key=room_key)
             if room_id:
-                room_name = room_setting % group.slug
+                room_name = room_name_code % group.slug
                 response = self.rocket.groups_rename(room_id=room_id, name=room_name).json()
                 if not response.get('success'):
                     logger.error('RocketChat: groups_rename ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
-
-    def groups_archive(self, group):
+                    success = False
+        return success
+    
+    def group_set_topic_to_url(self, group, specific_room_keys=None):
+        """ Sets the CosinnusGroup url as topic of the group's room 
+            @param specific_room_keysspecific_room_keys: if set to a list, the topic will only be 
+                set for those specific room names, instead of for all rooms of that group """
+        room_keys = specific_room_keys or settings.COSINNUS_ROCKET_GROUP_ROOM_KEYS
+        for group_room_key in room_keys:
+            # check if group room exists
+            room_id = group.settings.get(f'{PROFILE_SETTING_ROCKET_CHAT_ID}_{group_room_key}', None)
+            if room_id:
+                response = self.rocket.groups_set_topic(room_id=room_id, topic=group.get_absolute_url()).json()
+                if not response.get('success'):
+                    logger.error('RocketChat: groups_set_topic: ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
+        
+    def groups_archive(self, group, specific_room_keys=None, specific_room_ids=None):
         """
-        Archive default channels for group or project
+        Archive channels for group or project
         :param group:
-        :return:
+        :return: True if successful, False if there were any errors
         """
-        # Archive general and news channel
-        for room in self.GROUP_ROOM_NAMES:
-            room_id = self.get_group_id(group, group_type=room)
+        # Archive given rooms
+        success = True
+        room_keys = specific_room_keys or settings.COSINNUS_ROCKET_GROUP_ROOM_KEYS
+        room_ids = specific_room_ids or [self.get_group_id(group, room_key=room_key) for room_key in room_keys]
+        for room_id in room_ids:
             if room_id:
                 response = self.rocket.groups_archive(room_id=room_id).json()
                 if not response.get('success'):
                     logger.error('RocketChat: groups_archive ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
-
-    def groups_unarchive(self, group):
+                    success = False
+        return success
+    
+    def groups_unarchive(self, group, specific_room_keys=None, specific_room_ids=None):
         """
-        Unarchive default channels for group or project
+        Unarchive channels for group or project
         :param group:
-        :return:
+        :return: True if successful, False if there were any errors
         """
-        # Unarchive general and news channel
-        for room in self.GROUP_ROOM_NAMES:
-            room_id = self.get_group_id(group, group_type=room)
+        # Unarchive given rooms
+        success = True
+        room_keys = specific_room_keys or settings.COSINNUS_ROCKET_GROUP_ROOM_KEYS
+        room_ids = specific_room_ids or [self.get_group_id(group, room_key=room_key) for room_key in room_keys]
+        for room_id in room_ids:
+            room_id = self.get_group_id(group, room_key=room_key)
             if room_id:
                 response = self.rocket.groups_unarchive(room_id=room_id).json()
                 if not response.get('success'):
                     logger.error('RocketChat: groups_unarchive ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
+                    success = False
+        return success
 
     def groups_delete(self, group):
         """
         Delete default channels for group or project
         :param group:
-        :return:
+        :return: True if successful, False if there were any errors
         """
-        # Delete general and news channel
-        for room in self.GROUP_ROOM_NAMES:
-            room_id = self.get_group_id(group, group_type=room)
+        # Delete configured channels
+        success = True
+        for room in settings.COSINNUS_ROCKET_GROUP_ROOM_KEYS:
+            room_id = self.get_group_id(group, room_key=room)
             if room_id:
                 response = self.rocket.groups_delete(room_id=room_id).json()
                 if not response.get('success'):
                     logger.error('RocketChat: groups_delete ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
+                    success = False
+        return success
 
     def invite_or_kick_for_membership(self, membership):
         """ For a CosinnusGroupMembership, force do:
@@ -767,8 +837,8 @@ class RocketChatConnection:
             return
         
         # Create role in general and news group
-        for room in self.GROUP_ROOM_NAMES:
-            room_id = self.get_group_id(membership.group, group_type=room)
+        for room in settings.COSINNUS_ROCKET_GROUP_ROOM_KEYS:
+            room_id = self.get_group_id(membership.group, room_key=room)
             if room_id:
                 response = self.rocket.groups_invite(room_id=room_id, user_id=user_id).json()
                 if not response.get('success'):
@@ -785,8 +855,8 @@ class RocketChatConnection:
             return
         
         # Remove role in general and news group
-        for room in self.GROUP_ROOM_NAMES:
-            room_id = self.get_group_id(membership.group, group_type=room)
+        for room in settings.COSINNUS_ROCKET_GROUP_ROOM_KEYS:
+            room_id = self.get_group_id(membership.group, room_key=room)
             if room_id:
                 response = self.rocket.groups_kick(room_id=room_id, user_id=user_id).json()
                 if not response.get('success'):
@@ -803,8 +873,8 @@ class RocketChatConnection:
             return
         
         # Add moderator in general and news group
-        for room in self.GROUP_ROOM_NAMES:
-            room_id = self.get_group_id(membership.group, group_type=room)
+        for room in settings.COSINNUS_ROCKET_GROUP_ROOM_KEYS:
+            room_id = self.get_group_id(membership.group, room_key=room)
             if room_id:
                 response = self.rocket.groups_add_moderator(room_id=room_id, user_id=user_id).json()
                 if not response.get('success') and not response.get('errorType', '') == 'error-user-already-moderator':
@@ -821,8 +891,8 @@ class RocketChatConnection:
             return
         
         # Remove moderator in general and news group
-        for room in self.GROUP_ROOM_NAMES:
-            room_id = self.get_group_id(membership.group, group_type=room)
+        for room in settings.COSINNUS_ROCKET_GROUP_ROOM_KEYS:
+            room_id = self.get_group_id(membership.group, room_key=room)
             if room_id:
                 response = self.rocket.groups_remove_moderator(room_id=room_id, user_id=user_id).json()
                 if not response.get('success') and not response.get('errorType', '') == 'error-user-not-moderator':
@@ -887,26 +957,39 @@ class RocketChatConnection:
         # Strike: ~~ to ~
         text = re.sub(r'~~', '~', text)
         return text
-
+    
+    def _format_note_message(self, note):
+        """ Formats a Note to a readable chat message """
+        url = note.get_absolute_url()
+        text = self.format_message(note.text)
+        if settings.COSINNUS_ROCKET_NOTE_POST_RELAY_TRUNCATE_WORD_COUNT:
+            text = truncatewords(text, settings.COSINNUS_ROCKET_NOTE_POST_RELAY_TRUNCATE_WORD_COUNT)
+        author_name = full_name(note.creator)
+        note_title = note.title if not note.title == note.EMPTY_TITLE_PLACEHOLDER else ''
+        title = f':newspaper: *{author_name}: {note_title}*\n' 
+        message = f'{title}{text}\n[{url}]({url})'
+        return message
+    
     def notes_create(self, note):
         """
         Create message for new note in default channel of group/project
         :param group:
         :return:
         """
-        url = note.get_absolute_url()
-        text = self.format_message(note.text)
-        message = f'*{note.title}*\n{text}\n\n[{url}]({url})'
-        room_id = self.get_group_id(note.group, group_type='news')
+        room_key = settings.COSINNUS_ROCKET_NOTE_POST_RELAY_ROOM_KEY
+        if not room_key:
+            return
+        room_id = self.get_group_id(note.group, room_key=room_key)
         if not room_id:
             return
+        message = self._format_note_message(note)
         response = self.rocket.chat_post_message(text=message, room_id=room_id).json()
         if not response.get('success'):
-            logger.error('RocketChat: notes_create', extra={'response': response})
+            logger.error('RocketChat: notes_create did not return a success response', extra={'response': response})
         msg_id = response.get('message', {}).get('_id')
 
         # Save Rocket.Chat message ID to note instance
-        note.settings['rocket_chat_message_id'] = msg_id
+        note.settings[ROCKETCHAT_NOTE_ID_SETTINGS_KEY] = msg_id
         # Update note settings without triggering signals to prevent cycles
         type(note).objects.filter(pk=note.pk).update(settings=note.settings)
 
@@ -916,26 +999,34 @@ class RocketChatConnection:
         :param group:
         :return:
         """
-        msg_id = note.settings.get('rocket_chat_message_id')
-        url = note.get_absolute_url()
-        text = self.format_message(note.text)
-        message = f'*{note.title}*\n{text}\n\n[{url}]({url})'
-        room_id = self.get_group_id(note.group, group_type='news')
+        room_key = settings.COSINNUS_ROCKET_NOTE_POST_RELAY_ROOM_KEY
+        if not room_key:
+            return
+        room_id = self.get_group_id(note.group, room_key=room_key)
+        msg_id = note.settings.get(ROCKETCHAT_NOTE_ID_SETTINGS_KEY, None)
         if not msg_id or not room_id:
             return
+        message = self._format_note_message(note)
         response = self.rocket.chat_update(msg_id=msg_id, room_id=room_id, text=message).json()
         if not response.get('success'):
-            logger.error('RocketChat: notes_update', extra={'response': response})
+            if response.get('error', None) == 'The room id provided does not match where the message is from.':
+                # if the room has moved, we cannot reach the note anymore, ignore this error
+                return
+            logger.error('RocketChat: notes_update did not return a success response', extra={'response': response})
 
     def notes_attachments_update(self, note):
         """
+        ** Currently disabled **
         Update attachments for note in default channel of group/project
         Unfortunately we cannot delete/update existing uploads, sincee rooms_upload doesn't return the message ID yet
         :param group:
         :return:
         """
-        msg_id = note.settings.get('rocket_chat_message_id')
-        room_id = self.get_group_id(note.group, group_type='news')
+        room_key = settings.COSINNUS_ROCKET_NOTE_POST_RELAY_ROOM_KEY
+        if not room_key:
+            return
+        room_id = self.get_group_id(note.group, room_key=room_key)
+        msg_id = note.settings.get(ROCKETCHAT_NOTE_ID_SETTINGS_KEY)
         if not msg_id or not room_id:
             return
 
@@ -955,7 +1046,7 @@ class RocketChatConnection:
                                                 mimetype=att_file.mimetype,
                                                 tmid=msg_id).json()
             if not response.get('success'):
-                logger.error('RocketChat: notes_attachments_update', extra={'response': response})
+                logger.error('RocketChat: notes_attachments_update did not return a success response', extra={'response': response})
             # attachment_ids.append(response.get('message', {}).get('_id'))
 
         # note.settings['rocket_chat_attachment_ids'] = attachment_ids
@@ -968,13 +1059,19 @@ class RocketChatConnection:
         :param group:
         :return:
         """
-        msg_id = note.settings.get('rocket_chat_message_id')
-        room_id = self.get_group_id(note.group, group_type='news')
+        room_key = settings.COSINNUS_ROCKET_NOTE_POST_RELAY_ROOM_KEY
+        if not room_key:
+            return
+        msg_id = note.settings.get(ROCKETCHAT_NOTE_ID_SETTINGS_KEY)
+        room_id = self.get_group_id(note.group, room_key=room_key)
         if not msg_id or not room_id:
             return
         response = self.rocket.chat_delete(room_id=room_id, msg_id=msg_id).json()
         if not response.get('success'):
-            logger.error('RocketChat: notes_delete', extra={'response': response})
+            if response.get('error', None) == 'The room id provided does not match where the message is from.':
+                # if the room has moved, we cannot reach the note anymore, ignore this error
+                return
+            logger.error('RocketChat: notes_delete did not return a success response', extra={'response': response})
 
     def unread_messages(self, user):
         """
@@ -987,22 +1084,9 @@ class RocketChatConnection:
         profile = user.cosinnus_profile
 
         try:
-            try:
-                user_connection = get_cached_rocket_connection(rocket_username=profile.rocket_username, password=user.password,
-                                             server_url=settings.COSINNUS_CHAT_BASE_URL)
-            except RocketAuthenticationException:
-                user_id = user.cosinnus_profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_ID)
-                if not user_id:
-                    # user not connected to rocketchat
-                    return 0
-                # try to re-initi the user's account and reconnect
-                response = self.rocket.users_update(user_id=user_id, password=user.password).json()
-                if not response.get('success'):
-                    logger.error('RocketChat: unread_messages did not receive a success response: ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
-                    return 0
-                user_connection = get_cached_rocket_connection(rocket_username=profile.rocket_username, password=user.password,
-                                             server_url=settings.COSINNUS_CHAT_BASE_URL, reset=True) # resets cache
-
+            user_connection = self._get_user_connection(user)
+            if not user_connection:
+                return 0
             response = user_connection.subscriptions_get()
 
             # if we didn't receive a successful response, the server may be down or the user logged out
@@ -1029,3 +1113,83 @@ class RocketChatConnection:
             logger.error('RocketChat: unread message count: unexpected exception',
                      extra={'exception': e})
             logger.exception(e)
+    
+    def get_user_preferences(self, user):
+        """ Gets the given user's rocketchat preferences.
+            Note: the preference set is empty for preferences that have never been changed
+                from the default!
+            @return: a dict of preferences. `None`, if there was an error.
+        """
+        user_connection = self._get_user_connection(user)
+        if not user_connection:
+            return None
+        
+        response = user_connection.users_get_preferences().json()
+        print(f'>>> resp {response}')
+        if not response.get('success') or not 'preferences' in response:
+            logger.error('RocketChat: get_user_preferences did not receive a success response or data: ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
+            return None
+        return response.get('preferences', None)
+        
+    def get_user_email_preference(self, user):
+        """ Gets the user preference for email notifications
+            Preference for emails is: 'emailNotificationMode': 'mentions'|'default'|'nothing'
+            @return: one of the values of `ROCKETCHAT_PREFERENCES_EMAIL_NOTIFICATION` or None if 
+                no setting is set, it is of unknown value or an error occured """
+        prefs = self.get_user_preferences(user)
+        if not prefs:
+            return None
+        email_pref = prefs.get('emailNotificationMode', None)
+        if email_pref and email_pref not in ROCKETCHAT_PREFERENCES_EMAIL_NOTIFICATION:
+            logger.error('RocketChat: get_user_email_preference did not receive a known value: ' + str(email_pref))
+            return None
+        return email_pref
+    
+    def set_user_email_preference(self, user, preference):
+        """ Sets the user's email preferences to be one of the values of `ROCKETCHAT_PREFERENCES_EMAIL_NOTIFICATION`
+            @return: True if successful, False if not """
+        if not preference in ROCKETCHAT_PREFERENCES_EMAIL_NOTIFICATION:
+            logger.error('RocketChat: set_user_email_preference got an invalid value: ' + str(preference))
+            return False
+        user_connection = self._get_user_connection(user)
+        if not user_connection:
+            return False
+        user_id = user.cosinnus_profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_ID, None)
+        if not user_id:
+            # user not connected to rocketchat
+            return False
+        data = {
+            'emailNotificationMode': preference,
+        }
+        response = user_connection.users_set_preferences(user_id, data).json()
+        if not response.get('success'):
+            logger.error('RocketChat: set_user_email_preference did not receive a success response: ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
+            import ipdb;ipdb.set_trace()
+            return False
+        return True
+        
+    def _get_user_connection(self, user):
+        """ Returns a user-specific rocketchat connection for the given user, 
+            or None if this fails for any reason """
+            
+        profile = user.cosinnus_profile
+        user_connection = None
+        try:
+            user_connection = get_cached_rocket_connection(rocket_username=profile.rocket_username, password=user.password,
+                                         server_url=settings.COSINNUS_CHAT_BASE_URL)
+        except RocketAuthenticationException:
+            user_id = user.cosinnus_profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_ID)
+            if not user_id:
+                # user not connected to rocketchat
+                return None
+            # try to re-initi the user's account and reconnect
+            response = self.rocket.users_update(user_id=user_id, password=user.password).json()
+            if not response.get('success'):
+                logger.error('RocketChat: unread_messages did not receive a success response: ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
+                return None
+            user_connection = get_cached_rocket_connection(rocket_username=profile.rocket_username, password=user.password,
+                                         server_url=settings.COSINNUS_CHAT_BASE_URL, reset=True) # resets cache
+        return user_connection
+        
+        
+        
