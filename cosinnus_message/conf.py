@@ -46,6 +46,9 @@ class CosinnusMessageDefaultSettings(AppConf):
     # set to None to disable note post relaying to rocketchat!
     COSINNUS_ROCKET_NOTE_POST_RELAY_ROOM_KEY = COSINNUS_ROCKET_GROUP_ROOM_KEYS[1]
     
+    # how many words the relayed note may be max. if None, disabled.
+    COSINNUS_ROCKET_NOTE_POST_RELAY_TRUNCATE_WORD_COUNT = 20
+    
     COSINNUS_CHAT_SETTINGS = {
         # General
         'UTF8_Names_Validation': '[0-9a-zA-Z-_.äÄöÖüÜß]+',

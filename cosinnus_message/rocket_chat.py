@@ -27,6 +27,7 @@ import six
 from annoying.functions import get_object_or_None
 from cosinnus_message.utils.utils import save_rocketchat_mail_notification_preference_for_user_setting
 from cosinnus.templatetags.cosinnus_tags import full_name
+from django.template.defaultfilters import truncatewords
 
 logger = logging.getLogger(__name__)
 
@@ -961,9 +962,12 @@ class RocketChatConnection:
         """ Formats a Note to a readable chat message """
         url = note.get_absolute_url()
         text = self.format_message(note.text)
+        if settings.COSINNUS_ROCKET_NOTE_POST_RELAY_TRUNCATE_WORD_COUNT:
+            text = truncatewords(text, settings.COSINNUS_ROCKET_NOTE_POST_RELAY_TRUNCATE_WORD_COUNT)
         author_name = full_name(note.creator)
-        title = f'*{author_name}: {note.title}*\n' if not note.title == note.EMPTY_TITLE_PLACEHOLDER else ''
-        message = f'{title}{text}\n\n[{url}]({url})'
+        note_title = note.title if not note.title == note.EMPTY_TITLE_PLACEHOLDER else ''
+        title = f':newspaper: *{author_name}: {note_title}*\n' 
+        message = f'{title}{text}\n[{url}]({url})'
         return message
     
     def notes_create(self, note):
