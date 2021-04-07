@@ -5,6 +5,7 @@ from django.core.management.base import BaseCommand
 from cosinnus_message.rocket_chat import RocketChatConnection
 from cosinnus.utils.group import get_cosinnus_group_model
 from cosinnus.models.group import CosinnusPortal
+from cosinnus.conf import settings
 
 
 logger = logging.getLogger(__name__)
@@ -18,6 +19,9 @@ class Command(BaseCommand):
     
 
     def handle(self, *args, **options):
+        if not settings.COSINNUS_CHAT_USER:
+            return
+        
         rocket = RocketChatConnection(stdout=self.stdout, stderr=self.stderr)
         current_portal = CosinnusPortal.get_current()
         for group in get_cosinnus_group_model().objects.filter(portal=current_portal, is_active=True):

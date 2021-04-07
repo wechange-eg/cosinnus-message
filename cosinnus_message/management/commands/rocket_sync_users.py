@@ -3,6 +3,7 @@ import logging
 from django.core.management.base import BaseCommand
 
 from cosinnus_message.rocket_chat import RocketChatConnection
+from cosinnus.conf import settings
 
 
 logger = logging.getLogger(__name__)
@@ -21,5 +22,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         skip_update = options['skip_update']
         
+        if not settings.COSINNUS_CHAT_USER:
+            return
         rocket = RocketChatConnection(stdout=self.stdout, stderr=self.stderr)
         rocket.users_sync(skip_update=skip_update)

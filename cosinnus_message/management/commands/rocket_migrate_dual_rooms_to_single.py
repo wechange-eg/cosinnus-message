@@ -23,6 +23,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         skip_rename = options['skip_rename']
         
+        if not settings.COSINNUS_CHAT_USER:
+            return
         # sanity checks
         if len(settings.COSINNUS_ROCKET_GROUP_ROOM_KEYS) > 1:
             self.stdout.write('*Aborting*: there seems to be more than one rocketchat channel configured in `COSINNUS_ROCKET_GROUP_ROOM_KEYS`. This migration can only be run to go from a dual-room ("general" and "news" as it was) to a single-room configuration.')

@@ -25,6 +25,9 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
+        if not settings.COSINNUS_CHAT_USER:
+            return
+        
         default_setting = settings.COSINNUS_DEFAULT_ROCKETCHAT_NOTIFICATION_SETTING
         
         rocket = RocketChatConnection(stdout=self.stdout, stderr=self.stderr)
