@@ -581,7 +581,7 @@ class RocketChatConnection:
             if not hasattr(user, 'cosinnus_profile'):
                 return
             profile = user.cosinnus_profile
-            members = [str(u.id) for u in group.actual_admins] + [profile.rocket_username, ]
+            members = [u.cosinnus_profile.rocket_username for u in group.actual_admins] + [profile.rocket_username, ]
             response = self.rocket.groups_create(group_name, members=members).json()
             if not response.get('success'):
                 logger.error('RocketChat: groups_request: groups_create ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
@@ -596,16 +596,20 @@ class RocketChatConnection:
                     logger.error('RocketChat: groups_request: groups_add_moderator ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
 
             # Set description of group
-            desc = ''
-            if group.type == group.TYPE_PROJECT:
-                desc = _('Request about your project "%(group_name)s"')
-            else:
-                desc = _('Request about your group "%(group_name)s"')
-            response = self.rocket.groups_set_description(room_id=room_id,
-                                                          description=desc % {'group_name': group.name}).json()
+            topic = group.trans.CONTACT_ROOM_TOPIC % {'group_name': group.name}
+            topic = f'{topic} ({group.get_absolute_url()})'
+            response = self.rocket.groups_set_topic(room_id=room_id, topic=topic).json()
             if not response.get('success'):
-                logger.error('RocketChat: groups_request: groups_set_description ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
-
+                logger.error('RocketChat: groups_request: groups_set_topic ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
+                
+            # Post help message
+            greeting_message = group.trans.CONTACT_ROOM_GREETING_MESSAGE
+            info_message = _('Please post your request or question here. You can see the channel members by clicking the group icon at the top of the channel.')
+            message = f'@{profile.rocket_username} {greeting_message} {info_message}'
+            response = self.rocket.chat_post_message(text=message, room_id=room_id).json()
+            if not response.get('success'):
+                logger.error('RocketChat: groups_request: chat_post_message ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
+                
         return group_name
 
     def create_private_room(self, group_name, moderator_user, member_users=None, additional_admin_users=None):
