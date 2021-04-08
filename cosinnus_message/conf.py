@@ -90,7 +90,7 @@ class CosinnusMessageDefaultSettings(AppConf):
     COSINNUS_CHAT_PASSWORD = None
     
     # rocket authentication timeout is 30 days  by default
-    COSINNUS_CHAT_CONNECTION_CACHE_TIMEOUT = 60 * 24 * 30
+    COSINNUS_CHAT_CONNECTION_CACHE_TIMEOUT = 60 * 60 * 24 * 30
     
     # enables the read-only mode for the legacy postman messages system and shows an
     # "archived messages button" in the user profile
