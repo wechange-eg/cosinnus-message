@@ -51,18 +51,23 @@ class Command(BaseCommand):
                         # go by direct room ids, because the room key is not configured any more
                         if not rocket.groups_archive(group, specific_room_ids=[setting_value]):
                             error = True
+                            self.stdout.write(f'\tError during group {group.slug} room archive: {room_key}: {setting_value} ')
+                            break
                         deleted_keys.append(setting_key)
-            # soft-save the group if the settings object was changed
-            if deleted_keys:
-                for deleted_key in deleted_keys:
-                    del group.settings[deleted_key]
-                type(group).objects.filter(pk=group.pk).update(settings=group.settings)
-            
-            # call a rename on the group, so that the changed channel naming pattern is applied
-            if not skip_rename:
-                if not rocket.groups_rename(group):
-                    error = True
-                renamed = True
+                        
+            if not error:
+                # soft-save the group if the settings object was changed
+                if deleted_keys:
+                    for deleted_key in deleted_keys:
+                        del group.settings[deleted_key]
+                    type(group).objects.filter(pk=group.pk).update(settings=group.settings)
+                
+                # call a rename on the group, so that the changed channel naming pattern is applied
+                if not skip_rename:
+                    if not rocket.groups_rename(group):
+                        self.stdout.write(f'\tError during group rename: {group.slug}')
+                        error = True
+                    renamed = True
                 
             if error:
                 errors += 1
