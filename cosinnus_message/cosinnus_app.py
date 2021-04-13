@@ -19,12 +19,16 @@ def register():
     
     if settings.COSINNUS_ROCKET_ENABLED:
         active_by_default = "cosinnus_event" in settings.COSINNUS_DEFAULT_ACTIVE_GROUP_APPS
-        app_registry.register('cosinnus_message', 'message', _('Message'), deactivatable=True, active_by_default=active_by_default)
+        app_registry.register('cosinnus_message', 'message', pgettext_lazy("the_app", "Chat"), deactivatable=True, active_by_default=active_by_default)
         widget_registry.register('message', 'cosinnus_message.dashboard.EmbeddedRocketchatDashboardWidget')
+        # makemessages replacement protection
+        name = pgettext_lazy("the_app", "Chat") #noqa
     else:
         app_registry.register('cosinnus_message', 'message', _('Message'))
         attached_object_registry.register('postman.Message', 'cosinnus_message.utils.renderer.MessageRenderer')
+        # makemessages replacement protection
+        name = pgettext_lazy("the_app", "message") #noqa
+
     url_registry.register('cosinnus_message', cosinnus_root_patterns, cosinnus_group_patterns)
 
-    # makemessages replacement protection
-    name = pgettext_lazy("the_app", "message")
+    
