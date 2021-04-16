@@ -1129,7 +1129,6 @@ class RocketChatConnection:
             return None
         
         response = user_connection.users_get_preferences().json()
-        print(f'>>> resp {response}')
         if not response.get('success') or not 'preferences' in response:
             logger.error('RocketChat: get_user_preferences did not receive a success response or data: ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
             return None
