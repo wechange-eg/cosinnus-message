@@ -334,5 +334,4 @@ def save_rocketchat_mail_notification_preference_for_user_setting(user, setting)
     }
     pref = setting_map.get(setting)
     success = RocketChatConnection().set_user_email_preference(user, pref)
-    print(f'>>>> saved rocket mail prefs: {setting} {success}')
     return success

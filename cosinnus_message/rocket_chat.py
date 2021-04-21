@@ -1130,7 +1130,9 @@ class RocketChatConnection:
         
         response = user_connection.users_get_preferences().json()
         if not response.get('success') or not 'preferences' in response:
-            logger.error('RocketChat: get_user_preferences did not receive a success response or data: ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
+            # if the preferences aren't set up yet, don't count this ans an error
+            if response.get('error', None) != "FAILED TO RETRIEVE USER PREFERENCES BECAUSE THEY HAVEN'T BEEN SET UP BY THE USER YET":
+                logger.error('RocketChat: get_user_preferences did not receive a success response or data: ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
             return None
         return response.get('preferences', None)
         
