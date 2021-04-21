@@ -1167,7 +1167,6 @@ class RocketChatConnection:
         response = user_connection.users_set_preferences(user_id, data).json()
         if not response.get('success'):
             logger.error('RocketChat: set_user_email_preference did not receive a success response: ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
-            import ipdb;ipdb.set_trace()
             return False
         return True
         
