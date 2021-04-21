@@ -3,7 +3,7 @@ import logging
 from django.core.management.base import BaseCommand
 
 from cosinnus_message.rocket_chat import RocketChatConnection
-
+from cosinnus.conf import settings
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -28,6 +28,9 @@ class Command(BaseCommand):
         parser.add_argument('-f', '--force-group-membership-sync', action='store_true', help='Sync ALL users\' group memberships')
 
     def handle(self, *args, **options):
+        if not settings.COSINNUS_CHAT_USER:
+            return
+        
         skip_inactive = options['skip_inactive']
         force_group_membership_sync = options['force_group_membership_sync']
         

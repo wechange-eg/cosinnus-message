@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-30 19:20+0200\n"
-"PO-Revision-Date: 2020-08-20 11:40+0100\n"
+"POT-Creation-Date: 2021-04-07 12:53+0200\n"
+"PO-Revision-Date: 2021-04-13 14:16+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 2.0.6\n"
 
 msgid "Message"
 msgstr "Nachricht"
@@ -25,6 +25,9 @@ msgstr "Nachricht"
 msgctxt "the_app"
 msgid "message"
 msgstr "Nachrichten"
+
+msgid "Chat"
+msgstr "Chat"
 
 msgid "Recipients"
 msgstr "Empfänger"
@@ -41,13 +44,8 @@ msgstr "Kein Empfänger angegeben"
 msgid "Portal"
 msgstr "Portal"
 
-#, python-format
-msgid "Request about your project \"%(group_name)s\""
-msgstr ""
-
-#, python-format
-msgid "Request about your group \"%(group_name)s\""
-msgstr ""
+msgid "Please post your request or question here. You can see the channel members by clicking the group icon at the top of the channel."
+msgstr "Bitte stelle deine Anfrage hier. Du kannst sehen, wer in diesem Chat-Kanal ist, indem du in der Titelleiste des Kanals auf das Gruppen-Icon klickst."
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
 msgstr "Du kannst Dateien und Bilder nur anhängen, wenn du Mitglied im Forum bist. Du kannst hier beitreten:"
@@ -96,6 +94,12 @@ msgid ""
 "Note: This message is issued by an automated system.\n"
 "Do not reply, this would not be taken into account."
 msgstr "Diese Nachricht wurde von einem automatisierten System erstellt - bitte antworte nicht darauf. "
+
+msgid "Only group members can see the content you requested. Apply to become a member now!"
+msgstr "Nur Mitglieder/innen können diesen Inhalt sehen. Bewirb dich jetzt, Mitglied zu werden!"
+
+msgid "Go to chat"
+msgstr "Zur Chat-App"
 
 msgid "Archived Messages"
 msgstr "Archivierte Nachricht"

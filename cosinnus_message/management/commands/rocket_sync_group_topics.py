@@ -3,6 +3,8 @@ import logging
 from django.core.management.base import BaseCommand
 
 from cosinnus_message.rocket_chat import RocketChatConnection
+from cosinnus.utils.group import get_cosinnus_group_model
+from cosinnus.models.group import CosinnusPortal
 from cosinnus.conf import settings
 
 
@@ -12,17 +14,15 @@ logging.basicConfig(level=logging.INFO)
 
 class Command(BaseCommand):
     """
-    Sync users with Rocket.Chat
+    Sets all group room's topics anew
     """
     
-    def add_arguments(self, parser):
-        parser.add_argument('-s', '--skip-update', action='store_true', help='Skip updating existing users')
-
 
     def handle(self, *args, **options):
-        skip_update = options['skip_update']
-        
         if not settings.COSINNUS_CHAT_USER:
             return
+        
         rocket = RocketChatConnection(stdout=self.stdout, stderr=self.stderr)
-        rocket.users_sync(skip_update=skip_update)
+        current_portal = CosinnusPortal.get_current()
+        for group in get_cosinnus_group_model().objects.filter(portal=current_portal, is_active=True):
+            rocket.group_set_topic_to_url(group)

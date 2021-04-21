@@ -291,3 +291,47 @@ def _test_direct_reply_mail(sender_email=None, body_text=None):
             -------------------------------------------------------------------------------
         """
     process_direct_reply_messages([Msg()], True)
+    
+
+def get_rocketchat_group_embed_url_for_user(group, user):
+    """ Returns the iframe-embeddable URL for an only-group-chat view for a CosinnusGroup for
+        a user if the user is a member of it, None otherwise """
+    
+    if user and user.is_authenticated and group.is_member(user):
+        from cosinnus_message.rocket_chat import RocketChatConnection
+        rocket = RocketChatConnection()
+        group_name = rocket.get_group_room_name(group)
+        if group_name:
+            return f'{settings.COSINNUS_CHAT_BASE_URL}/group/{group_name}?layout=embedded'
+    return None
+
+
+def get_rocketchat_mail_notification_setting_from_user_preference(user):
+    """ Retrieves the rocketchat user email preference and returns one value of
+        `GlobalUserNotificationSetting.ROCKETCHAT_SETTING_CHOICES`.
+        Since there are only two values, unless we specifically see that a user's settings
+        is set to off, we assume that it is set to Mentions, because that's what rocketchat does as default """
+    from cosinnus.models.profile import GlobalUserNotificationSetting
+    from cosinnus_message.rocket_chat import (RocketChatConnection, 
+        ROCKETCHAT_PREFERENCE_EMAIL_NOTIFICATION_OFF) 
+    pref = RocketChatConnection().get_user_email_preference(user)
+    setting = GlobalUserNotificationSetting.ROCKETCHAT_SETTING_MENTIONS
+    if pref and pref == ROCKETCHAT_PREFERENCE_EMAIL_NOTIFICATION_OFF:
+        setting = GlobalUserNotificationSetting.ROCKETCHAT_SETTING_OFF
+    return setting
+
+def save_rocketchat_mail_notification_preference_for_user_setting(user, setting):
+    """ Saves the rocketchat email preference given the user setting from
+        `GlobalUserNotificationSetting.ROCKETCHAT_SETTING_CHOICES`
+        @return: True if successful, False if not """
+    from cosinnus.models.profile import GlobalUserNotificationSetting
+    from cosinnus_message.rocket_chat import (RocketChatConnection, 
+        ROCKETCHAT_PREFERENCE_EMAIL_NOTIFICATION_OFF, 
+        ROCKETCHAT_PREFERENCE_EMAIL_NOTIFICATION_MENTIONS) 
+    setting_map = {
+        GlobalUserNotificationSetting.ROCKETCHAT_SETTING_OFF: ROCKETCHAT_PREFERENCE_EMAIL_NOTIFICATION_OFF,
+        GlobalUserNotificationSetting.ROCKETCHAT_SETTING_MENTIONS: ROCKETCHAT_PREFERENCE_EMAIL_NOTIFICATION_MENTIONS,
+    }
+    pref = setting_map.get(setting)
+    success = RocketChatConnection().set_user_email_preference(user, pref)
+    return success

@@ -217,9 +217,8 @@ if settings.COSINNUS_ROCKET_ENABLED:
         rocket = RocketChatConnection()
         rocket.notes_delete(instance)
 
-
     @receiver(signals.pre_userprofile_delete)
-    def handle_note_deleted(sender, profile, **kwargs):
+    def handle_user_deleted(sender, profile, **kwargs):
         """ Called when a user deletes their account. Completely deletes the user's rocket profile """
         rocket = RocketChatConnection()
         rocket.users_delete(profile.user)
