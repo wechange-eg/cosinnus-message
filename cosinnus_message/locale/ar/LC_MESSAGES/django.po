@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-30 19:20+0200\n"
+"POT-Creation-Date: 2021-04-22 12:51+0200\n"
 "PO-Revision-Date: 2020-11-26 09:00+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,12 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: Poedit 2.0.6\n"
 
+msgctxt "the_app"
+msgid "Chat"
+msgstr ""
+
 msgid "Message"
 msgstr "الرسالة"
 
 msgctxt "the_app"
 msgid "message"
 msgstr "الرسالة"
+
+msgid "Chat"
+msgstr ""
 
 msgid "Recipients"
 msgstr "المستلمون"
@@ -40,13 +47,8 @@ msgstr "مستلم غير محدد."
 msgid "Portal"
 msgstr "بوابة"
 
-#, python-format
-msgid "Request about your project \"%(group_name)s\""
-msgstr "طلب حول مشروعك \"%(group_name)s\""
-
-#, python-format
-msgid "Request about your group \"%(group_name)s\""
-msgstr "تساؤل حول مجموعتك \"%(group_name)s\""
+msgid "Please post your request or question here. You can see the channel members by clicking the group icon at the top of the channel."
+msgstr ""
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
 msgstr "يمكنك فقط إرفاق ملفات وصور للرسائل إذا كنت عضوًا في المنتدى. يمكنك الانضمام هنا:"
@@ -97,6 +99,12 @@ msgid ""
 msgstr ""
 "ملاحظة: هذه الرسالة صادرة عن نظام آلي.\n"
 "لا تفن بالرد ، هذا لن يؤخذ بعين الاعتبار."
+
+msgid "Only group members can see the content you requested. Apply to become a member now!"
+msgstr ""
+
+msgid "Go to chat"
+msgstr ""
 
 msgid "Archived Messages"
 msgstr "الرسائل المؤرشفة"
@@ -272,3 +280,9 @@ msgstr "تم وضع علامة على هذه الرسائل كمقروءة."
 
 msgid "Messages or conversations successfully recovered."
 msgstr "تم استعادة الرسائل أو المحادثات بنجاح."
+
+#~ msgid "Request about your project \"%(group_name)s\""
+#~ msgstr "طلب حول مشروعك \"%(group_name)s\""
+
+#~ msgid "Request about your group \"%(group_name)s\""
+#~ msgstr "تساؤل حول مجموعتك \"%(group_name)s\""

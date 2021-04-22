@@ -7,15 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-30 19:20+0200\n"
-"PO-Revision-Date: 2020-10-09 20:00+0200\n"
+"POT-Creation-Date: 2021-04-22 12:51+0200\n"
+"PO-Revision-Date: 2021-04-01 14:47+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
+
+msgctxt "the_app"
+msgid "Chat"
+msgstr ""
 
 msgid "Message"
 msgstr "Wiadomość"
@@ -23,6 +27,9 @@ msgstr "Wiadomość"
 msgctxt "the_app"
 msgid "message"
 msgstr "wiadomość"
+
+msgid "Chat"
+msgstr ""
 
 msgid "Recipients"
 msgstr "Odbiorcy"
@@ -39,13 +46,8 @@ msgstr "Odbiorca nieokreślony."
 msgid "Portal"
 msgstr "Portal"
 
-#, python-format
-msgid "Request about your project \"%(group_name)s\""
-msgstr "Żądanie dotyczące Twojego projektu \"%(group_name)s\""
-
-#, python-format
-msgid "Request about your group \"%(group_name)s\""
-msgstr "Żądanie dotyczące twojej grupy \"%(group_name)s\""
+msgid "Please post your request or question here. You can see the channel members by clicking the group icon at the top of the channel."
+msgstr ""
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
 msgstr "Możesz załączać pliki i zdjęcia do wiadomości tylko, jeśli jesteś członkiem forum. Możesz dołączyć tutaj:"
@@ -96,6 +98,12 @@ msgid ""
 msgstr ""
 "Uwaga: Ta wiadomość została wygenerowana przez automatyczny system.\n"
 "Nie wysyłaj odpowiedzi, nie zostanie ona odczytana."
+
+msgid "Only group members can see the content you requested. Apply to become a member now!"
+msgstr ""
+
+msgid "Go to chat"
+msgstr ""
 
 msgid "Archived Messages"
 msgstr "Wiadomości Zarchiwizowane"
@@ -271,6 +279,12 @@ msgstr "Wiadomości oznaczono jako przeczytane."
 
 msgid "Messages or conversations successfully recovered."
 msgstr "Wiadomości lub konwersacje przywrócono pomyślnie."
+
+#~ msgid "Request about your project \"%(group_name)s\""
+#~ msgstr "Żądanie dotyczące Twojego projektu \"%(group_name)s\""
+
+#~ msgid "Request about your group \"%(group_name)s\""
+#~ msgstr "Żądanie dotyczące twojej grupy \"%(group_name)s\""
 
 #~ msgid "Mark All"
 #~ msgstr "Zaznacz Wszystkie"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-30 19:20+0200\n"
+"POT-Creation-Date: 2021-04-22 12:51+0200\n"
 "PO-Revision-Date: 2020-10-11 23:49+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,12 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 "X-Generator: Poedit 2.2.4\n"
 
+msgctxt "the_app"
+msgid "Chat"
+msgstr ""
+
 msgid "Message"
 msgstr "Mesaj"
 
 msgctxt "the_app"
 msgid "message"
 msgstr "mesaj"
+
+msgid "Chat"
+msgstr ""
 
 msgid "Recipients"
 msgstr "Recipienții"
@@ -40,13 +47,8 @@ msgstr "Recipient nedefinit."
 msgid "Portal"
 msgstr "Portal"
 
-#, python-format
-msgid "Request about your project \"%(group_name)s\""
-msgstr "Cerere despre proiectul dvs. \"%(group_name)s\""
-
-#, python-format
-msgid "Request about your group \"%(group_name)s\""
-msgstr "Cerere despre grupul dvs. \"%(group_name)s\""
+msgid "Please post your request or question here. You can see the channel members by clicking the group icon at the top of the channel."
+msgstr ""
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
 msgstr "Puteți atașa fișiere și imagini la mesaj doar dacă sunteți membru forumului. Vă puteți alătura aici:"
@@ -97,6 +99,12 @@ msgid ""
 msgstr ""
 "Notă: Acest mesaj este emis de un sistem automat.\n"
 "Nu răspundeți, acest lucru nu poate fi luat în considerare."
+
+msgid "Only group members can see the content you requested. Apply to become a member now!"
+msgstr ""
+
+msgid "Go to chat"
+msgstr ""
 
 msgid "Archived Messages"
 msgstr "Mesaje Arhivate"
@@ -272,3 +280,9 @@ msgstr "Mesajele au fost marcate ca fiind citite."
 
 msgid "Messages or conversations successfully recovered."
 msgstr "Mesajele sau conversațiile s-au recuperat cu succes."
+
+#~ msgid "Request about your project \"%(group_name)s\""
+#~ msgstr "Cerere despre proiectul dvs. \"%(group_name)s\""
+
+#~ msgid "Request about your group \"%(group_name)s\""
+#~ msgstr "Cerere despre grupul dvs. \"%(group_name)s\""

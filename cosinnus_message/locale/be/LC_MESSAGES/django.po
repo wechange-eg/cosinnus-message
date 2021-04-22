@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-30 19:20+0200\n"
+"POT-Creation-Date: 2021-04-22 12:51+0200\n"
 "PO-Revision-Date: 2019-05-01 23:08+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,12 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 2.2.1\n"
 
+msgctxt "the_app"
+msgid "Chat"
+msgstr ""
+
 msgid "Message"
 msgstr "Паведамленне"
 
 msgctxt "the_app"
 msgid "message"
 msgstr "паведамленне"
+
+msgid "Chat"
+msgstr ""
 
 msgid "Recipients"
 msgstr "Атрымальнікі(-цы)"
@@ -40,12 +47,7 @@ msgstr "Нявызначаны атрымальнік."
 msgid "Portal"
 msgstr "Партал"
 
-#, python-format
-msgid "Request about your project \"%(group_name)s\""
-msgstr ""
-
-#, python-format
-msgid "Request about your group \"%(group_name)s\""
+msgid "Please post your request or question here. You can see the channel members by clicking the group icon at the top of the channel."
 msgstr ""
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
@@ -97,6 +99,12 @@ msgid ""
 msgstr ""
 "Увага: Гэтае паведамленне перададзена аўтаматызаванай сістэмай.\n"
 "Не адказвайте, Ваш адказ не будзе разгледжаны."
+
+msgid "Only group members can see the content you requested. Apply to become a member now!"
+msgstr ""
+
+msgid "Go to chat"
+msgstr ""
 
 msgid "Archived Messages"
 msgstr "Архіўныя паведамленні"

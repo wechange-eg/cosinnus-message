@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-30 19:20+0200\n"
+"POT-Creation-Date: 2021-04-22 12:51+0200\n"
 "PO-Revision-Date: 2020-04-01 11:56+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -17,12 +17,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.3\n"
 
+msgctxt "the_app"
+msgid "Chat"
+msgstr ""
+
 msgid "Message"
 msgstr "Հաղորդագրություն"
 
 msgctxt "the_app"
 msgid "message"
 msgstr "hաղորդագրություն"
+
+msgid "Chat"
+msgstr ""
 
 msgid "Recipients"
 msgstr "Ստացողներ"
@@ -39,13 +46,8 @@ msgstr "Անորոշ ստացող."
 msgid "Portal"
 msgstr "Պորտալ"
 
-#, python-format
-msgid "Request about your project \"%(group_name)s\""
-msgstr "Հայց ձեր \"%(group_name)s\" նախագծի մասին"
-
-#, python-format
-msgid "Request about your group \"%(group_name)s\""
-msgstr "Հայց ձեր \"%(group_name)s\" խմբի մասին"
+msgid "Please post your request or question here. You can see the channel members by clicking the group icon at the top of the channel."
+msgstr ""
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
 msgstr "Կարող եք ֆայլեր և նկարներ կցել հաղորդագրություններին, եթե ֆորումի անդամ եք: Ֆորումին կարող եք միանալ այստեղ ՝:"
@@ -96,6 +98,12 @@ msgid ""
 msgstr ""
 "Նշում. Այս հաղորդագրությունը թողարկվում է ավտոմատացված համակարգով:\n"
 "Մի պատասխանեք, այն չի դիտարկվելու."
+
+msgid "Only group members can see the content you requested. Apply to become a member now!"
+msgstr ""
+
+msgid "Go to chat"
+msgstr ""
 
 msgid "Archived Messages"
 msgstr "Արխիվացված հաղորդագրություններ"
@@ -271,3 +279,9 @@ msgstr "Հաղորդագրությունները նշվել են որպես ըն
 
 msgid "Messages or conversations successfully recovered."
 msgstr "Հաղորդագրությունները կամ խոսակցությունները հաջողությամբ վերականգնվել են."
+
+#~ msgid "Request about your project \"%(group_name)s\""
+#~ msgstr "Հայց ձեր \"%(group_name)s\" նախագծի մասին"
+
+#~ msgid "Request about your group \"%(group_name)s\""
+#~ msgstr "Հայց ձեր \"%(group_name)s\" խմբի մասին"

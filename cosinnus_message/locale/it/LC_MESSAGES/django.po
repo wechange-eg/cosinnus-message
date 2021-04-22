@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-30 19:20+0200\n"
+"POT-Creation-Date: 2021-04-22 12:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "the_app"
+msgid "Chat"
+msgstr ""
+
 msgid "Message"
 msgstr ""
 
 msgctxt "the_app"
 msgid "message"
+msgstr ""
+
+msgid "Chat"
 msgstr ""
 
 msgid "Recipients"
@@ -40,12 +47,7 @@ msgstr ""
 msgid "Portal"
 msgstr ""
 
-#, python-format
-msgid "Request about your project \"%(group_name)s\""
-msgstr ""
-
-#, python-format
-msgid "Request about your group \"%(group_name)s\""
+msgid "Please post your request or question here. You can see the channel members by clicking the group icon at the top of the channel."
 msgstr ""
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
@@ -82,6 +84,12 @@ msgstr ""
 msgid ""
 "Note: This message is issued by an automated system.\n"
 "Do not reply, this would not be taken into account."
+msgstr ""
+
+msgid "Only group members can see the content you requested. Apply to become a member now!"
+msgstr ""
+
+msgid "Go to chat"
 msgstr ""
 
 msgid "Archived Messages"

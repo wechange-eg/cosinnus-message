@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-30 19:20+0200\n"
+"POT-Creation-Date: 2021-04-22 12:51+0200\n"
 "PO-Revision-Date: 2021-02-18 11:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,12 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.4.1\n"
 
+msgctxt "the_app"
+msgid "Chat"
+msgstr ""
+
 msgid "Message"
 msgstr "Bericht"
 
 msgctxt "the_app"
 msgid "message"
 msgstr "bericht"
+
+msgid "Chat"
+msgstr ""
 
 msgid "Recipients"
 msgstr "Ontvangers"
@@ -40,13 +47,8 @@ msgstr "Ongedefinieerde ontvanger."
 msgid "Portal"
 msgstr "Portal"
 
-#, python-format
-msgid "Request about your project \"%(group_name)s\""
-msgstr "Verzoek voor je project “%(group_name)s”"
-
-#, python-format
-msgid "Request about your group \"%(group_name)s\""
-msgstr "Verzoek voor je groep “%(group_name)s”"
+msgid "Please post your request or question here. You can see the channel members by clicking the group icon at the top of the channel."
+msgstr ""
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
 msgstr "Je kunt alleen bestanden en afbeeldingen aan berichten toevoegen als je lid bent van het forum. Je kunt hier lid worden:"
@@ -97,6 +99,12 @@ msgid ""
 msgstr ""
 "Opmerking: dit is een automatisch gegenereerd bericht.\n"
 "Antwoord hierop niet."
+
+msgid "Only group members can see the content you requested. Apply to become a member now!"
+msgstr ""
+
+msgid "Go to chat"
+msgstr ""
 
 msgid "Archived Messages"
 msgstr "Gearchiveerde berichten"
@@ -272,3 +280,9 @@ msgstr "Berichten zijn gemarkeerd als gelezen."
 
 msgid "Messages or conversations successfully recovered."
 msgstr "Berichten of gesprekken zijn succesvol hersteld."
+
+#~ msgid "Request about your project \"%(group_name)s\""
+#~ msgstr "Verzoek voor je project “%(group_name)s”"
+
+#~ msgid "Request about your group \"%(group_name)s\""
+#~ msgstr "Verzoek voor je groep “%(group_name)s”"

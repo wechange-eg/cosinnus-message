@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-30 19:20+0200\n"
+"POT-Creation-Date: 2021-04-22 12:51+0200\n"
 "PO-Revision-Date: 2020-09-23 09:41+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,12 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
 "X-Generator: Poedit 2.4.1\n"
 
+msgctxt "the_app"
+msgid "Chat"
+msgstr ""
+
 msgid "Message"
 msgstr "Zpráva"
 
 msgctxt "the_app"
 msgid "message"
 msgstr "zpráva"
+
+msgid "Chat"
+msgstr ""
 
 msgid "Recipients"
 msgstr "Příjemci"
@@ -40,13 +47,8 @@ msgstr "Nedefinovaný příjemce."
 msgid "Portal"
 msgstr "Portál"
 
-#, python-format
-msgid "Request about your project \"%(group_name)s\""
-msgstr "Žádost o váš projekt \"%(group_name)s\""
-
-#, python-format
-msgid "Request about your group \"%(group_name)s\""
-msgstr "Žádost o vaši skupinu \"%(group_name)s\""
+msgid "Please post your request or question here. You can see the channel members by clicking the group icon at the top of the channel."
+msgstr ""
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
 msgstr "Ke zprávám můžete připojit soubory a obrázky, pouze pokud jste členem fóra. Můžete se k němu připojit zde:"
@@ -97,6 +99,12 @@ msgid ""
 msgstr ""
 "Poznámka: Tuto zprávu posílá automatizovaný systém.\n"
 "Neodpovídejte na ni, schránka je bez dozoru."
+
+msgid "Only group members can see the content you requested. Apply to become a member now!"
+msgstr ""
+
+msgid "Go to chat"
+msgstr ""
 
 msgid "Archived Messages"
 msgstr "Archivované zprávy"
@@ -272,3 +280,9 @@ msgstr "Zprávy byly označeny jako přečtené."
 
 msgid "Messages or conversations successfully recovered."
 msgstr "Zprávy nebo konverzace byly úspěšně obnoveny."
+
+#~ msgid "Request about your project \"%(group_name)s\""
+#~ msgstr "Žádost o váš projekt \"%(group_name)s\""
+
+#~ msgid "Request about your group \"%(group_name)s\""
+#~ msgstr "Žádost o vaši skupinu \"%(group_name)s\""

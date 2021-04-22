@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-30 19:20+0200\n"
+"POT-Creation-Date: 2021-04-22 12:51+0200\n"
 "PO-Revision-Date: 2020-04-07 13:06+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,12 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 2.3\n"
 
+msgctxt "the_app"
+msgid "Chat"
+msgstr ""
+
 msgid "Message"
 msgstr "შეტყობინება"
 
 msgctxt "the_app"
 msgid "message"
 msgstr "შეტყობინება"
+
+msgid "Chat"
+msgstr ""
 
 msgid "Recipients"
 msgstr "მიმღებები"
@@ -40,13 +47,8 @@ msgstr "არაიდენტიფიცირებული მიმღ�
 msgid "Portal"
 msgstr "პორტალი"
 
-#, python-format
-msgid "Request about your project \"%(group_name)s\""
-msgstr "თხოვნა თქვენს პროექტთან \"%(group_name)s\" დაკავშირებით"
-
-#, python-format
-msgid "Request about your group \"%(group_name)s\""
-msgstr "თხოვნა თქვენს ჯგუფთან \"%(group_name)s\" დაკავშირებით"
+msgid "Please post your request or question here. You can see the channel members by clicking the group icon at the top of the channel."
+msgstr ""
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
 msgstr "თქვენ შეგიძლიათ ტვირთოთ ფაილები ან სურათები შეტყობინებებზე, იმ შემთხვევაში თუ ხარ ფორუმის წევრი. თქვენ შეგიძლიათ ჩაერთოთ აქ:"
@@ -97,6 +99,12 @@ msgid ""
 msgstr ""
 "შენიშვნა: შეტყობინების გამოგზავნა ავტომატურად მოხდა.\n"
 "არ უპასუხოთ, რადგან პასუხი არ იქნება გათვალისწინებული."
+
+msgid "Only group members can see the content you requested. Apply to become a member now!"
+msgstr ""
+
+msgid "Go to chat"
+msgstr ""
 
 msgid "Archived Messages"
 msgstr "დაარქივებული შეტყობინებები"
@@ -272,3 +280,9 @@ msgstr "შეტყობინებები წაკითხულად �
 
 msgid "Messages or conversations successfully recovered."
 msgstr "შეტყობინებები და დიალოგები წარმატებით აღდგა."
+
+#~ msgid "Request about your project \"%(group_name)s\""
+#~ msgstr "თხოვნა თქვენს პროექტთან \"%(group_name)s\" დაკავშირებით"
+
+#~ msgid "Request about your group \"%(group_name)s\""
+#~ msgstr "თხოვნა თქვენს ჯგუფთან \"%(group_name)s\" დაკავშირებით"

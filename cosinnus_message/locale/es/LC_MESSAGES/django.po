@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-30 19:20+0200\n"
+"POT-Creation-Date: 2021-04-22 12:51+0200\n"
 "PO-Revision-Date: 2020-04-22 12:36+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,12 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.5.4\n"
 
+msgctxt "the_app"
+msgid "Chat"
+msgstr ""
+
 msgid "Message"
 msgstr "Mensaje"
 
 msgctxt "the_app"
 msgid "message"
 msgstr "mensaje"
+
+msgid "Chat"
+msgstr ""
 
 msgid "Recipients"
 msgstr "Receptores"
@@ -40,12 +47,7 @@ msgstr "Receptores indefinidos."
 msgid "Portal"
 msgstr "Portal"
 
-#, python-format
-msgid "Request about your project \"%(group_name)s\""
-msgstr ""
-
-#, python-format
-msgid "Request about your group \"%(group_name)s\""
+msgid "Please post your request or question here. You can see the channel members by clicking the group icon at the top of the channel."
 msgstr ""
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
@@ -98,6 +100,12 @@ msgid ""
 msgstr ""
 "Nota: Este mensaje es emitido por un sistema automatizado.\n"
 "No respondas, esto no se tendría en cuenta."
+
+msgid "Only group members can see the content you requested. Apply to become a member now!"
+msgstr ""
+
+msgid "Go to chat"
+msgstr ""
 
 msgid "Archived Messages"
 msgstr "Mensajes archivados"
