@@ -539,7 +539,7 @@ class RocketChatConnection:
         user_id = self.get_user_id(user)
         if not user_id:
             return
-        response = self.rocket.users_delete(user_id=user_id).json()
+        response = self.rocket.users_delete(user_id=user_id, confirmRelinquish=True).json()
         if not response.get('success'):
             logger.error('RocketChat: users_delete: ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
     
