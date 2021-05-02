@@ -66,6 +66,10 @@ if settings.COSINNUS_ROCKET_ENABLED:
 
     @receiver(post_save, sender=UserProfile)
     def handle_profile_updated(sender, instance, created, **kwargs):
+        # only update active profiles (inactive ones should be disabled in rocketchat also)
+        if not instance.user.is_active:
+            return
+        
         try:
             rocket = RocketChatConnection()
             if created:
@@ -156,6 +160,25 @@ if settings.COSINNUS_ROCKET_ENABLED:
         except Exception as e:
             logger.exception(e)
             
+
+    @receiver(signals.user_deactivated)
+    def user_deactivated(sender, user, **kwargs):
+        """ Deactivate a rocketchat user account """
+        try:
+            rocket = RocketChatConnection()
+            rocket.users_disable(user)
+        except Exception as e:
+            logger.exception(e)
+    
+    @receiver(signals.user_activated)
+    def user_activated(sender, user, **kwargs):
+        """ Activate a rocketchat user account """
+        try:
+            rocket = RocketChatConnection()
+            rocket.users_enable(user)
+        except Exception as e:
+            logger.exception(e)
+        
     @receiver(pre_save, sender=CosinnusGroupMembership)
     def handle_membership_updated(sender, instance, **kwargs):
         try:
