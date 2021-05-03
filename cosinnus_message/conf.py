@@ -47,7 +47,7 @@ class CosinnusMessageDefaultSettings(AppConf):
     COSINNUS_ROCKET_NOTE_POST_RELAY_ROOM_KEY = COSINNUS_ROCKET_GROUP_ROOM_KEYS[1]
     
     # how many words the relayed note may be max. if None, disabled.
-    COSINNUS_ROCKET_NOTE_POST_RELAY_TRUNCATE_WORD_COUNT = 20
+    COSINNUS_ROCKET_NOTE_POST_RELAY_TRUNCATE_WORD_COUNT = 60
     
     COSINNUS_CHAT_SETTINGS = {
         # General
