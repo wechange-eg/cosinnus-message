@@ -26,11 +26,14 @@ class Command(BaseCommand):
     
     This is not neccessary to run on new portals, as the setting is set on user creation already.
     """
-
+    
+    def add_arguments(self, parser):
+        parser.add_argument('-u', '--use-user-setting', action='store_true', help='Infer the rocket setting from the the user notification instead of using the portal default setting')
+    
     def handle(self, *args, **options):
         if not settings.COSINNUS_CHAT_USER:
             return
-        
+        use_user_setting = options['use_user_setting']
         default_setting = settings.COSINNUS_DEFAULT_ROCKETCHAT_NOTIFICATION_SETTING
         
         rocket = RocketChatConnection(stdout=self.stdout, stderr=self.stderr)
@@ -45,12 +48,16 @@ class Command(BaseCommand):
                 pref = rocket.get_user_email_preference(user)
                 # if the user hasn't got a definite value set in their profile, we set the portal's default
                 if not pref:
-                    if check_user_can_receive_emails(user):
-                        user_setting = GlobalUserNotificationSetting.ROCKETCHAT_SETTING_MENTIONS
+                    if use_user_setting:
+                        # apply the inferred user notification settings
+                        if check_user_can_receive_emails(user):
+                            user_setting = GlobalUserNotificationSetting.ROCKETCHAT_SETTING_MENTIONS
+                        else:
+                            user_setting = GlobalUserNotificationSetting.ROCKETCHAT_SETTING_OFF
+                        target_setting = user_setting
                     else:
-                        user_setting = GlobalUserNotificationSetting.ROCKETCHAT_SETTING_OFF
-                    # target_setting = default_setting # change to this to apply the default settings for unset users instead!
-                    target_setting = user_setting
+                        # apply the default portal settings for unset users instead!
+                        target_setting = default_setting 
                     save_rocketchat_mail_notification_preference_for_user_setting(
                         user,
                         target_setting
