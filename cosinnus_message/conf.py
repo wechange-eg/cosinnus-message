@@ -34,17 +34,15 @@ class CosinnusMessageDefaultSettings(AppConf):
     # Do not change this setting value for portals unless you know exactly what youre doing! 
     COSINNUS_ROCKET_GROUP_ROOM_KEYS = [
         'general', 
-        'news'
     ]
     # the display name pattern for the channel for the group rooms that will be created
     # will be given the group.slug as format-argument 
     COSINNUS_ROCKET_GROUP_ROOM_NAMES_MAP = {
-        COSINNUS_ROCKET_GROUP_ROOM_KEYS[0]: '%s-general',
-        COSINNUS_ROCKET_GROUP_ROOM_KEYS[1]: '%s-news',
+    COSINNUS_ROCKET_GROUP_ROOM_KEYS[0]: '%s',
     }
     # the room where note posts will be posted to by the rocket box
     # set to None to disable note post relaying to rocketchat!
-    COSINNUS_ROCKET_NOTE_POST_RELAY_ROOM_KEY = COSINNUS_ROCKET_GROUP_ROOM_KEYS[1]
+    COSINNUS_ROCKET_NOTE_POST_RELAY_ROOM_KEY = COSINNUS_ROCKET_GROUP_ROOM_KEYS[0]
     
     # how many words the relayed note may be max. if None, disabled.
     COSINNUS_ROCKET_NOTE_POST_RELAY_TRUNCATE_WORD_COUNT = 60
