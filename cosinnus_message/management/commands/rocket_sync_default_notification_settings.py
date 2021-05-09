@@ -10,7 +10,8 @@ from cosinnus.conf import settings
 from django.contrib.auth import get_user_model
 from cosinnus_message.utils.utils import save_rocketchat_mail_notification_preference_for_user_setting
 from cosinnus.utils.permissions import check_user_can_receive_emails
-from cosinnus.models.profile import GlobalUserNotificationSetting
+from cosinnus.models.profile import GlobalUserNotificationSetting,\
+    PROFILE_SETTING_ROCKET_CHAT_USERNAME
 
 
 logger = logging.getLogger(__name__)
@@ -44,6 +45,11 @@ class Command(BaseCommand):
         errors = 0
         total = len(users)
         for user in users:
+            if not user.cosinnus_profile.settings.get(PROFILE_SETTING_ROCKET_CHAT_USERNAME, None):
+                self.stdout.write(f'User {count+1}/{total} ({errors} Errors): Skipping (user has no rocket account yet)')
+                count += 1
+                continue
+            
             try:
                 pref = rocket.get_user_email_preference(user)
                 # if the user hasn't got a definite value set in their profile, we set the portal's default
