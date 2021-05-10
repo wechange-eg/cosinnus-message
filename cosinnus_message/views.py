@@ -181,7 +181,7 @@ class RocketChatWriteView(BaseRocketChatView):
 
 class RocketChatWriteGroupView(BaseRocketChatView):
 
-    queryset = CosinnusGroup.objects.filter(is_active=True)
+    queryset = CosinnusGroup.objects.all_in_portal()
 
     def get_object(self):
         slug = self.kwargs.get('slug')
