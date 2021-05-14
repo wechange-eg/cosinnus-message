@@ -3,67 +3,67 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-14 15:23+0200\n"
-"PO-Revision-Date: 2021-02-18 11:08+0100\n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Language: nl\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.1\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgctxt "the_app"
 msgid "Chat"
 msgstr ""
 
 msgid "Message"
-msgstr "Bericht"
+msgstr ""
 
 msgctxt "the_app"
 msgid "message"
-msgstr "bericht"
+msgstr ""
 
 msgid "Chat"
 msgstr ""
 
 msgid "Recipients"
-msgstr "Ontvangers"
+msgstr ""
 
 msgid "Only Administrators may send a message to this project/group!"
-msgstr "Alleen beheerders mogen een bericht sturen naar dit project/deze groep!"
+msgstr ""
 
 msgid "Additional Recipients"
-msgstr "Verdere ontvangers"
+msgstr ""
 
 msgid "Undefined recipient."
-msgstr "Ongedefinieerde ontvanger."
+msgstr ""
 
 msgid "Portal"
-msgstr "Portal"
+msgstr ""
 
 msgid "Please post your request or question here. You can see the channel members by clicking the group icon at the top of the channel."
 msgstr ""
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
-msgstr "Je kunt alleen bestanden en afbeeldingen aan berichten toevoegen als je lid bent van het forum. Je kunt hier lid worden:"
+msgstr ""
 
 msgid "Forum"
-msgstr "Forum"
+msgstr ""
 
 msgid "Messages"
-msgstr "Berichten"
+msgstr ""
 
 msgid "Legacy Messages Archive"
 msgstr ""
 
 msgid "The legacy messaging app is no longer in use. You can view all of your old messages, but you cannot write new ones. Please use the new messaging app in the navigation from now on!"
-msgstr "De legacy messaging app is niet meer beschikbaar. Je kunt je oude berichten bekijken, maar geen nieuwe schrijven. Gebruik alsjeblieft per direct de nieuwe bericht app in de navigatie!"
+msgstr ""
 
 #, python-format
 msgid ""
@@ -80,25 +80,11 @@ msgid ""
 "\n"
 "If this keeps happening, consider logging in and sending the reply directly on the site.\n"
 msgstr ""
-"Je antwoord kon niet worden verwerkt!\n"
-"\n"
-"De reden hiervoor is: %(reason)s\n"
-"\n"
-"\n"
-"Het tekstbericht was: \n"
-"————————————————\n"
-"%(text)s\n"
-"————————————————\n"
-"\n"
-"\n"
-"Als dit blijft gebeuren, overweeg dan om in te loggen en het antwoord rechtstreeks op de site te verzenden.\n"
 
 msgid ""
 "Note: This message is issued by an automated system.\n"
 "Do not reply, this would not be taken into account."
 msgstr ""
-"Opmerking: dit is een automatisch gegenereerd bericht.\n"
-"Antwoord hierop niet."
 
 msgid "Only group members can see the content you requested. Apply to become a member now!"
 msgstr ""
@@ -107,182 +93,176 @@ msgid "Go to chat"
 msgstr ""
 
 msgid "Archived Messages"
-msgstr "Gearchiveerde berichten"
+msgstr ""
 
 msgid "Delete"
-msgstr "Verwijderen"
+msgstr ""
 
 msgid "Archive"
-msgstr "Archiveren"
+msgstr ""
 
 msgid "Undelete"
-msgstr "Verwijderen ongedaan maken"
+msgstr ""
 
 msgid "Mark as Read"
-msgstr "Als gelezen markeren"
+msgstr ""
 
 msgid "No messages"
-msgstr "Geen berichten"
+msgstr ""
 
 msgid "Please enter message..."
-msgstr "Bericht invoeren..."
+msgstr ""
 
 msgid "Send"
-msgstr "Versturen"
+msgstr ""
 
 msgid "Dear user,"
-msgstr "Beste gebruiker,"
+msgstr ""
 
 #, python-format
 msgid "On %(date)s, you asked to send a message to the user '%(recipient)s'."
-msgstr "Op %(date)s, heb je gevraagd een bericht te sturen naar gebruiker ‘%(recipient)s’."
+msgstr ""
 
 msgid "Your message has been rejected by the moderator"
-msgstr "Je bericht is afgewezen door de moderator"
+msgstr ""
 
 msgid ", for the following reason:"
-msgstr ", om de volgende reden:"
+msgstr ""
 
 #, python-format
 msgid "'%(sender_first)s %(sender_last)s' has replied to your message from %(date)s:"
-msgstr "‘%(sender_first)s %(sender_last)s’ heeft geantwoord op je bericht van %(date)s:"
+msgstr ""
 
 #, python-format
 msgid "'%(sender_first)s %(sender_last)s' has posted a message in one of your conversations."
-msgstr "‘%(sender_first)s %(sender_last)s’ heeft een bericht geplaatst in een van je gesprekken."
+msgstr ""
 
 #, python-format
 msgid "You have received a message from the user '%(sender_first)s %(sender_last)s'."
-msgstr "Je hebt een bericht ontvangen van gebruiker ‘%(sender_first)s %(sender_last)s’."
+msgstr ""
 
 msgid "This message was sent in a conversation with: "
-msgstr "Dit bericht is verstuurd in een gesprek met: "
+msgstr ""
 
 msgid "Project/Group"
-msgstr "Project/groep"
+msgstr ""
 
 msgid "Follow this link to view the message on the site"
-msgstr "Volg deze link om het bericht op de site te bekijken"
+msgstr ""
 
 msgid "If you do not wish to receive any more emails from us, click here to unsubscribe:"
-msgstr "Als je geen e-mails meer van ons wenst te ontvangen, klik dan hier om je uit te schrijven:"
+msgstr ""
 
 msgid "You can also reply to this message directly by replying to this email. When you do, please leave the subject and addressee as it is. The email you reply from *must* be the one you are registered with on the site."
-msgstr "Je kunt dit bericht ook rechtstreeks beantwoorden door op deze e-mail te antwoorden. Wanneer je dit doet, laat het onderwerp en de geadresseerde dan zoals ze zijn. Het e-mailadres waarmee je antwoordt *moet* dat zijn waarmee je bent geregistreerd op de site."
+msgstr ""
 
 msgid "WARNING: Your reply will be sent to all participants of this conversation!"
-msgstr "WAARSCHUWING: je antwoord wordt verstuurd naar alle deelnemers van dit gesprek!"
+msgstr ""
 
 #, python-format
 msgid "Message \"%(subject)s\" on the site %(sitename)s"
-msgstr "Bericht “%(subject)s” op de site %(sitename)s"
+msgstr ""
 
 msgid "Dear visitor,"
-msgstr "Beste bezoeker,"
+msgstr ""
 
 msgid "As a reminder, please find below the content of your message."
-msgstr "Ter herinnering vind je hieronder de inhoud van je bericht."
+msgstr ""
 
 #, python-format
 msgid "On %(date)s, you sent a message to the user '%(sender_first)s %(sender_last)s'."
-msgstr "Op %(date)s heb je een bericht gestuurd naar gebruiker ‘%(sender_first)s %(sender_last)s’."
+msgstr ""
 
 msgid "Please find below the answer from your correspondent."
-msgstr "Hieronder vind je het antwoord van je correspondent."
+msgstr ""
 
 msgid "Thank you again for your interest in our services."
-msgstr "Nogmaals bedankt voor je interesse in onze diensten."
+msgstr ""
 
 msgid "For more comfort, we encourage you to open an account on the site."
-msgstr "Voor meer gemak raden we je aan een account aan te maken op de site."
+msgstr ""
 
 msgid "The site administrator"
-msgstr "De sitebeheerder"
+msgstr ""
 
 msgid "Inbox"
-msgstr "Inbox"
+msgstr ""
 
 msgid "Sent"
-msgstr "Verzonden"
+msgstr ""
 
 msgctxt "the noun for an Archive"
 msgid "Archive"
-msgstr "Archief"
+msgstr ""
 
 msgid "Trash"
-msgstr "Prullenmand"
+msgstr ""
 
 msgid "Write"
-msgstr "Schrijven"
+msgstr ""
 
 msgid "Reply"
-msgstr "Beantwoorden"
+msgstr ""
 
 msgid "Recipient"
-msgstr "Ontvanger"
+msgstr ""
 
 msgid "Conversation"
-msgstr "Gesprek"
+msgstr ""
 
 msgid "Conversation with members from"
-msgstr "Gesprek met leden van"
+msgstr ""
 
 msgid "Conversation with"
-msgstr "Gesprek met"
+msgstr ""
 
 #, python-format
 msgid "Show all %(count)s participants"
-msgstr "Laat alle %(count)s deelnemers zien"
+msgstr ""
 
 msgid "Me"
-msgstr "Ik"
+msgstr ""
 
 msgid "Answer"
-msgstr "Beantwoorden"
+msgstr ""
 
 msgid "Reply..."
-msgstr "Antwoorden…"
+msgstr ""
 
 #, python-format
 msgid "Reply to %(sender_name)s"
-msgstr "Antwoorden aan %(sender_name)s"
+msgstr ""
 
 #, python-format
 msgid "Reply to all %(adressee_count)s"
-msgstr "Antwoorden aan alle %(adressee_count)s"
+msgstr ""
 
 msgid "Your reply could not be matched to an existing message."
-msgstr "Je antwoord kon niet worden gekoppeld aan een bestaand bericht."
+msgstr ""
 
 msgid "An internal error occured."
-msgstr "Er is een interne fout opgetreden."
+msgstr ""
 
 msgid "The email adress you sent the reply from is not the one associated with your user account. Please send direct replies only from the email adress you are registered with on the site!"
-msgstr "Het e-mailadres waarmee je het antwoord hebt verstuurd, is niet het adres dat aan je gebruikersaccount is gekoppeld. Stuur directe antwoorden alleen vanaf het e-mailadres waarmee je op de site bent geregistreerd!"
+msgstr ""
 
 msgid "There was an error when processing your message text!"
-msgstr "Er is een fout opgetreden bij het verwerken van je bericht!"
+msgstr ""
 
 msgid "Your direct reply failed!"
-msgstr "Je antwoord is niet gelukt!"
+msgstr ""
 
 msgid "Select at least one object."
-msgstr "Selecteer minstens één ontvanger."
+msgstr ""
 
 msgid "Messages or conversations successfully archived."
-msgstr "Berichten of gesprekken succesvol gearchiveerd."
+msgstr ""
 
 msgid "Messages or conversations successfully deleted."
-msgstr "Berichten of gesprekken succesvol verwijderd."
+msgstr ""
 
 msgid "Messages were marked as read."
-msgstr "Berichten zijn gemarkeerd als gelezen."
+msgstr ""
 
 msgid "Messages or conversations successfully recovered."
-msgstr "Berichten of gesprekken zijn succesvol hersteld."
-
-#~ msgid "Request about your project \"%(group_name)s\""
-#~ msgstr "Verzoek voor je project “%(group_name)s”"
-
-#~ msgid "Request about your group \"%(group_name)s\""
-#~ msgstr "Verzoek voor je groep “%(group_name)s”"
+msgstr ""
