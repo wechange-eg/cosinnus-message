@@ -47,6 +47,9 @@ class CosinnusMessageDefaultSettings(AppConf):
     # how many words the relayed note may be max. if None, disabled.
     COSINNUS_ROCKET_NOTE_POST_RELAY_TRUNCATE_WORD_COUNT = 60
     
+    # the introductory emote for news post relays by the bot
+    COSINNUS_ROCKET_NEWS_BOT_EMOTE = ':loud_sound:'
+    
     COSINNUS_CHAT_SETTINGS = {
         # General
         'UTF8_Names_Validation': '[0-9a-zA-Z-_.äÄöÖüÜß]+',

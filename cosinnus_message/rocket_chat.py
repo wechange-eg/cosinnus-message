@@ -970,7 +970,7 @@ class RocketChatConnection:
             text = truncatewords(text, settings.COSINNUS_ROCKET_NOTE_POST_RELAY_TRUNCATE_WORD_COUNT)
         author_name = full_name(note.creator)
         note_title = note.title if not note.title == note.EMPTY_TITLE_PLACEHOLDER else ''
-        title = f':newspaper: *{author_name}: {note_title}*\n' 
+        title = f'{settings.COSINNUS_ROCKET_NEWS_BOT_EMOTE} *{author_name}: {note_title}*\n' 
         message = f'{title}{text}\n[{url}]({url})'
         return message
     
