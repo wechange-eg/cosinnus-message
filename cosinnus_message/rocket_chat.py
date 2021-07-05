@@ -605,7 +605,7 @@ class RocketChatConnection:
             # Post help message
             greeting_message = group.trans.CONTACT_ROOM_GREETING_MESSAGE
             info_message = _('Please post your request or question here. You can see the channel members by clicking the group icon at the top of the channel.')
-            message = f'@{profile.rocket_username} {greeting_message} {info_message}'
+            message = f'@all {greeting_message} {info_message}'
             response = self.rocket.chat_post_message(text=message, room_id=room_id).json()
             if not response.get('success'):
                 logger.error('RocketChat: groups_request: chat_post_message ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
