@@ -50,6 +50,9 @@ class CosinnusMessageDefaultSettings(AppConf):
     # the introductory emote for news post relays by the bot
     COSINNUS_ROCKET_NEWS_BOT_EMOTE = ':loud_sound:'
     
+    # whether all rocketchat links should open with target="_blank"
+    COSINNUS_ROCKET_OPEN_IN_NEW_TAB = False
+    
     COSINNUS_CHAT_SETTINGS = {
         # General
         'UTF8_Names_Validation': '[0-9a-zA-Z-_.äÄöÖüÜß]+',
