@@ -328,7 +328,6 @@ class RocketChatConnection:
             "verified": True, # we keep verified at True always and provide a fake email for unverified accounts, since rocket is broken and still sends emails to unverified accounts
             "requirePasswordChange": False,
         }
-        print(f">>> WRITE! rock creating user with verified {profile.email_verified}")
         response = self.rocket.users_create(**data).json()
         if not response.get('success'):
             logger.error('RocketChat: users_create: ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
@@ -474,13 +473,8 @@ class RocketChatConnection:
         # Update name, email address, password, verified status if they have changed
         profile = user.cosinnus_profile
         rocket_email = user_data.get('emails', [{}])[0].get('address', None)
-        rocket_mail_verified = user_data.get('emails', [{}])[0].get('verified', None)
-        print(f"rocket checking data for changed (force-upd: {force_user_update}), {user_data}")
-        print(f"rocket name check: {user_data.get('name')} - {user.get_full_name()}")
-        print(f"rocket email check: {rocket_email} - {profile.rocket_user_email}")
-        print(f"rocket verified check: {rocket_mail_verified} - {profile.email_verified}")
-        if force_user_update or user_data.get('name') != user.get_full_name() or rocket_email != profile.rocket_user_email \
-                    or rocket_mail_verified != profile.email_verified:
+        #rocket_mail_verified = user_data.get('emails', [{}])[0].get('verified', None)
+        if force_user_update or user_data.get('name') != user.get_full_name() or rocket_email != profile.rocket_user_email:
             data = {
                 "username": profile.rocket_username,
                 "name": user.get_full_name(),
@@ -489,7 +483,6 @@ class RocketChatConnection:
                 "verified": True, # we keep verified at True always and provide a fake email for unverified accounts, since rocket is broken and still sends emails to unverified accounts
                 "requirePasswordChange": False,
             }
-            print(f">>> WRITE! rock UPDATING user with verified {profile.email_verified}")
             # updating the password invalidates existing user sessions, so use it only
             # when actually needed
             if update_password:

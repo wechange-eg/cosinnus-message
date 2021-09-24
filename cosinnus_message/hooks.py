@@ -37,7 +37,11 @@ if settings.COSINNUS_ROCKET_ENABLED:
                 force = any([getattr(instance, fname) != getattr(old_instance, fname) \
                                 for fname in ('password', 'first_name', 'last_name', 'email')])
                 password_updated = bool(instance.password != old_instance.password)
-                rocket.users_update(instance, force_user_update=force, update_password=password_updated)
+                # do a threaded call
+                class CosinnusRocketUpdateThread(Thread):
+                    def run(self):
+                        rocket.users_update(instance, force_user_update=force, update_password=password_updated)
+                CosinnusRocketUpdateThread().start()
             except Exception as e:
                 logger.exception(e)
     
@@ -71,11 +75,16 @@ if settings.COSINNUS_ROCKET_ENABLED:
             return
         
         try:
-            rocket = RocketChatConnection()
             if created:
+                rocket = RocketChatConnection()
                 rocket.users_create(instance.user)
             else:
-                rocket.users_update(instance.user)
+                # do a threaded call
+                class CosinnusRocketProfileUpdateThread(Thread):
+                    def run(self):
+                        rocket = RocketChatConnection()
+                        rocket.users_update(instance.user)
+                CosinnusRocketProfileUpdateThread().start()
         except Exception as e:
             logger.exception(e)
 
@@ -184,35 +193,40 @@ if settings.COSINNUS_ROCKET_ENABLED:
         try:
             rocket = RocketChatConnection()
             is_pending = instance.status in (MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING)
-            if instance.id:
-                old_instance = CosinnusGroupMembership.objects.get(pk=instance.id)
-                was_pending = old_instance.status in (MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING)
-                user_changed = instance.user_id != old_instance.user_id
-                group_changed = instance.group_id != old_instance.group_id
-                is_moderator_changed = instance.status != old_instance.status and \
-                        (instance.status == MEMBERSHIP_ADMIN or old_instance.status == MEMBERSHIP_ADMIN)
-    
-                # Invalidate old membership
-                if (is_pending and not was_pending) or user_changed or group_changed:
-                    rocket.groups_kick(old_instance)
-    
-                # Create new membership
-                if (was_pending and not is_pending) or user_changed or group_changed:
-                    rocket.groups_invite(instance)
-    
-                # Update membership
-                if not is_pending and is_moderator_changed:
-                    # Upgrade
-                    if not old_instance.status == MEMBERSHIP_ADMIN and instance.status == MEMBERSHIP_ADMIN:
-                        rocket.groups_add_moderator(instance)
-                    # Downgrade
-                    elif old_instance.status == MEMBERSHIP_ADMIN and not instance.status == MEMBERSHIP_ADMIN:
-                        rocket.groups_remove_moderator(instance)
-            elif not is_pending:
-                # Create new membership
-                rocket.groups_invite(instance)
-                if instance.status == MEMBERSHIP_ADMIN:
-                    rocket.groups_add_moderator(instance)
+            # do a threaded call
+            class CosinnusRocketMembershipUpdateThread(Thread):
+                def run(self):
+                    if instance.id:
+                        old_instance = CosinnusGroupMembership.objects.get(pk=instance.id)
+                        was_pending = old_instance.status in (MEMBERSHIP_PENDING, MEMBERSHIP_INVITED_PENDING)
+                        user_changed = instance.user_id != old_instance.user_id
+                        group_changed = instance.group_id != old_instance.group_id
+                        is_moderator_changed = instance.status != old_instance.status and \
+                                (instance.status == MEMBERSHIP_ADMIN or old_instance.status == MEMBERSHIP_ADMIN)
+            
+                        # Invalidate old membership
+                        if (is_pending and not was_pending) or user_changed or group_changed:
+                            rocket.groups_kick(old_instance)
+            
+                        # Create new membership
+                        if (was_pending and not is_pending) or user_changed or group_changed:
+                            rocket.groups_invite(instance)
+            
+                        # Update membership
+                        if not is_pending and is_moderator_changed:
+                            # Upgrade
+                            if not old_instance.status == MEMBERSHIP_ADMIN and instance.status == MEMBERSHIP_ADMIN:
+                                rocket.groups_add_moderator(instance)
+                            # Downgrade
+                            elif old_instance.status == MEMBERSHIP_ADMIN and not instance.status == MEMBERSHIP_ADMIN:
+                                rocket.groups_remove_moderator(instance)
+                    elif not is_pending:
+                        # Create new membership
+                        rocket.groups_invite(instance)
+                        if instance.status == MEMBERSHIP_ADMIN:
+                            rocket.groups_add_moderator(instance)
+            CosinnusRocketMembershipUpdateThread().start()
+            
         except Exception as e:
             logger.exception(e)
 
@@ -220,7 +234,11 @@ if settings.COSINNUS_ROCKET_ENABLED:
     def handle_membership_deleted(sender, instance, **kwargs):
         try:
             rocket = RocketChatConnection()
-            rocket.groups_kick(instance)
+            # do a threaded call
+            class CosinnusRocketMembershipDeletedThread(Thread):
+                def run(self):
+                    rocket.groups_kick(instance)
+            CosinnusRocketMembershipDeletedThread().start()
         except Exception as e:
             logger.exception(e)
 
