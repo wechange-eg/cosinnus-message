@@ -144,7 +144,7 @@ class RocketChatConnection:
             during this run)
         """
         users = filter_portal_users(get_user_model().objects.all())
-        users = users.exclude(email__startswith='__unverified__')
+        users = users.exclude(email__startswith='__unverified__') # accounts with a real mail but unverified flag will be created
         if skip_inactive:
             users = filter_active_users(users)
         count = len(users)
@@ -196,9 +196,9 @@ class RocketChatConnection:
             rocket_user = rocket_users.get(rocket_username)
 
             # User with different username but same email address exists?
-            if not rocket_user and user.email.lower() in rocket_emails_usernames.keys():
+            if not rocket_user and profile.rocket_user_email in rocket_emails_usernames.keys():
                 # Change username in DB
-                rocket_username = rocket_emails_usernames.get(user.email.lower())
+                rocket_username = rocket_emails_usernames.get(profile.rocket_user_email)
                 rocket_user = rocket_users.get(rocket_username)
 
                 profile.settings[PROFILE_SETTING_ROCKET_CHAT_USERNAME] = rocket_username
@@ -213,7 +213,7 @@ class RocketChatConnection:
                 # TODO: Introducing User.updated_at would improve performance here
                 rocket_emails = (e['address'] for e in rocket_user.get('emails'))
                 # Email address changed?
-                if user.email.lower() not in rocket_emails:
+                if profile.rocket_user_email not in rocket_emails:
                     changed = True
                 # Name changed?
                 elif user.get_full_name() != rocket_user.get('name'):
@@ -314,18 +314,21 @@ class RocketChatConnection:
         """
         if not hasattr(user, 'cosinnus_profile'):
             return
+        if not user.email or '__unverified__' in user.email:
+            return
         profile = user.cosinnus_profile
         original_password = user.password
         rocket_user_password = user.password or get_random_string(length=16)
         data = {
-            "email": user.email.lower(),
+            "email": profile.rocket_user_email,
             "name": user.get_full_name() or str(user.id),
             "password": rocket_user_password,
             "username": profile.rocket_username,
             "active": user.is_active,
-            "verified": True,
+            "verified": True, # we keep verified at True always and provide a fake email for unverified accounts, since rocket is broken and still sends emails to unverified accounts
             "requirePasswordChange": False,
         }
+        print(f">>> WRITE! rock creating user with verified {profile.email_verified}")
         response = self.rocket.users_create(**data).json()
         if not response.get('success'):
             logger.error('RocketChat: users_create: ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
@@ -468,17 +471,25 @@ class RocketChatConnection:
             return
         user_data = response.get('user')
 
-        # Update name, email address, password
-        if force_user_update or user_data.get('name') != user.get_full_name() or user_data.get('email') != user.email.lower():
-            profile = user.cosinnus_profile
+        # Update name, email address, password, verified status if they have changed
+        profile = user.cosinnus_profile
+        rocket_email = user_data.get('emails', [{}])[0].get('address', None)
+        rocket_mail_verified = user_data.get('emails', [{}])[0].get('verified', None)
+        print(f"rocket checking data for changed (force-upd: {force_user_update}), {user_data}")
+        print(f"rocket name check: {user_data.get('name')} - {user.get_full_name()}")
+        print(f"rocket email check: {rocket_email} - {profile.rocket_user_email}")
+        print(f"rocket verified check: {rocket_mail_verified} - {profile.email_verified}")
+        if force_user_update or user_data.get('name') != user.get_full_name() or rocket_email != profile.rocket_user_email \
+                    or rocket_mail_verified != profile.email_verified:
             data = {
                 "username": profile.rocket_username,
                 "name": user.get_full_name(),
-                "email": user.email.lower(),
-                #"active": user.is_active,
-                "verified": True,
+                "email": profile.rocket_user_email,
+                "active": user.is_active,
+                "verified": True, # we keep verified at True always and provide a fake email for unverified accounts, since rocket is broken and still sends emails to unverified accounts
                 "requirePasswordChange": False,
             }
+            print(f">>> WRITE! rock UPDATING user with verified {profile.email_verified}")
             # updating the password invalidates existing user sessions, so use it only
             # when actually needed
             if update_password:

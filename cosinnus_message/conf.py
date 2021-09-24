@@ -69,7 +69,7 @@ class CosinnusMessageDefaultSettings(AppConf):
         'Accounts_AllowUserProfileChange': False,
         'Accounts_AllowUserAvatarChange': True,
         'Accounts_AllowRealNameChange': True,
-        'Accounts_AllowEmailChange': True,
+        'Accounts_AllowEmailChange': False,
         'Accounts_AllowPasswordChange': False,
         # 'Accounts_AllowUserStatusMessageChange': True,
         'Accounts_AllowUsernameChange': False,

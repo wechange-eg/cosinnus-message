@@ -38,9 +38,11 @@ class Command(BaseCommand):
         default_setting = settings.COSINNUS_DEFAULT_ROCKETCHAT_NOTIFICATION_SETTING
         
         rocket = RocketChatConnection(stdout=self.stdout, stderr=self.stderr)
-        users = filter_portal_users(get_user_model().objects.all())
+        users = get_user_model().objects.all().filter(is_active=True) # active users only
+        users = filter_portal_users(users) # from this portal 
         users = users.exclude(email__startswith='__unverified__')
-        users = users.exclude(password__exact='').exclude(password=None)
+        users = users.exclude(password__exact='').exclude(password=None) # with a password
+        # note, we do include users with a real mail, but unverified flag, as their setting will be relevant once they verify
         count = 0
         errors = 0
         total = len(users)
