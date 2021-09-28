@@ -1193,7 +1193,7 @@ class RocketChatConnection:
             # try to re-initi the user's account and reconnect
             response = self.rocket.users_update(user_id=user_id, password=user.password).json()
             if not response.get('success'):
-                logger.error('RocketChat: unread_messages did not receive a success response: ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
+                logger.error('RocketChat: unread_messages did not receive a success response: ' + str(response.get('errorType', '<No Error Type>')), extra={'response': response})
                 return None
             user_connection = get_cached_rocket_connection(rocket_username=profile.rocket_username, password=user.password,
                                          server_url=settings.COSINNUS_CHAT_BASE_URL, reset=True) # resets cache
