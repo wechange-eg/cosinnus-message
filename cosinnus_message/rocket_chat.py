@@ -324,6 +324,7 @@ class RocketChatConnection:
             "name": user.get_full_name() or str(user.id),
             "password": rocket_user_password,
             "username": profile.rocket_username,
+            "bio": profile.get_absolute_url(),
             "active": user.is_active,
             "verified": True, # we keep verified at True always and provide a fake email for unverified accounts, since rocket is broken and still sends emails to unverified accounts
             "requirePasswordChange": False,
@@ -479,6 +480,7 @@ class RocketChatConnection:
                 "username": profile.rocket_username,
                 "name": user.get_full_name(),
                 "email": profile.rocket_user_email,
+                "bio": profile.get_absolute_url(),
                 "active": user.is_active,
                 "verified": True, # we keep verified at True always and provide a fake email for unverified accounts, since rocket is broken and still sends emails to unverified accounts
                 "requirePasswordChange": False,
