@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-14 15:23+0200\n"
-"PO-Revision-Date: 2021-04-13 14:16+0200\n"
+"POT-Creation-Date: 2021-10-01 11:18+0200\n"
+"PO-Revision-Date: 2021-10-01 11:59+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -16,10 +16,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 3.0\n"
 
-#, fuzzy
-#| msgid "Chat"
+msgid "Please post your request or question here. You can see the channel members by clicking the group icon at the top of the channel."
+msgstr "Bitte stelle deine Anfrage hier. Du kannst sehen, wer in diesem Chat-Kanal ist, indem du in der Titelleiste des Kanals auf das Gruppen-Icon klickst."
+
 msgctxt "the_app"
 msgid "Chat"
 msgstr "Chat"
@@ -45,13 +46,10 @@ msgid "Additional Recipients"
 msgstr "Zusätzliche Empfänger"
 
 msgid "Undefined recipient."
-msgstr "Kein Empfänger angegeben"
+msgstr "Kein Empfänger angegeben."
 
 msgid "Portal"
 msgstr "Portal"
-
-msgid "Please post your request or question here. You can see the channel members by clicking the group icon at the top of the channel."
-msgstr "Bitte stelle deine Anfrage hier. Du kannst sehen, wer in diesem Chat-Kanal ist, indem du in der Titelleiste des Kanals auf das Gruppen-Icon klickst."
 
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
 msgstr "Du kannst Dateien und Bilder nur anhängen, wenn du Mitglied im Forum bist. Du kannst hier beitreten:"
@@ -99,7 +97,7 @@ msgstr ""
 msgid ""
 "Note: This message is issued by an automated system.\n"
 "Do not reply, this would not be taken into account."
-msgstr "Diese Nachricht wurde von einem automatisierten System erstellt - bitte antworte nicht darauf. "
+msgstr "Diese Nachricht wurde von einem automatisierten System erstellt - bitte antworte nicht darauf."
 
 msgid "Only group members can see the content you requested. Apply to become a member now!"
 msgstr "Nur Mitglieder/innen können diesen Inhalt sehen. Bewirb dich jetzt, Mitglied zu werden!"
@@ -123,7 +121,7 @@ msgid "Mark as Read"
 msgstr "Gelesen"
 
 msgid "No messages"
-msgstr "Keine Nachrichten."
+msgstr "Keine Nachrichten"
 
 msgid "Please enter message..."
 msgstr "Bitte Nachricht eingeben..."
@@ -136,13 +134,13 @@ msgstr "Hallo,"
 
 #, python-format
 msgid "On %(date)s, you asked to send a message to the user '%(recipient)s'."
-msgstr ""
+msgstr "Am %(date)s wolltest du die Nachricht an Benutzer_in ‘%(recipient)s’ schicken."
 
 msgid "Your message has been rejected by the moderator"
-msgstr ""
+msgstr "Deine Nachricht wurde von dem Moderator abgelehnt"
 
 msgid ", for the following reason:"
-msgstr ""
+msgstr "aus folgendem Grund:"
 
 #, python-format
 msgid "'%(sender_first)s %(sender_last)s' has replied to your message from %(date)s:"
@@ -154,10 +152,10 @@ msgstr "'%(sender_first)s %(sender_last)s' hat eine Nachricht in einer Unterhalt
 
 #, python-format
 msgid "You have received a message from the user '%(sender_first)s %(sender_last)s'."
-msgstr "du hast eine Nachricht von '%(sender_first)s %(sender_last)s' erhalten:"
+msgstr "Du hast eine Nachricht von '%(sender_first)s %(sender_last)s' erhalten."
 
 msgid "This message was sent in a conversation with: "
-msgstr "Diese Nachricht wurde in einer Unterhaltung gesendet mit:"
+msgstr "Diese Nachricht wurde in einer Unterhaltung gesendet mit: "
 
 msgid "Project/Group"
 msgstr "Projekt/Gruppe"
@@ -179,26 +177,26 @@ msgid "Message \"%(subject)s\" on the site %(sitename)s"
 msgstr "Nachricht \"%(subject)s\" auf %(sitename)s"
 
 msgid "Dear visitor,"
-msgstr ""
+msgstr "Lieber Besucher,"
 
 msgid "As a reminder, please find below the content of your message."
-msgstr ""
+msgstr "Als Erinnerung: Unten findest du den Inhalt deiner Nachricht."
 
 #, python-format
 msgid "On %(date)s, you sent a message to the user '%(sender_first)s %(sender_last)s'."
 msgstr "Am %(date)s, hast du eine Nachricht an Benutzer_in '%(sender_first)s %(sender_last)s' geschrieben."
 
 msgid "Please find below the answer from your correspondent."
-msgstr ""
+msgstr "Unten findest du die Antwort deines Gesprächspartners."
 
 msgid "Thank you again for your interest in our services."
-msgstr ""
+msgstr "Vielen Dank nochmal für dein Interesse an unseren Dienstleistungen."
 
 msgid "For more comfort, we encourage you to open an account on the site."
-msgstr ""
+msgstr "Für mehr Benutzungskomfort empfählen wir dir einen Account auf der Webseite zu erstellen."
 
 msgid "The site administrator"
-msgstr ""
+msgstr "Siteadministrator_in"
 
 msgid "Inbox"
 msgstr "Posteingang"
@@ -268,7 +266,7 @@ msgid "Your direct reply failed!"
 msgstr "Deine direkte Antwort ist fehlgeschlagen!"
 
 msgid "Select at least one object."
-msgstr "Wählen sie mindestens einen Empfänger aus!"
+msgstr "Wählen sie mindestens einen Empfänger aus."
 
 msgid "Messages or conversations successfully archived."
 msgstr "Nachrichten wurden erfolgreich archiviert."
