@@ -7,90 +7,64 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-04 09:53+0200\n"
+"POT-Creation-Date: 2021-10-01 11:18+0200\n"
 "PO-Revision-Date: 2020-10-13 18:38+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 2.4.1\n"
 
-#: cosinnus_message/cosinnus_app.py:22 cosinnus_message/cosinnus_app.py:25
+msgid "Please post your request or question here. You can see the channel members by clicking the group icon at the top of the channel."
+msgstr "Будь ласка, опублікуйте свій запит або запитання тут. Ви можете побачити учасників каналу, натиснувши значок групи у верхній частині каналу."
+
 msgctxt "the_app"
 msgid "Chat"
 msgstr "Чат"
 
-#: cosinnus_message/cosinnus_app.py:27
-#: cosinnus_message/templates/postman/view.html:9
-#: cosinnus_message/templates/postman/view.html:32
 msgid "Message"
 msgstr "Повідомлення"
 
-#: cosinnus_message/cosinnus_app.py:30
 msgctxt "the_app"
 msgid "message"
 msgstr "повідомлення"
 
-#: cosinnus_message/dashboard.py:23
 msgid "Chat"
 msgstr "Чат"
 
-#: cosinnus_message/forms.py:31
 msgid "Recipients"
 msgstr "Адресати"
 
-#: cosinnus_message/forms.py:98 cosinnus_message/utils/utils.py:140
 msgid "Only Administrators may send a message to this project/group!"
 msgstr "Тільки адміністратори можуть відправляти повідомлення до цих проєктів/груп!"
 
-#: cosinnus_message/forms.py:110
 msgid "Additional Recipients"
 msgstr "Додаткові адресати"
 
-#: cosinnus_message/forms.py:116
 msgid "Undefined recipient."
 msgstr "Не вказано адресата."
 
-#: cosinnus_message/models.py:17
 msgid "Portal"
 msgstr "Портал"
 
-#: cosinnus_message/rocket_chat.py:607
-msgid ""
-"Please post your request or question here. You can see the channel members "
-"by clicking the group icon at the top of the channel."
-msgstr "Будь ласка, опублікуйте свій запит або запитання тут. Ви можете побачити учасників каналу, натиснувши значок групи у верхній частині каналу."
-
-#: cosinnus_message/templates/cosinnus_message/attachments_form.html:29
-msgid ""
-"You can only attach files and pictures to messages if you are a member of "
-"the forum. You can join it here:"
+msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
 msgstr "Ви можете додавати файли та зображення до повідомлень, якщо Ви член форуму. Ви можете приєднатися тут:"
 
-#: cosinnus_message/templates/cosinnus_message/attachments_form.html:31
 msgid "Forum"
 msgstr "Форум"
 
-#: cosinnus_message/templates/cosinnus_message/base.html:6
 msgid "Messages"
 msgstr "Повідомлення"
 
-#: cosinnus_message/templates/cosinnus_message/base.html:19
 msgid "Legacy Messages Archive"
 msgstr "Архів попередніх повідомлень"
 
-#: cosinnus_message/templates/cosinnus_message/base.html:21
-msgid ""
-"The legacy messaging app is no longer in use. You can view all of your old "
-"messages, but you cannot write new ones. Please use the new messaging app in "
-"the navigation from now on!"
+msgid "The legacy messaging app is no longer in use. You can view all of your old messages, but you cannot write new ones. Please use the new messaging app in the navigation from now on!"
 msgstr "Застаріла програма обміну повідомленнями більше не використовується. Ви можете переглядати всі свої старі повідомлення, але не можете писати нові. Відтепер використовуйте новий застосунок для обміну повідомленнями в навігації!"
 
-#: cosinnus_message/templates/cosinnus_message/email_direct_reply_failed.txt:1
 #, python-format
 msgid ""
 "Your direct reply could not be processed!\n"
@@ -104,293 +78,204 @@ msgid ""
 "--------------------------------\n"
 "\n"
 "\n"
-"If this keeps happening, consider logging in and sending the reply directly "
-"on the site.\n"
-msgstr "Ваша пряма відповідь не може бути доставлена!%(reason)s\n\n\nТекст Вашого повідомлення:\n--------------------------------\n%(text)s\n--------------------------------\n\n\nЯкщо це продовжиться, вийдіть із акаунта і відправте відповідь прямо на сайт.\n"
+"If this keeps happening, consider logging in and sending the reply directly on the site.\n"
+msgstr ""
+"Ваша пряма відповідь не може бути доставлена!%(reason)s\n"
+"\n"
+"\n"
+"Текст Вашого повідомлення:\n"
+"--------------------------------\n"
+"%(text)s\n"
+"--------------------------------\n"
+"\n"
+"\n"
+"Якщо це продовжиться, вийдіть із акаунта і відправте відповідь прямо на сайт.\n"
 
-#: cosinnus_message/templates/cosinnus_message/email_direct_reply_failed.txt:14
-#: cosinnus_message/templates/postman/email_user.txt:35
-#: cosinnus_message/templates/postman/email_visitor.txt:18
 msgid ""
 "Note: This message is issued by an automated system.\n"
 "Do not reply, this would not be taken into account."
-msgstr "Примітка: це повідомлення надсилається системою автоматично.\nБудь ласка, не відповідайте на нього."
+msgstr ""
+"Примітка: це повідомлення надсилається системою автоматично.\n"
+"Будь ласка, не відповідайте на нього."
 
-#: cosinnus_message/templates/cosinnus_message/widgets/embedded_rocketchat_widget.html:14
-msgid ""
-"Only group members can see the content you requested. Apply to become a "
-"member now!"
+msgid "Only group members can see the content you requested. Apply to become a member now!"
 msgstr "Тільки учасники групи можуть бачити контент, про який Ви просили. Подайте заявку, щоб стати учасником зараз!"
 
-#: cosinnus_message/templates/cosinnus_message/widgets/message_widget.html:25
 msgid "Go to chat"
 msgstr "Перейти до чату"
 
-#: cosinnus_message/templates/postman/archives.html:4
-#: cosinnus_message/templates/postman/archives.html:8
 msgid "Archived Messages"
 msgstr "Заархівовані повідомлення"
 
-#: cosinnus_message/templates/postman/base_folder.html:14
-#: cosinnus_message/templates/postman/view.html:196
 msgid "Delete"
 msgstr "Видалити"
 
-#: cosinnus_message/templates/postman/base_folder.html:19
-#: cosinnus_message/templates/postman/view.html:19
-#: cosinnus_message/templates/postman/view.html:27
-#: cosinnus_message/templates/postman/view.html:210
 msgid "Archive"
 msgstr "Архів"
 
-#: cosinnus_message/templates/postman/base_folder.html:24
 msgid "Undelete"
 msgstr "Скасувати видалення"
 
-#: cosinnus_message/templates/postman/base_folder.html:29
 msgid "Mark as Read"
 msgstr "Позначити як прочитані"
 
-#: cosinnus_message/templates/postman/base_folder.html:95
 msgid "No messages"
 msgstr "Повідомлень немає"
 
-#: cosinnus_message/templates/postman/base_write.html:49
 msgid "Please enter message..."
 msgstr "Уведіть, будь ласка, повідомлення..."
 
-#: cosinnus_message/templates/postman/base_write.html:68
 msgid "Send"
 msgstr "Надіслати"
 
-#: cosinnus_message/templates/postman/email_user.txt:1
 msgid "Dear user,"
 msgstr "Шановний/-на користувачу/-ко,"
 
-#: cosinnus_message/templates/postman/email_user.txt:3
-#: cosinnus_message/templates/postman/email_visitor.txt:3
 #, python-format
 msgid "On %(date)s, you asked to send a message to the user '%(recipient)s'."
 msgstr "%(date)s ви хотіли надіслати повідомлення до користувача/-ки '%(recipient)s'."
 
-#: cosinnus_message/templates/postman/email_user.txt:5
-#: cosinnus_message/templates/postman/email_visitor.txt:5
 msgid "Your message has been rejected by the moderator"
 msgstr "Ваше повідомлення заблокував модератор"
 
-#: cosinnus_message/templates/postman/email_user.txt:5
-#: cosinnus_message/templates/postman/email_visitor.txt:5
 msgid ", for the following reason:"
 msgstr ", з наступної причини:"
 
-#: cosinnus_message/templates/postman/email_user.txt:9
 #, python-format
-msgid ""
-"'%(sender_first)s %(sender_last)s' has replied to your message from %(date)s:"
+msgid "'%(sender_first)s %(sender_last)s' has replied to your message from %(date)s:"
 msgstr "'%(sender_first)s %(sender_last)s' відповів(ла) на ваше повідомлення від %(date)s:"
 
-#: cosinnus_message/templates/postman/email_user.txt:10
 #, python-format
-msgid ""
-"'%(sender_first)s %(sender_last)s' has posted a message in one of your "
-"conversations."
+msgid "'%(sender_first)s %(sender_last)s' has posted a message in one of your conversations."
 msgstr "’%(sender_first)s %(sender_last)s' надіслав(ла) повідомлення в один із Ваших діалогів."
 
-#: cosinnus_message/templates/postman/email_user.txt:11
 #, python-format
-msgid ""
-"You have received a message from the user '%(sender_first)s %(sender_last)s'."
+msgid "You have received a message from the user '%(sender_first)s %(sender_last)s'."
 msgstr "Ви отримали повідомлення від користувача/-ки '%(sender_first)s %(sender_last)s'."
 
-#: cosinnus_message/templates/postman/email_user.txt:13
 msgid "This message was sent in a conversation with: "
 msgstr "Повідомлення було надіслано в діалог з: "
 
-#: cosinnus_message/templates/postman/email_user.txt:13
 msgid "Project/Group"
 msgstr "Проєкт/Група"
 
-#: cosinnus_message/templates/postman/email_user.txt:20
 msgid "Follow this link to view the message on the site"
 msgstr "Перейдіть за цим посиланням, щоб переглянути повідомлення на веб-сайті"
 
-#: cosinnus_message/templates/postman/email_user.txt:23
-msgid ""
-"If you do not wish to receive any more emails from us, click here to "
-"unsubscribe:"
+msgid "If you do not wish to receive any more emails from us, click here to unsubscribe:"
 msgstr "Якщо Ви більше не бажаєте отримувати від нас електронні листи, натисніть тут, щоб відписатися:"
 
-#: cosinnus_message/templates/postman/email_user.txt:26
-msgid ""
-"You can also reply to this message directly by replying to this email. When "
-"you do, please leave the subject and addressee as it is. The email you reply "
-"from *must* be the one you are registered with on the site."
+msgid "You can also reply to this message directly by replying to this email. When you do, please leave the subject and addressee as it is. The email you reply from *must* be the one you are registered with on the site."
 msgstr "Ви також можете напряму відповісти на повідомлення, відповівши на цей лист. Якщо Ви так робитимете, будь ласка, залиште тему та адресатів у вихідному вигляді. Поштова скринька, з якої Ви відповідаєте, повинна бути зареєстрована на сайті."
 
-#: cosinnus_message/templates/postman/email_user.txt:28
-msgid ""
-"WARNING: Your reply will be sent to all participants of this conversation!"
+msgid "WARNING: Your reply will be sent to all participants of this conversation!"
 msgstr "ПОПЕРЕДЖЕННЯ: Ваша відповідь буде надіслана усім учасникам цього діалогу!"
 
-#: cosinnus_message/templates/postman/email_user_subject.txt:1
-#: cosinnus_message/templates/postman/email_visitor_subject.txt:1
 #, python-format
 msgid "Message \"%(subject)s\" on the site %(sitename)s"
 msgstr "Повідомлення «%(subject)s» на веб-сайті %(sitename)s"
 
-#: cosinnus_message/templates/postman/email_visitor.txt:1
 msgid "Dear visitor,"
 msgstr "Шановний/-на відвідувачу/-ко,"
 
-#: cosinnus_message/templates/postman/email_visitor.txt:8
 msgid "As a reminder, please find below the content of your message."
 msgstr "У якості нагадування, нижче наведено зміст вашого повідомлення."
 
-#: cosinnus_message/templates/postman/email_visitor.txt:10
 #, python-format
-msgid ""
-"On %(date)s, you sent a message to the user '%(sender_first)s "
-"%(sender_last)s'."
+msgid "On %(date)s, you sent a message to the user '%(sender_first)s %(sender_last)s'."
 msgstr "%(date)s ви надіслали повідомлення користувачу/-ці '%(sender_first)s %(sender_last)s'."
 
-#: cosinnus_message/templates/postman/email_visitor.txt:11
 msgid "Please find below the answer from your correspondent."
 msgstr "Нижче знаходиться відповідь від вашого/-ї кореспондента/-ки."
 
-#: cosinnus_message/templates/postman/email_visitor.txt:14
 msgid "Thank you again for your interest in our services."
 msgstr "Ще раз дякуємо, що користуєтеся нашими сервісами."
 
-#: cosinnus_message/templates/postman/email_visitor.txt:15
 msgid "For more comfort, we encourage you to open an account on the site."
 msgstr "Для більшої зручності ми радимо зареєструватися на веб-сайті."
 
-#: cosinnus_message/templates/postman/email_visitor.txt:16
 msgid "The site administrator"
 msgstr "Адміністратор/-ка веб-сайту"
 
-#: cosinnus_message/templates/postman/inbox.html:4
-#: cosinnus_message/templates/postman/inbox.html:8
-#: cosinnus_message/templates/postman/menu.html:16
-#: cosinnus_message/templates/postman/view.html:29
 msgid "Inbox"
 msgstr "Вхідні"
 
-#: cosinnus_message/templates/postman/menu.html:20
-#: cosinnus_message/templates/postman/sent.html:4
-#: cosinnus_message/templates/postman/sent.html:8
-#: cosinnus_message/templates/postman/view.html:21
 msgid "Sent"
 msgstr "Надіслані"
 
-#: cosinnus_message/templates/postman/menu.html:24
 msgctxt "the noun for an Archive"
 msgid "Archive"
 msgstr "Архів"
 
-#: cosinnus_message/templates/postman/menu.html:28
-#: cosinnus_message/templates/postman/trash.html:4
-#: cosinnus_message/templates/postman/trash.html:8
-#: cosinnus_message/templates/postman/view.html:17
-#: cosinnus_message/templates/postman/view.html:25
 msgid "Trash"
 msgstr "Кошик"
 
-#: cosinnus_message/templates/postman/menu.html:33
-#: cosinnus_message/templates/postman/write.html:4
-#: cosinnus_message/templates/postman/write.html:8
 msgid "Write"
 msgstr "Написати"
 
-#: cosinnus_message/templates/postman/reply.html:4
-#: cosinnus_message/templates/postman/reply.html:8
-#: cosinnus_message/templates/postman/view.html:154
 msgid "Reply"
 msgstr "Відповісти"
 
-#: cosinnus_message/templates/postman/reply.html:11
 msgid "Recipient"
 msgstr "Адресат"
 
-#: cosinnus_message/templates/postman/view.html:32
 msgid "Conversation"
 msgstr "Розмова"
 
-#: cosinnus_message/templates/postman/view.html:49
 msgid "Conversation with members from"
 msgstr "Діалог з членами із"
 
-#: cosinnus_message/templates/postman/view.html:59
 msgid "Conversation with"
 msgstr "Розмова з"
 
-#: cosinnus_message/templates/postman/view.html:68
 #, python-format
 msgid "Show all %(count)s participants"
 msgstr "Показати всіх %(count)s участників"
 
-#: cosinnus_message/templates/postman/view.html:97
 msgid "Me"
 msgstr "Я"
 
-#: cosinnus_message/templates/postman/view.html:124
 msgid "Answer"
 msgstr "Відповісти"
 
-#: cosinnus_message/templates/postman/view.html:134
 msgid "Reply..."
 msgstr "Відповісти..."
 
-#: cosinnus_message/templates/postman/view.html:156
 #, python-format
 msgid "Reply to %(sender_name)s"
 msgstr "Відповісти %(sender_name)s"
 
-#: cosinnus_message/templates/postman/view.html:172
 #, python-format
 msgid "Reply to all %(adressee_count)s"
 msgstr "Відповісти всім %(adressee_count)s"
 
-#: cosinnus_message/utils/utils.py:98 cosinnus_message/utils/utils.py:117
 msgid "Your reply could not be matched to an existing message."
 msgstr "Ваша відповідь не може бути поєднана з існуючим повідомленням."
 
-#: cosinnus_message/utils/utils.py:121
 msgid "An internal error occured."
 msgstr "Сталася внутрішня помилка."
 
-#: cosinnus_message/utils/utils.py:134
-msgid ""
-"The email adress you sent the reply from is not the one associated with your "
-"user account. Please send direct replies only from the email adress you are "
-"registered with on the site!"
+msgid "The email adress you sent the reply from is not the one associated with your user account. Please send direct replies only from the email adress you are registered with on the site!"
 msgstr "Електронна адреса, з якої Ви надіслали відповідь, не зв’язана з Вашим акаунтом. Будь ласка, надсилайте відповіді тільки з тих електронних адрес, які Ви зареєстрували на сайті!"
 
-#: cosinnus_message/utils/utils.py:150
 msgid "There was an error when processing your message text!"
 msgstr "Сталася помилка при обробці тексту Вашого повідомлення!"
 
-#: cosinnus_message/utils/utils.py:270
 msgid "Your direct reply failed!"
 msgstr "Ваша пряма відповідь не доставлена!"
 
-#: cosinnus_message/views.py:109
 msgid "Select at least one object."
 msgstr "Виберіть щонайменше одного отримувача."
 
-#: cosinnus_message/views.py:116
 msgid "Messages or conversations successfully archived."
 msgstr "Повідомлення успішно заархівовані."
 
-#: cosinnus_message/views.py:123
 msgid "Messages or conversations successfully deleted."
 msgstr "Повідомлення успішно видалені."
 
-#: cosinnus_message/views.py:130
 msgid "Messages were marked as read."
 msgstr "Повідомлення позначені як прочитані."
 
-#: cosinnus_message/views.py:137
 msgid "Messages or conversations successfully recovered."
 msgstr "Повідомлення успішно відновлені."
 
@@ -406,10 +291,5 @@ msgstr "Повідомлення успішно відновлені."
 #~ msgid "Deselect All"
 #~ msgstr "Прибрати всі позначення"
 
-#~ msgid ""
-#~ "You have received a copy of a response from the user '%(sender_first)s "
-#~ "%(sender_last)s'."
-#~ msgstr ""
-#~ "Ви отримали копію відповіді від користувача/-ки '%(sender_first)s "
-#~ "%(sender_last)s'."
-
+#~ msgid "You have received a copy of a response from the user '%(sender_first)s %(sender_last)s'."
+#~ msgstr "Ви отримали копію відповіді від користувача/-ки '%(sender_first)s %(sender_last)s'."
