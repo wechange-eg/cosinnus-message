@@ -146,9 +146,9 @@
 	        <button type="submit" class="btn btn-emphasized" style="width:200px;">
 	            <ul class="media-list">
 	                <li class="media">
-	                    <a class="pull-left" href="#">
+	                    <span class="pull-left">
 	                        <i class="fa fa-pencil"></i>
-	                    </a>
+	                    </span>
 	                    <div class="media-body">
 	                        {% if participants|length < 2 %}
 	                            {% trans "Reply" %}
@@ -165,9 +165,9 @@
 		    <button type="submit" onclick="this.form.reply_all.value='1';" class="btn btn-emphasized" style="width:200px;">
 	            <ul class="media-list">
 	                <li class="media">
-	                    <a class="pull-left" href="#">
+	                    <span class="pull-left">
 	                        <i class="fa fa-group"></i>
-	                    </a>
+	                    </span>
 	                    <div class="media-body">
 	                        {% blocktrans with adressee_count=participants|length %}Reply to all {{adressee_count}}{% endblocktrans %}
 	                    </div>
@@ -189,9 +189,9 @@
 		<button type="submit"  onclick="this.form.action='{% url 'postman:delete' %}?next={{ next_url|urlencode }}'" class="btn btn-emphasized pull-left">
 		    <ul class="media-list">
 		        <li class="media">
-		            <a class="pull-left" href="#">
+		            <span class="pull-left">
 		                <i class="fa fa-eraser"></i>
-		            </a>
+		            </span>
 		            <div class="media-body">
 		                {% trans "Delete" %}
 		            </div>
@@ -203,9 +203,9 @@
 		<button type="submit" onclick="this.form.action='{% url 'postman:archive' %}?next={{ next_url|urlencode }}'" class="btn btn-emphasized pull-left">
 		    <ul class="media-list">
 		        <li class="media">
-		            <a class="pull-left" href="#">
+		            <span class="pull-left">
 		                <i class="fa fa-folder"></i>
-		            </a>
+		            </span>
 		            <div class="media-body">
 		                {% trans "Archive" %}
 		            </div>

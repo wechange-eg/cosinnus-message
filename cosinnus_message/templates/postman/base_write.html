@@ -16,9 +16,9 @@
 	    <div class="btn btn-default w100 regular-space">
 	        <ul class="media-list">
 	            <li class="media">
-	                <a class="pull-left" href="#">
+	                <span class="pull-left">
 	                    <i class="fa fa-user"></i>
-	                </a>
+	                </span>
 	                <div class="media-body">
 	                	{{ form.recipients.errors }}
 	                    {% render_field form.recipients class+="w100" placeholder=form.recipients.label id="id_recipients"%}
@@ -30,9 +30,9 @@
 	    <div class="btn btn-default w100 regular-space">
 	        <ul class="media-list">
 	            <li class="media">
-	                <a class="pull-left" href="#">
+	                <span class="pull-left">
 	                    <i class="fa fa-pencil"></i>
-	                </a>
+	                </span>
 	                <div class="media-body media-body-form-control">
 	                	{{ form.subject.errors }}
 	                    {% render_field form.subject class+="form-control" placeholder=form.subject.label value=request.GET.subject %}
@@ -61,9 +61,9 @@
         <button type="submit" class="btn btn-emphasized" >
             <ul class="media-list">
                 <li class="media">
-                    <a class="pull-left" href="#">
+                    <span class="pull-left">
                         <i class="fa fa-pencil"></i>
-                    </a>
+                    </span>
                     <div class="media-body">
                         {% trans "Send" %}
                     </div>
