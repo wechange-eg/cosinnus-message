@@ -19,7 +19,7 @@ from rocketchat_API.rocketchat import RocketChat as RocketChatAPI
 from cosinnus.models.group import CosinnusPortal, CosinnusGroupMembership
 from cosinnus.models import MEMBERSHIP_ADMIN
 from cosinnus.models.membership import MEMBERSHIP_MEMBER,\
-    MEMBERSHIP_INVITED_PENDING, MEMBERSHIP_PENDING
+    MEMBERSHIP_INVITED_PENDING, MEMBERSHIP_PENDING, MEMBER_STATUS
 from cosinnus.models.profile import PROFILE_SETTING_ROCKET_CHAT_ID, PROFILE_SETTING_ROCKET_CHAT_USERNAME
 import traceback
 from cosinnus.utils.user import filter_active_users, filter_portal_users
@@ -658,7 +658,7 @@ class RocketChatConnection:
         memberships = group.memberships.select_related('user', 'user__cosinnus_profile')
         admin_qs = memberships.filter_membership_status(MEMBERSHIP_ADMIN)
         admin_ids = [self.get_user_id(m.user) for m in admin_qs]
-        members_qs = memberships.filter_membership_status([MEMBERSHIP_ADMIN, MEMBERSHIP_MEMBER])
+        members_qs = memberships.filter_membership_status(MEMBER_STATUS)
         member_usernames = [str(m.user.cosinnus_profile.rocket_username)
                             for m in members_qs if m.user.cosinnus_profile]
         member_usernames.append(settings.COSINNUS_CHAT_USER)
