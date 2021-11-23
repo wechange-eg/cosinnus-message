@@ -6,14 +6,14 @@ import hashlib
 from django.utils.crypto import get_random_string
 from cosinnus.models.tagged import AttachableObjectModel, LastVisitedMixin
 from importlib import import_module
+import six
 
 from cosinnus.conf import settings
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.db import models
 from django.db.models.query import QuerySet
-from django.utils import six
-from django.utils.encoding import force_text, python_2_unicode_compatible
+from django.utils.encoding import force_text
 try:
     from django.utils.text import Truncator  # Django 1.4
 except ImportError:
@@ -303,7 +303,7 @@ class MessageManager(models.Manager):
         ).update(read_at=now())
 
 
-@python_2_unicode_compatible
+@six.python_2_unicode_compatible
 class Message(AttachableObjectModel, LastVisitedMixin, MultiConversationModel):
     """
     A message between a User and another User or an AnonymousUser.
