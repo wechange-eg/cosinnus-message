@@ -798,7 +798,6 @@ class RocketChatConnection:
         room_keys = specific_room_keys or settings.COSINNUS_ROCKET_GROUP_ROOM_KEYS
         room_ids = specific_room_ids or [self.get_group_id(group, room_key=room_key) for room_key in room_keys]
         for room_id in room_ids:
-            room_id = self.get_group_id(group, room_key=room_key)
             if room_id:
                 response = self.rocket.groups_unarchive(room_id=room_id).json()
                 if not response.get('success'):
