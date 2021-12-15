@@ -34,7 +34,7 @@ class MessageExportView(APIView):
             profile = user.cosinnus_profile
             if not profile:
                 continue
-            users.append([user.id, profile.rocket_username, profile.rocket_user_email, user.get_full_name()])
+            users.append([user.id, profile.rocket_username, profile.rocket_user_email, profile.get_external_full_name()])
         return users
 
     def _get_channels(self, user_ids, format='old'):

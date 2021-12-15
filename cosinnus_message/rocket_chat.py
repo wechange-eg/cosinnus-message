@@ -216,7 +216,7 @@ class RocketChatConnection:
                 if profile.rocket_user_email not in rocket_emails:
                     changed = True
                 # Name changed?
-                elif user.get_full_name() != rocket_user.get('name'):
+                elif profile.get_external_full_name() != rocket_user.get('name'):
                     changed = True
                 elif rocket_username != rocket_user.get('username'):
                     changed = True
@@ -321,7 +321,7 @@ class RocketChatConnection:
         rocket_user_password = user.password or get_random_string(length=16)
         data = {
             "email": profile.rocket_user_email,
-            "name": user.get_full_name() or str(user.id),
+            "name": profile.get_external_full_name() or str(user.id),
             "password": rocket_user_password,
             "username": profile.rocket_username,
             "bio": profile.get_absolute_url(),
@@ -475,10 +475,10 @@ class RocketChatConnection:
         profile = user.cosinnus_profile
         rocket_email = user_data.get('emails', [{}])[0].get('address', None)
         #rocket_mail_verified = user_data.get('emails', [{}])[0].get('verified', None)
-        if force_user_update or user_data.get('name') != user.get_full_name() or rocket_email != profile.rocket_user_email:
+        if force_user_update or user_data.get('name') != profile.get_external_full_name() or rocket_email != profile.rocket_user_email:
             data = {
                 "username": profile.rocket_username,
-                "name": user.get_full_name(),
+                "name": profile.get_external_full_name(),
                 "email": profile.rocket_user_email,
                 "bio": profile.get_absolute_url(),
                 "active": user.is_active,
