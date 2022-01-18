@@ -11,9 +11,6 @@ PREREL = ()
 POST = 0
 DEV = 0
 
-# as of Django 1.7
-default_app_config = 'postman.apps.PostmanConfig'
-
 # options
 OPTION_MESSAGES = 'm'
 OPTIONS = OPTION_MESSAGES  # may be extended in future
