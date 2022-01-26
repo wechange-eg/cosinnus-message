@@ -58,7 +58,8 @@ class CosinnusMessageDefaultSettings(AppConf):
     
     COSINNUS_CHAT_SETTINGS = {
         # General
-        'UTF8_Names_Validation': '[0-9a-zA-Z-_.äÄöÖüÜß]+',
+        'UTF8_User_Names_Validation': '[0-9a-zA-Z-_.äÄöÖüÜß]+',
+        'UTF8_Channel_Names_Validation': '[0-9a-zA-Z-_.äÄöÖüÜß]+',
         'Favorite_Rooms': True,
         'Iframe_Restrict_Access': False,
 
@@ -110,7 +111,21 @@ class CosinnusMessageDefaultSettings(AppConf):
 
         # Nachrichten
         'API_Embed': False,
-        'Message_HideType_au': False,
+        'Hide_System_Messages': ["uj","ul","ru","subscription-role-added","ut","subscription-role-removed","au"],
+    }
+    
+    COSINNUS_CHAT_SYNC_OAUTH_SETTINGS = {
+        'Accounts_OAuth_Custom-%(portal_name_cap)s': True,
+        'Accounts_OAuth_Custom-%(portal_name_cap)s-url': '%(portal_domain)s',
+        'Accounts_OAuth_Custom-%(portal_name_cap)s-token_path': '/o/token/',
+        'Accounts_OAuth_Custom-%(portal_name_cap)s-token_sent_via': 'header',
+        'Accounts_OAuth_Custom-%(portal_name_cap)s-identity_path': '/o/me/',
+        'Accounts_OAuth_Custom-%(portal_name_cap)s-authorize_path': '/o/authorize/',
+        'Accounts_OAuth_Custom-%(portal_name_cap)s-scope': 'read',
+        'Accounts_OAuth_Custom-%(portal_name_cap)s-id': '%(oauth_id)s',
+        'Accounts_OAuth_Custom-%(portal_name_cap)s-secret': '%(oauth_secret)s',
+        'Accounts_OAuth_Custom-%(portal_name_cap)s-button_label_text': 'Enter chat',
+        'Accounts_OAuth_Custom-%(portal_name_cap)s-merge_users': True,
     }
     COSINNUS_CHAT_USER = None
     COSINNUS_CHAT_PASSWORD = None

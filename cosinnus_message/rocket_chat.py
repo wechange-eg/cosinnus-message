@@ -2,10 +2,11 @@ import logging
 import mimetypes
 import os
 import re
+import secrets
 
 from cosinnus.models.group_extra import CosinnusSociety, CosinnusProject,\
     CosinnusConference
-from django.conf import settings
+from cosinnus.conf import settings
 from django.core.cache import cache
 from django.contrib.auth import get_user_model
 from django.db.models import Q
@@ -111,14 +112,38 @@ class RocketChatConnection:
             self.stderr = stderr
 
     def oauth_sync(self):
-        app, created = Application.objects.get_or_create(
-            client_type='confidential',
-            authorization_grant_type='authorization-code',
-            redirect_uris=f'{self.rocket.server_url}/_oauth/{settings.COSINNUS_PORTAL_NAME}',
-            skip_authorization=True
-        )
-        # FIXME: Create/update oauth client app on Rocket.Chat, once version 3.4 is released
-        # https://github.com/RocketChat/Rocket.Chat/pull/14912
+        """ Note: this requires an Oauth app having been created in rocketchat manually,
+            by the name of the portal identifier name """
+        client_id = secrets.token_urlsafe(16)
+        client_secret = secrets.token_urlsafe(16)
+        # create django oauth toolkit provider app
+        portal_id = CosinnusPortal.get_current().id
+        app, __ = Application.objects.get_or_create(name=f"rocketchat_{portal_id}")
+        app.client_id = client_id
+        app.client_secret = client_secret
+        app.redirect_uris = f"{self.rocket.server_url}/_oauth/{settings.COSINNUS_PORTAL_NAME}"
+        app.client_type = Application.CLIENT_CONFIDENTIAL
+        app.authorization_grant_type = Application.GRANT_AUTHORIZATION_CODE
+        app.skip_authorization = True
+        app.save()
+            
+        values_dict = {
+            'portal_name_cap': settings.COSINNUS_PORTAL_NAME.capitalize(),
+            'portal_domain': CosinnusPortal.get_current().get_domain(),
+            'oauth_id': client_id,
+            'oauth_secret': client_secret,
+        }
+        for setting, value in settings.COSINNUS_CHAT_SYNC_OAUTH_SETTINGS.items():
+            if type(value) in six.string_types:
+                value = value % values_dict
+            if type(setting) in six.string_types:
+                setting = setting % values_dict
+            response = self.rocket.settings_update(setting, value).json()
+            if not response.get('success'):
+                self.stderr.write('ERROR! ' + str(setting) + ': ' + str(value) + ':: ' + str(response))
+            else:
+                self.stdout.write('OK! ' + str(setting) + ': ' + str(value)) 
+        
 
     def settings_update(self):
         for setting, value in settings.COSINNUS_CHAT_SETTINGS.items():
@@ -129,8 +154,7 @@ class RocketChatConnection:
                 self.stderr.write('ERROR! ' + str(setting) + ': ' + str(value) + ':: ' + str(response))
             else:
                 self.stdout.write('OK! ' + str(setting) + ': ' + str(value)) 
-        self.oauth_sync()
-        
+    
     def create_missing_users(self, skip_inactive=False, force_group_membership_sync=False):
         """ 
         Create missing user accounts in rocketchat (and verify that ones with an existing
