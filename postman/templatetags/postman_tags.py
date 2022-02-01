@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 import datetime
+import six
 
 from django import VERSION
 try:
@@ -11,7 +12,6 @@ from django.template import Node
 from django.template import TemplateSyntaxError
 from django.template import Library
 from django.template.defaultfilters import date
-from django.utils import six
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 

@@ -1,10 +1,11 @@
 from __future__ import unicode_literals
+import six
 from builtins import object
 from types import MethodType
 
 from django import VERSION
 from django.db.models.sql.query import Query
-from django.utils import six
+
 
 
 class Proxy(object):
