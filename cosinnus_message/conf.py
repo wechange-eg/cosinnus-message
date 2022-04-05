@@ -112,6 +112,9 @@ class CosinnusMessageDefaultSettings(AppConf):
         # Nachrichten
         'API_Embed': False,
         'Hide_System_Messages': ["uj","ul","ru","subscription-role-added","ut","subscription-role-removed","au"],
+        
+        # User Surveys
+        'NPS_survey_enabled': False,
     }
     
     COSINNUS_CHAT_SYNC_OAUTH_SETTINGS = {
