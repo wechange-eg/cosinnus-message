@@ -133,6 +133,9 @@ class RocketChatConnection:
             'oauth_id': client_id,
             'oauth_secret': client_secret,
         }
+        # create oauth endpoint
+        response = self.rocket._RocketChat__call_api_post('settings.addCustomOAuth', name=values_dict['portal_name_cap'])
+        # set endpoint attributes
         for setting, value in settings.COSINNUS_CHAT_SYNC_OAUTH_SETTINGS.items():
             if type(value) in six.string_types:
                 value = value % values_dict

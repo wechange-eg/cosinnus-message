@@ -86,7 +86,7 @@ class CosinnusMessageDefaultSettings(AppConf):
         'Accounts_AllowUsernameChange': False,
         'Accounts_Default_User_Preferences_sidebarGroupByType': True,
         'Accounts_Default_User_Preferences_sidebarShowUnread': True,
-        'Accounts_ShowFormLogin': False,  # Required to be able to login as bot on first deployment
+        'Accounts_ShowFormLogin': True,  # Required True to be able to login as bot on first deployment
         'Accounts_RegistrationForm': 'Disabled',
         'Accounts_RegistrationForm_LinkReplacementText': '',
         'Accounts_TwoFactorAuthentication_By_Email_Enabled': False,
