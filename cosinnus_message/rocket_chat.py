@@ -200,6 +200,8 @@ class RocketChatConnection:
                 break
 
             for rocket_user in response['users']:
+                if "username" not in rocket_user:
+                    continue
                 rocket_users[rocket_user['username']] = rocket_user
                 for email in rocket_user.get('emails', []):
                     if not email.get('address'):
@@ -687,7 +689,7 @@ class RocketChatConnection:
         admin_ids = [self.get_user_id(m.user) for m in admin_qs]
         members_qs = memberships.filter_membership_status(MEMBER_STATUS)
         member_usernames = [str(m.user.cosinnus_profile.rocket_username)
-                            for m in members_qs if m.user.cosinnus_profile]
+                            for m in members_qs if hasattr(m.user, 'cosinnus_profile') and m.user.cosinnus_profile]
         member_usernames.append(settings.COSINNUS_CHAT_USER)
 
         # Createconfigured channels
