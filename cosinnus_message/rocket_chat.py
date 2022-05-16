@@ -614,7 +614,7 @@ class RocketChatConnection:
         else:
             # Try to find an existing group for this user
             group_name = f'{group.slug}--contact-{user.id}'
-            response = self.rocket.groups_info(room_id=group_name).json()
+            response = self.rocket.groups_info(room_name=group_name).json()
             if response.get('success'):
                 return group_name
             # Create private group if it didn't exist and the flag is set
@@ -644,9 +644,14 @@ class RocketChatConnection:
                     logger.error('RocketChat: groups_request: groups_set_topic ' + response.get('errorType', '<No Error Type>'), extra={'response': response})
                     
                 # Post help message
-                greeting_message = f'{group.trans.CONTACT_ROOM_GREETING_MESSAGE}{first_message}'
+                greeting_message = f'{group.trans.CONTACT_ROOM_GREETING_MESSAGE}'
                 info_message = settings.COSINNUS_ROCKET_GROUP_CONTACT_ROOM_INFO_MESSAGE
                 message = f'@{profile.rocket_username} @all {greeting_message} {info_message}'
+                if first_message:
+                    request_message = _('Contact request')
+                    # add message in blockquotes
+                    first_message = first_message.replace('\n', '\n> ')
+                    message += f'\n\n{request_message}: @{profile.rocket_username}\n\n> {first_message}'
                 response = self.rocket.chat_post_message(text=message, room_id=room_id).json()
                 if not response.get('success'):
                     logger.error('RocketChat: groups_request: chat_post_message ' + response.get('errorType', '<No Error Type>'), extra={'response': response})

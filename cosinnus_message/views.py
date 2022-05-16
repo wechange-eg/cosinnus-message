@@ -211,8 +211,9 @@ class RocketChatWriteGroupComposeView(BaseRocketChatView):
             group = self.get_object()
             user = self.request.user
             rocket = RocketChatConnection()
-            group_name = rocket.groups_request(group, user, first_message=contact_message, force_sync_membership=True, create=True)
-            return redirect(group_aware_reverse('cosinnus-message:message-write-group'), kwargs={'group': group})
+            # trigger room creation
+            rocket.groups_request(group, user, first_message=contact_message, force_sync_membership=True, create=True)
+            return redirect(reverse('cosinnus:message-write-group', kwargs={'slug': group.slug}))
         return render(request, self.template, {'message_form': message_form})
 
     def get_context_data(self, **kwargs):
@@ -238,7 +239,7 @@ class RocketChatWriteGroupView(BaseRocketChatView):
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
         if not context.get('url'):
-            return redirect(group_aware_reverse('cosinnus-message:message-write-group-compose'), kwargs={'group': self.object})
+            return redirect(reverse('cosinnus:message-write-group-compose', kwargs={'slug': self.object.slug}))
         return self.render_to_response(context)
 
     def get_object(self):
