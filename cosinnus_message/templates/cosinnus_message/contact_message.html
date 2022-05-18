@@ -19,12 +19,12 @@
         {% endblock description %}
 
         {% block contact_message_field %}
-            {% if message_form %}
+            {% if form %}
                 <form action="" method="POST">
                     {% csrf_token %}
                     {% trans "What is your message?" as contact_message_form_label %}
                     {% trans "Write it here" as contact_message_form_placeholder %}
-                    {% include 'cosinnus/fields/default_field.html' with field=message_form.contact_message label=contact_message_form_label placeholder=contact_message_form_placeholder large_field=True %}
+                    {% include 'cosinnus/fields/default_field.html' with field=form.contact_message label=contact_message_form_label placeholder=contact_message_form_placeholder large_field=True %}
                     
                     <button type="submit" class="rounded-button button-color-primary-inverted">
                         <span class="rounded-button-inner">
