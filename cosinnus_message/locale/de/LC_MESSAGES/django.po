@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-01 11:18+0200\n"
-"PO-Revision-Date: 2021-10-01 11:59+0200\n"
+"POT-Creation-Date: 2022-05-17 15:28+0200\n"
+"PO-Revision-Date: 2022-05-18 12:31+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 2.0.6\n"
 
 msgid "Please post your request or question here. You can see the channel members by clicking the group icon at the top of the channel."
 msgstr "Bitte stelle deine Anfrage hier. Du kannst sehen, wer in diesem Chat-Kanal ist, indem du in der Titelleiste des Kanals auf das Gruppen-Icon klickst."
@@ -51,6 +51,9 @@ msgstr "Kein Empfänger angegeben."
 msgid "Portal"
 msgstr "Portal"
 
+msgid "Contact request"
+msgstr "Kontaktanfrage"
+
 msgid "You can only attach files and pictures to messages if you are a member of the forum. You can join it here:"
 msgstr "Du kannst Dateien und Bilder nur anhängen, wenn du Mitglied im Forum bist. Du kannst hier beitreten:"
 
@@ -65,6 +68,28 @@ msgstr "Nachrichtenarchiv der alten Nachrichten-App"
 
 msgid "The legacy messaging app is no longer in use. You can view all of your old messages, but you cannot write new ones. Please use the new messaging app in the navigation from now on!"
 msgstr "Die alte Nachrichten-App ist nicht mehr in Benutzung. Du kannst alle alten Nachrichten ansehen, aber keine Neuen mehr schreiben. Bitte benutze ab jetzt die neue Nachrichten-App in der Navigationsleiste!"
+
+msgid "Contact"
+msgstr "Kontak"
+
+msgid "You can contact the group administration via this form. Write your message in the field below and than you will be redirected to the chat with group admins."
+msgstr "Du kannst die Gruppenadministratoren über dieses Formular kontaktieren. Schreibe hier deine Nachricht in das Feld unten und dann wirst du zu einem Chat mit den Gruppenadministratoren weitergeleitet."
+
+msgid "You can contact the project administration via this form. Write your message in the field below and than you will be redirected to the chat with project admins."
+msgstr "Du kannst die Projektadministratoren über dieses Formular kontaktieren. Schreibe hier deine Nachricht in das Feld unten und dann wirst du zu einem Chat mit den Projektadministratoren weitergeleitet."
+
+msgid "What is your message?"
+msgstr "Was ist deine Anfrage?"
+
+msgid "Write it here"
+msgstr "Bitte hier angeben"
+
+msgid "Send"
+msgstr "Absenden"
+
+#, python-format
+msgid "Contact the administration of %(group_name)s:"
+msgstr "Die Administratoren von %(group_name)s kontaktieren:"
 
 #, python-format
 msgid ""
@@ -125,9 +150,6 @@ msgstr "Keine Nachrichten"
 
 msgid "Please enter message..."
 msgstr "Bitte Nachricht eingeben..."
-
-msgid "Send"
-msgstr "Absenden"
 
 msgid "Dear user,"
 msgstr "Hallo,"
